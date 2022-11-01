@@ -29,4 +29,8 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "id")
     )
     private Set<Person> directors;
+
+    @OneToMany(mappedBy = "movie")
+    private List<Comment> comments;
+
 }

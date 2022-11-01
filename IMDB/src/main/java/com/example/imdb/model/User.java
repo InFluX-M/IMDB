@@ -3,6 +3,7 @@ package com.example.imdb.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -29,4 +30,6 @@ public class User {
     )
     private Set<FavoriteList> favoriteLists;
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
 }

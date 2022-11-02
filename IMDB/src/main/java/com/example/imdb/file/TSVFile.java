@@ -1,8 +1,6 @@
 package com.example.imdb.file;
 
-import com.example.imdb.model.Movie;
-import com.example.imdb.model.Person;
-import com.example.imdb.model.TitleType;
+import com.example.imdb.model.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -80,4 +78,69 @@ public class TSVFile {
 
         return people;
     }
+
+    public static Rating[] readRatings(String fileName) throws IOException {
+
+        String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
+        Rating[] ratings = new Rating[lines.length - 1];
+
+        boolean firstLine = true;
+        int i = 0;
+
+        for (String s : lines) {
+
+            if (firstLine) {
+                firstLine = false;
+                continue;
+            }
+
+            String[] parts = s.split("\t");
+            System.err.println(Arrays.toString(parts));
+
+            for (int j = 0; j < parts.length; j++)
+                if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
+
+            ratings[i++] = Rating.builder()
+                    .titleId(parts[0])
+                    .avgRating(Integer.parseInt(parts[1]))
+                    .numVotes(Integer.parseInt(parts[2]))
+                    .build();
+        }
+
+        return ratings;
+
+    }
+
+    public static Series_Episode[] readEpisodes(String fileName) throws IOException {
+
+        String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
+        Series_Episode[] episodes = new Series_Episode[lines.length - 1];
+
+        boolean firstLine = true;
+        int i = 0;
+
+        for (String s : lines) {
+
+            if (firstLine) {
+                firstLine = false;
+                continue;
+            }
+
+            String[] parts = s.split("\t");
+            System.err.println(Arrays.toString(parts));
+
+            for (int j = 0; j < parts.length; j++)
+                if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
+
+            episodes[i++] = Series_Episode.builder()
+                    .titleId(parts[0])
+                    .parentId(parts[1])
+                    .seasonNumber(Integer.parseInt(parts[2]))
+                    .episodeNumber(Integer.parseInt(parts[3]))
+                    .build();
+        }
+
+        return episodes;
+    }
+
 }

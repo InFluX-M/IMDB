@@ -1,9 +1,16 @@
 package com.example.imdb.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Series_Episode {
     @Id
     @GeneratedValue

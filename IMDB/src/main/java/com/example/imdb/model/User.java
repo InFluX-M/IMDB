@@ -2,13 +2,19 @@ package com.example.imdb.model;
 
 import com.example.imdb.model.requests.UserRequest;
 import com.example.imdb.model.responses.UserResponse;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table
 public class User {

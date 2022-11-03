@@ -23,4 +23,5 @@ public class MovieResponse {
     String genres;
     Set<Person> directors;
     List<Comment> comments;
+    List<EpisodeResponse> episodeResponses;
 }

@@ -108,10 +108,10 @@ public class TSVFile {
 
     }
 
-    public static Series_Episode[] readEpisodes(String fileName) throws IOException {
+    public static SeriesEpisode[] readEpisodes(String fileName) throws IOException {
 
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
-        Series_Episode[] episodes = new Series_Episode[lines.length - 1];
+        SeriesEpisode[] episodes = new SeriesEpisode[lines.length - 1];
 
         boolean firstLine = true;
         int i = 0;
@@ -128,7 +128,7 @@ public class TSVFile {
             for (int j = 0; j < parts.length; j++)
                 if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
 
-            episodes[i++] = Series_Episode.builder()
+            episodes[i++] = SeriesEpisode.builder()
                     .titleId(parts[0])
                     .parentId(parts[1])
                     .seasonNumber(Integer.parseInt(parts[2]))

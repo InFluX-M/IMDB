@@ -30,6 +30,9 @@ public class Movie {
     @Transient
     private List<String> genresList;
 
+    @OneToMany(mappedBy = "parent")
+    List<SeriesEpisode> episodes;
+
     @ManyToMany
     @JoinTable(
             name = "movie_director",
@@ -67,6 +70,7 @@ public class Movie {
                 .directors(directors)
                 .comments(comments)
                 .isAdult(isAdult)
+                .episodeResponses(episodes.stream().map(SeriesEpisode::episodeResponse).toList())
                 .build();
     }
 }

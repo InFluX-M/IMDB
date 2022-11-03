@@ -1,5 +1,7 @@
 package com.example.imdb.model;
 
+import com.example.imdb.model.requests.PersonRequest;
+import com.example.imdb.model.responses.PersonResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,4 +31,26 @@ public class Person {
     private List<String> professionsList;
     @Transient
     private List<String> knownForTitlesList;
+
+    public PersonRequest request() {
+        return PersonRequest.builder()
+                .id(id)
+                .name(name)
+                .birthYear(birthYear)
+                .deathYear(deathYear)
+                .professions(professions)
+                .knownForTitles(knownForTitles)
+                .build();
+    }
+
+    public PersonResponse response() {
+        return PersonResponse.builder()
+                .id(id)
+                .name(name)
+                .birthYear(birthYear)
+                .deathYear(deathYear)
+                .professions(professions)
+                .knownForTitles(knownForTitles)
+                .build();
+    }
 }

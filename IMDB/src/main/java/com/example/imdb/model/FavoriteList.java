@@ -1,5 +1,7 @@
 package com.example.imdb.model;
 
+import com.example.imdb.model.requests.FavoriteListRequest;
+import com.example.imdb.model.responses.FavoriteListResponse;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -22,4 +24,19 @@ public class FavoriteList {
             inverseJoinColumns = @JoinColumn(name = "titleId")
     )
     private List<Movie> movies;
+
+    public FavoriteListRequest request() {
+        return FavoriteListRequest.builder()
+                .name(name)
+                .size(size)
+                .build();
+    }
+
+    public FavoriteListResponse response() {
+        return FavoriteListResponse.builder()
+                .name(name)
+                .size(size)
+                .movies(movies)
+                .build();
+    }
 }

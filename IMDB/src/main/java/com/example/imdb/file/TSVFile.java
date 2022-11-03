@@ -102,7 +102,7 @@ public class TSVFile {
 
             ratings[i++] = Rating.builder()
                     .titleId(parts[0])
-                    .avgRating(Integer.parseInt(parts[1]))
+                    .avgRating(Float.parseFloat(parts[1]))
                     .numVotes(Integer.parseInt(parts[2]))
                     .build();
         }

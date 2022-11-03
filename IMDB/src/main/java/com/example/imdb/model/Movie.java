@@ -1,5 +1,7 @@
 package com.example.imdb.model;
 
+import com.example.imdb.model.requests.MovieRequest;
+import com.example.imdb.model.responses.MovieResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,4 +41,32 @@ public class Movie {
     @OneToMany(mappedBy = "movie")
     private List<Comment> comments;
 
+    public MovieRequest request() {
+        return MovieRequest.builder()
+                .titleId(titleId)
+                .type(type)
+                .title(title)
+                .startYear(startYear)
+                .endYear(endYear)
+                .runtimeMinutes(runtimeMinutes)
+                .genres(genres)
+                .directors(directors)
+                .isAdult(isAdult)
+                .build();
+    }
+
+    public MovieResponse response() {
+        return MovieResponse.builder()
+                .titleId(titleId)
+                .type(type)
+                .title(title)
+                .startYear(startYear)
+                .endYear(endYear)
+                .runtimeMinutes(runtimeMinutes)
+                .genres(genres)
+                .directors(directors)
+                .comments(comments)
+                .isAdult(isAdult)
+                .build();
+    }
 }

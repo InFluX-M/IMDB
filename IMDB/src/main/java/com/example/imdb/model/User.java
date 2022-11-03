@@ -1,5 +1,7 @@
 package com.example.imdb.model;
 
+import com.example.imdb.model.requests.UserRequest;
+import com.example.imdb.model.responses.UserResponse;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -32,4 +34,19 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
+
+    public UserRequest request() {
+        return UserRequest.builder()
+                .username(username)
+                .password(password)
+                .build();
+    }
+
+    public UserResponse response() {
+        return UserResponse.builder()
+                .username(username)
+                .watchList(watchList)
+                .comments(comments)
+                .build();
+    }
 }

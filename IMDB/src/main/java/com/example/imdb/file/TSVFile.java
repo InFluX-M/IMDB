@@ -61,7 +61,6 @@ public class TSVFile {
             }
 
             String[] parts = s.split("\t");
-            System.err.println(Arrays.toString(parts));
 
             for (int j = 0; j < parts.length; j++)
                 if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
@@ -95,7 +94,6 @@ public class TSVFile {
             }
 
             String[] parts = s.split("\t");
-            System.err.println(Arrays.toString(parts));
 
             for (int j = 0; j < parts.length; j++)
                 if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
@@ -127,7 +125,6 @@ public class TSVFile {
             }
 
             String[] parts = s.split("\t");
-            System.err.println(Arrays.toString(parts));
 
             for (int j = 0; j < parts.length; j++)
                 if (Objects.equals(parts[j], "\\N")) parts[j] = "0";

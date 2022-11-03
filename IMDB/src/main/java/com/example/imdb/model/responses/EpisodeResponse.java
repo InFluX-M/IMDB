@@ -5,9 +5,8 @@ import lombok.Value;
 
 @Builder
 @Value
-public class SeriesEpisodeResponse {
+public class EpisodeResponse {
 
-    MovieResponse parent;
     String titleId;
     int seasonNumber;
     int episodeNumber;

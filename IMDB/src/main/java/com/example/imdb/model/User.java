@@ -1,6 +1,7 @@
 package com.example.imdb.model;
 
 import com.example.imdb.model.requests.UserRequest;
+import com.example.imdb.model.responses.UserCommentResponse;
 import com.example.imdb.model.responses.UserResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -53,6 +54,12 @@ public class User {
                 .username(username)
                 .watchList(watchList)
                 .comments(comments)
+                .build();
+    }
+
+    public UserCommentResponse commentResponse() {
+        return UserCommentResponse.builder()
+                .username(username)
                 .build();
     }
 }

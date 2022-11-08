@@ -7,11 +7,14 @@ import com.example.imdb.model.FavoriteList;
 import com.example.imdb.model.Movie;
 import com.example.imdb.model.Rating;
 import com.example.imdb.model.User;
+import com.example.imdb.model.requests.FavoriteListRequest;
 import com.example.imdb.model.requests.UserRequest;
 import com.example.imdb.model.responses.FavoriteListResponse;
 import com.example.imdb.model.responses.MovieResponse;
 import com.example.imdb.model.responses.RatingResponse;
 import com.example.imdb.model.responses.UserResponse;
+import com.example.imdb.repository.FavoriteListRepository;
+import com.example.imdb.repository.MovieRepository;
 import com.example.imdb.repository.RatingRepository;
 import com.example.imdb.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -28,6 +31,8 @@ public class UserService {
 
     private UserRepository userRepository;
     private RatingRepository ratingRepository;
+    private FavoriteListRepository favoriteListRepository;
+    private MovieRepository movieRepository;
 
     public UserResponse addUser(UserRequest request) {
         // todo password validation?
@@ -73,6 +78,36 @@ public class UserService {
         return userRepository.findById(username).get().getWatchList().stream().map(Movie::response).collect(Collectors.toSet());
     }
 
+    public FavoriteListResponse addFavList(FavoriteListRequest request) {
+        FavoriteList list = FavoriteList.builder()
+                .size(0)
+                .name(request.getName())
+                .build();
+
+        return favoriteListRepository.save(list).response();
+    }
+
+    public FavoriteListResponse addToFavList(String listName, String titleId) {
+
+        Movie movie = checkMovieId(titleId);
+        FavoriteList list = favoriteListRepository.getByName(listName);
+
+        list.getMovies().add(movie);
+
+        return favoriteListRepository.save(list).response();
+    }
+
+    public List<MovieResponse> addToWatchList(String username, String titleId) {
+
+        User user = checkUsername(username);
+        Movie movie = checkMovieId(titleId);
+
+        user.getWatchList().add(movie);
+        userRepository.save(user);
+
+        return user.getWatchList().stream().map(Movie::response).toList();
+    }
+
     public RatingResponse rateMovie(String titleId, int rating) {
 
         if (rating < 1 || rating > 10)
@@ -92,4 +127,12 @@ public class UserService {
             throw new EntityNotFoundException(User.class.getName(), username);
         return loaded.get();
     }
+
+    public Movie checkMovieId(String titleId) {
+        Optional<Movie> loaded = movieRepository.findById(titleId);
+        if (loaded.isEmpty())
+            throw new EntityNotFoundException(Movie.class.getName(), titleId);
+        return loaded.get();
+    }
+
 }

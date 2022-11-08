@@ -8,5 +8,4 @@ import lombok.Value;
 public class FavoriteListRequest {
 
     String name;
-    Integer size;
 }

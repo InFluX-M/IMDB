@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FavoriteListRepository extends JpaRepository<FavoriteList, Integer> {
+    FavoriteList getByName(String name);
 }

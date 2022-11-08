@@ -31,12 +31,7 @@ public class User {
     )
     private Set<Movie> watchList;
 
-    @ManyToMany
-    @JoinTable(
-            name = "favorite_lists",
-            joinColumns = @JoinColumn(name = "username"),
-            inverseJoinColumns = @JoinColumn(name = "id")
-    )
+    @OneToMany(mappedBy = "user")
     private Set<FavoriteList> favoriteLists;
 
     @OneToMany(mappedBy = "user")

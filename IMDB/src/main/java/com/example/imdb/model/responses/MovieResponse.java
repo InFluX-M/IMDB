@@ -16,10 +16,10 @@ public class MovieResponse {
     String titleId;
     TitleType type;
     String title;
-    boolean isAdult;
-    int startYear;
-    int endYear;
-    int runtimeMinutes;
+    Boolean isAdult;
+    Integer startYear;
+    Integer endYear;
+    Integer runtimeMinutes;
     String genres;
     Set<Person> directors;
     List<Comment> comments;

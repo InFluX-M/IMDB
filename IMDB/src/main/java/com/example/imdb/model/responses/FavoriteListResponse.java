@@ -11,6 +11,6 @@ import java.util.List;
 public class FavoriteListResponse {
 
     String name;
-    int size;
+    Integer size;
     List<Movie> movies;
 }

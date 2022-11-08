@@ -18,13 +18,13 @@ public class SeriesEpisode {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @ManyToOne
     private Movie parent;
     private String titleId; // todo Movie
-    private int seasonNumber;
-    private int episodeNumber;
+    private Integer seasonNumber;
+    private Integer episodeNumber;
 
     public SeriesEpisodeRequest request() {
         return SeriesEpisodeRequest.builder()

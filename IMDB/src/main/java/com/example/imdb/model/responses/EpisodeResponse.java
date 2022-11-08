@@ -8,6 +8,6 @@ import lombok.Value;
 public class EpisodeResponse {
 
     String titleId;
-    int seasonNumber;
-    int episodeNumber;
+    Integer seasonNumber;
+    Integer episodeNumber;
 }

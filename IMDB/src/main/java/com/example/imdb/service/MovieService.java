@@ -27,14 +27,14 @@ public class MovieService {
                 .endYear(request.getEndYear())
                 .runtimeMinutes(request.getRuntimeMinutes())
                 .genres(request.getGenres())
-                .isAdult(request.isAdult())
+                .isAdult(request.getIsAdult())
                 .build();
         return movieRepository.save(movie).response();
     }
 
     public void updateMovie(String titleId, MovieRequest request) {
         Movie movie = checkMovieId(titleId);
-        // todo
+//        if(request.)
     }
 
     public void deleteMovie(String titleId) {

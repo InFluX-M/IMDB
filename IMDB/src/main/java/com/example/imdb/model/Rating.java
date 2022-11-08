@@ -18,10 +18,10 @@ public class Rating {
 
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
     private String titleId;
-    private float avgRating;
-    private int numVotes;
+    private Float avgRating;
+    private Integer numVotes;
 
     public RatingRequest request() {
         return RatingRequest.builder()

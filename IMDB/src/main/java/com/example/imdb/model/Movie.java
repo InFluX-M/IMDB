@@ -2,6 +2,7 @@ package com.example.imdb.model;
 
 import com.example.imdb.model.requests.MovieRequest;
 import com.example.imdb.model.responses.DirectorResponse;
+import com.example.imdb.model.responses.MovieCommentResponse;
 import com.example.imdb.model.responses.MovieResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -89,6 +90,14 @@ public class Movie {
                 .titleId(titleId)
                 .title(title)
                 .directors(directors)
+                .build();
+    }
+
+    public MovieCommentResponse commentResponse() {
+        return MovieCommentResponse.builder()
+                .titleId(titleId)
+                .title(title)
+                .type(type)
                 .build();
     }
 }

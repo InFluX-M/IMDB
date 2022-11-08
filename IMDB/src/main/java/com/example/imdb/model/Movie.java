@@ -76,6 +76,7 @@ public class Movie {
                 .endYear(endYear)
                 .runtimeMinutes(runtimeMinutes)
                 .genres(genres)
+                .actors(actors)
                 .directors(directors)
                 .comments(comments)
                 .isAdult(isAdult)

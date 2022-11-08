@@ -22,6 +22,7 @@ public class MovieResponse {
     Integer runtimeMinutes;
     String genres;
     Set<Person> directors;
+    Set<Person> actors;
     List<Comment> comments;
     List<EpisodeResponse> episodeResponses;
 }

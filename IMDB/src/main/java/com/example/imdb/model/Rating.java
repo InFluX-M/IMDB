@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Rating {

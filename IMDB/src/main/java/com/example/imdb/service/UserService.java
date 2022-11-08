@@ -1,9 +1,14 @@
 package com.example.imdb.service;
 
 import com.example.imdb.exception.EntityNotFoundException;
+import com.example.imdb.model.FavoriteList;
+import com.example.imdb.model.Rating;
 import com.example.imdb.model.User;
 import com.example.imdb.model.requests.UserRequest;
+import com.example.imdb.model.responses.FavoriteListResponse;
+import com.example.imdb.model.responses.RatingResponse;
 import com.example.imdb.model.responses.UserResponse;
+import com.example.imdb.repository.RatingRepository;
 import com.example.imdb.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +21,7 @@ import java.util.Optional;
 public class UserService {
 
     private UserRepository userRepository;
+    private RatingRepository ratingRepository;
 
     public UserResponse addUser(UserRequest request) {
         // todo username tekrari . password validation?
@@ -37,12 +43,24 @@ public class UserService {
         userRepository.deleteById(username);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll().stream().map(User::response).toList();
     }
 
-    public User getUserById(String username) {
-        return checkUsername(username);
+    public UserResponse getUserById(String username) {
+        return checkUsername(username).response();
+    }
+
+    public List<FavoriteListResponse> getFavLists(String username) {
+        return userRepository.findById(username).get().getFavoriteLists().stream().map(FavoriteList::response).toList();
+    }
+
+    public RatingResponse rateMovie(String username, String titleId, int rating) {
+        // todo rating validation
+        Rating ratingObj = ratingRepository.findByTitleId(titleId);
+        ratingObj.setNumVotes(ratingObj.getNumVotes() + 1);
+        ratingObj.setAvgRating((rating + ratingObj.getAvgRating()) / 2f);
+        return ratingRepository.save(ratingObj).response();
     }
 
     public User checkUsername(String username) {

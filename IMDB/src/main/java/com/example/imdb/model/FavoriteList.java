@@ -13,7 +13,7 @@ import java.util.List;
 public class FavoriteList {
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
     private String name;
     private int size;
 

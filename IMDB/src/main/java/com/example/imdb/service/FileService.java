@@ -22,13 +22,9 @@ import java.util.Objects;
 public class FileService {
 
     private MovieRepository movieRepository;
-
     private PersonRepository personRepository;
-
     private RatingRepository ratingRepository;
-
     private SeriesEpisodeRepo seriesEpisodeRepo;
-
     public List<MovieResponse> readMovies() throws IOException {
 
         String fileName = "src/main/resources/Movie.tsv";
@@ -205,5 +201,4 @@ public class FileService {
 
         return movies.stream().map(Movie::directorResponse).toList();
     }
-
 }

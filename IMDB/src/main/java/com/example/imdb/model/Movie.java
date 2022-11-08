@@ -23,10 +23,10 @@ public class Movie {
     private String titleId;
     private TitleType type;
     private String title;
-    private boolean isAdult;
-    private int startYear;
-    private int endYear;
-    private int runtimeMinutes;
+    private Boolean isAdult;
+    private Integer startYear;
+    private Integer endYear;
+    private Integer runtimeMinutes;
     private String genres;
     @Transient
     private List<String> genresList;

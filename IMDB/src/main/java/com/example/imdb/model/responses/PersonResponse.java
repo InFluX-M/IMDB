@@ -9,8 +9,8 @@ public class PersonResponse {
 
     String id;
     String name;
-    int birthYear;
-    int deathYear;
+    Integer birthYear;
+    Integer deathYear;
     String professions;
     String knownForTitles;
 }

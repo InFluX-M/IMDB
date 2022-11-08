@@ -8,6 +8,6 @@ import lombok.Value;
 public class RatingResponse {
 
     String titleId;
-    float avgRating;
-    int numVotes;
+    Float avgRating;
+    Integer numVotes;
 }

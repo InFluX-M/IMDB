@@ -9,6 +9,6 @@ public class SeriesEpisodeResponse {
 
     MovieResponse parent;
     String titleId;
-    int seasonNumber;
-    int episodeNumber;
+    Integer seasonNumber;
+    Integer episodeNumber;
 }

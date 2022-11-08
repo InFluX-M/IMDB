@@ -23,8 +23,8 @@ public class Person {
     @Id
     private String id;
     private String name;
-    private int birthYear;
-    private int deathYear;
+    private Integer birthYear;
+    private Integer deathYear;
     private String professions;
     private String knownForTitles;
     @Transient

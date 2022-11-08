@@ -9,8 +9,8 @@ public class PersonRequest {
 
     String id;
     String name;
-    int birthYear;
-    int deathYear;
+    Integer birthYear;
+    Integer deathYear;
     String professions;
     String knownForTitles;
 }

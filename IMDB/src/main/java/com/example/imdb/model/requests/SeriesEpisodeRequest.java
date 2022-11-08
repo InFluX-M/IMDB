@@ -11,6 +11,6 @@ public class SeriesEpisodeRequest {
 
     String parentId;
     String titleId;
-    int seasonNumber;
-    int episodeNumber;
+    Integer seasonNumber;
+    Integer episodeNumber;
 }

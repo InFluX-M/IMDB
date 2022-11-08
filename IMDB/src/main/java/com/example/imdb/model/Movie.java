@@ -41,6 +41,14 @@ public class Movie {
     )
     private Set<Person> directors;
 
+    @ManyToMany
+    @JoinTable(
+            name = "movie_actor",
+            joinColumns = @JoinColumn(name = "titleId"),
+            inverseJoinColumns = @JoinColumn(name = "id")
+    )
+    private Set<Person> actors;
+
     @OneToMany(mappedBy = "movie")
     private List<Comment> comments;
 

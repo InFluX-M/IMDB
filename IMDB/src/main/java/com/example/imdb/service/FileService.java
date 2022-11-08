@@ -1,13 +1,20 @@
-package com.example.imdb.file;
+package com.example.imdb.service;
 
 import com.example.imdb.model.*;
+import com.example.imdb.repository.MovieRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public class TSVFile {
+@Service
+@AllArgsConstructor
+public class FileService {
+
+    private MovieRepository movieRepository;
 
     public static Movie[] readMovies(String fileName) throws IOException {
 
@@ -44,7 +51,7 @@ public class TSVFile {
         return allMovies;
     }
 
-    public static Person[] readPersons(String fileName) throws IOException {
+    public Person[] readPersons(String fileName) throws IOException {
 
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         Person[] people = new Person[lines.length - 1];
@@ -74,12 +81,15 @@ public class TSVFile {
                     .build();
 
             String[] titles = parts[5].split("\\,");
-            for (String st: titles) {
+
+            for (String st : titles) {
                 people[i - 1].getKnownForTitlesList().add(st);
-
+                Movie movie = movieRepository.findById(st).get();
+                movie.getActors().add(people[i-1]);
+                movieRepository.save(movie);
             }
-
         }
+
         return people;
     }
 
@@ -144,4 +154,5 @@ public class TSVFile {
 
         return episodes;
     }
+
 }

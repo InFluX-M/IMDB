@@ -2,12 +2,14 @@ package com.example.imdb.model;
 
 import com.example.imdb.model.requests.FavoriteListRequest;
 import com.example.imdb.model.responses.FavoriteListResponse;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
+@Builder
 @Entity
 @Table
 public class FavoriteList {
@@ -28,7 +30,6 @@ public class FavoriteList {
     public FavoriteListRequest request() {
         return FavoriteListRequest.builder()
                 .name(name)
-                .size(size)
                 .build();
     }
 

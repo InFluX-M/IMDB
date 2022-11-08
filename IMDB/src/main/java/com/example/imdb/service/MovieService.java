@@ -7,8 +7,9 @@ import com.example.imdb.model.TitleType;
 import com.example.imdb.model.requests.MovieRequest;
 import com.example.imdb.model.responses.MovieResponse;
 import com.example.imdb.model.responses.PersonResponse;
+import com.example.imdb.model.responses.RatingResponse;
 import com.example.imdb.repository.MovieRepository;
-import com.example.imdb.repository.PersonRepository;
+import com.example.imdb.repository.RatingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ import java.util.Optional;
 public class MovieService {
 
     private MovieRepository movieRepository;
-    private PersonRepository personRepository;
+    private RatingRepository ratingRepository;
 
     public MovieResponse addMovie(MovieRequest request) {
 
@@ -154,6 +155,21 @@ public class MovieService {
         } catch (SQLException | ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public List<PersonResponse> getActors(String titleId) {
+        Movie movie = checkMovieId(titleId);
+        return movie.getActors().stream().map(Person::response).toList();
+    }
+
+    public List<PersonResponse> getDirectors(String titleId) {
+        Movie movie = checkMovieId(titleId);
+        return movie.getDirectors().stream().map(Person::response).toList();
+    }
+
+    public RatingResponse getRating(String titleId) {
+        Movie movie = checkMovieId(titleId);
+        return ratingRepository.findByTitleId(movie.getTitleId()).response();
     }
 
     public Movie checkMovieId(String titleId) {

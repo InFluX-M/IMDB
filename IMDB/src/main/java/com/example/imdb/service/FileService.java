@@ -13,9 +13,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.spec.ECPoint;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @AllArgsConstructor
@@ -60,48 +63,57 @@ public class FileService {
         return movieRepository.saveAll(allMovies).stream().map(Movie::response).toList();
     }
 
-//    public List<PersonResponse> readPersons() throws IOException {
-//
-//        String fileName = "src/main/resources/Person.tsv";
-//        String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
-//        ArrayList<Person> people = new ArrayList<>();
-//
-//        boolean firstLine = true;
-//        int i = 0;
-//
-//        for (String s : lines) {
-//
-//            if (firstLine) {
-//                firstLine = false;
-//                continue;
-//            }
-//
-//            String[] parts = s.split("\t");
-//
-//            for (int j = 0; j < parts.length; j++)
-//                if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
-//
-//            people.add(Person.builder()
-//                    .id(parts[0])
-//                    .name(parts[1])
-//                    .birthDate(Integer.parseInt(parts[2]))
-//                    .deathDate(Integer.parseInt(parts[3]))
-//                    .professions(parts[4])
-//                    .knownForTitles(parts[5])
-//                    .build());
-//
-//            String[] titles = parts[5].split("\\,");
-//
-//            for (String st : titles) {
-//                people.get(i-1).getKnownForTitlesList().add(st);
-//                Movie movie = movieRepository.findById(st).get();
-//                movie.getActors().add(people.get(i-1));
-//                movieRepository.save(movie);
-//            }
-//        }
-//
-//        return personRepository.saveAll(people).stream().map(Person::response).toList();
-//    }
+    public List<PersonResponse> readPersons() throws IOException {
+
+        String fileName = "src/main/resources/Person.tsv";
+        String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
+        ArrayList<Person> people = new ArrayList<>();
+
+        boolean firstLine = true;
+        int i = 0;
+
+        for (String s : lines) {
+
+            if (firstLine) {
+                firstLine = false;
+                continue;
+            }
+
+            String[] parts = s.split("\t");
+
+            for (int j = 0; j < parts.length; j++)
+                if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
+
+            Random random = new Random();
+            int birthDay = random.nextInt(28) + 1;
+            int birthMonth = random.nextInt(12) + 1;
+            int deathDay = random.nextInt(28) + 1;
+            int deathMonth = random.nextInt(12) + 1;
+
+            LocalDate birthDate = LocalDate.of(Integer.parseInt(parts[2]), birthMonth, birthDay);
+            LocalDate deathDate = LocalDate.of(Integer.parseInt(parts[3]), deathMonth, deathDay);
+
+            people.add(Person.builder()
+                    .id(parts[0])
+                    .name(parts[1])
+                    .birthDate(birthDate)
+                    .deathDate(deathDate)
+                    .professions(parts[4])
+                    .knownForTitles(parts[5])
+                    .build());
+
+            String[] titles = parts[5].split("\\,");
+
+            for (String st : titles) {
+                people.get(i-1).getKnownForTitlesList().add(st);
+                Movie movie = movieRepository.findById(st).get();
+                movie.getActors().add(people.get(i-1));
+                movieRepository.save(movie);
+            }
+        }
+
+        return personRepository.saveAll(people).stream().map(Person::response).toList();
+    }
 
     public List<RatingResponse> readRatings() throws IOException {
 

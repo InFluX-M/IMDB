@@ -1,6 +1,7 @@
 package com.example.imdb.model;
 
 import com.example.imdb.model.requests.MovieRequest;
+import com.example.imdb.model.responses.DirectorResponse;
 import com.example.imdb.model.responses.MovieResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -79,6 +80,14 @@ public class Movie {
                 .comments(comments)
                 .isAdult(isAdult)
                 .episodeResponses(episodes.stream().map(SeriesEpisode::episodeResponse).toList())
+                .build();
+    }
+
+    public DirectorResponse directorResponse() {
+        return DirectorResponse.builder()
+                .titleId(titleId)
+                .title(title)
+                .directors(directors)
                 .build();
     }
 }

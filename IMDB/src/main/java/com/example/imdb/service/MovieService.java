@@ -2,8 +2,10 @@ package com.example.imdb.service;
 
 import com.example.imdb.exception.EntityNotFoundException;
 import com.example.imdb.model.Movie;
+import com.example.imdb.model.Person;
 import com.example.imdb.model.requests.MovieRequest;
 import com.example.imdb.model.responses.MovieResponse;
+import com.example.imdb.model.responses.PersonResponse;
 import com.example.imdb.repository.MovieRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ public class MovieService {
     private MovieRepository movieRepository;
 
     public MovieResponse addMovie(MovieRequest request) {
-        // todo titleId tekrari
+
         Movie movie = Movie.builder()
                 .titleId(request.getTitleId())
                 .type(request.getType())
@@ -32,21 +34,41 @@ public class MovieService {
         return movieRepository.save(movie).response();
     }
 
-    public void updateMovie(String titleId, MovieRequest request) {
+    public MovieResponse updateMovie(String titleId, MovieRequest request) {
         Movie movie = checkMovieId(titleId);
-//        if(request.)
+
+        if(request.getIsAdult()) movie.setIsAdult(request.getIsAdult());
+        if(request.getRuntimeMinutes() != null) movie.setRuntimeMinutes(request.getRuntimeMinutes());
+        if(request.getGenres() != null) movie.setGenres(request.getGenres());
+        if(request.getType() != null) movie.setType(request.getType());
+        if(request.getStartYear() != null) movie.setStartYear(request.getStartYear());
+        if(request.getEndYear() != null) movie.setEndYear(request.getEndYear());
+        if(request.getDirectors() != null) movie.setDirectors(request.getDirectors());
+        if(request.getTitle() != null) movie.setTitle(request.getTitle());
+        if(request.getTitleId() != null) movie.setTitleId(request.getTitleId());
+
+        return movieRepository.save(movie).response();
     }
 
     public void deleteMovie(String titleId) {
         movieRepository.deleteById(titleId);
     }
 
-    public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+    public List<MovieResponse> getAllMovies() {
+        return movieRepository.findAll().stream().map(Movie::response).toList();
     }
 
-    public Movie getMovieById(String titleId) {
-        return checkMovieId(titleId);
+    public List<PersonResponse> getDirectorsMovieById(String titleId)
+    {
+        return checkMovieId(titleId).getDirectors().stream().map(Person::response).toList();
+    }
+    public List<PersonResponse> getActorMovieById(String titleId)
+    {
+        return checkMovieId(titleId).getActors().stream().map(Person::response).toList();
+    }
+
+    public MovieResponse getMovieById(String titleId) {
+        return checkMovieId(titleId).response();
     }
 
     public Movie checkMovieId(String titleId) {

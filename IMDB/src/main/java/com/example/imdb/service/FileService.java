@@ -60,48 +60,48 @@ public class FileService {
         return movieRepository.saveAll(allMovies).stream().map(Movie::response).toList();
     }
 
-    public List<PersonResponse> readPersons() throws IOException {
-
-        String fileName = "src/main/resources/Person.tsv";
-        String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
-        ArrayList<Person> people = new ArrayList<>();
-
-        boolean firstLine = true;
-        int i = 0;
-
-        for (String s : lines) {
-
-            if (firstLine) {
-                firstLine = false;
-                continue;
-            }
-
-            String[] parts = s.split("\t");
-
-            for (int j = 0; j < parts.length; j++)
-                if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
-
-            people.add(Person.builder()
-                    .id(parts[0])
-                    .name(parts[1])
-                    .birthYear(Integer.parseInt(parts[2]))
-                    .deathYear(Integer.parseInt(parts[3]))
-                    .professions(parts[4])
-                    .knownForTitles(parts[5])
-                    .build());
-
-            String[] titles = parts[5].split("\\,");
-
-            for (String st : titles) {
-                people.get(i-1).getKnownForTitlesList().add(st);
-                Movie movie = movieRepository.findById(st).get();
-                movie.getActors().add(people.get(i-1));
-                movieRepository.save(movie);
-            }
-        }
-
-        return personRepository.saveAll(people).stream().map(Person::response).toList();
-    }
+//    public List<PersonResponse> readPersons() throws IOException {
+//
+//        String fileName = "src/main/resources/Person.tsv";
+//        String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
+//        ArrayList<Person> people = new ArrayList<>();
+//
+//        boolean firstLine = true;
+//        int i = 0;
+//
+//        for (String s : lines) {
+//
+//            if (firstLine) {
+//                firstLine = false;
+//                continue;
+//            }
+//
+//            String[] parts = s.split("\t");
+//
+//            for (int j = 0; j < parts.length; j++)
+//                if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
+//
+//            people.add(Person.builder()
+//                    .id(parts[0])
+//                    .name(parts[1])
+//                    .birthDate(Integer.parseInt(parts[2]))
+//                    .deathDate(Integer.parseInt(parts[3]))
+//                    .professions(parts[4])
+//                    .knownForTitles(parts[5])
+//                    .build());
+//
+//            String[] titles = parts[5].split("\\,");
+//
+//            for (String st : titles) {
+//                people.get(i-1).getKnownForTitlesList().add(st);
+//                Movie movie = movieRepository.findById(st).get();
+//                movie.getActors().add(people.get(i-1));
+//                movieRepository.save(movie);
+//            }
+//        }
+//
+//        return personRepository.saveAll(people).stream().map(Person::response).toList();
+//    }
 
     public List<RatingResponse> readRatings() throws IOException {
 

@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
-    Rating findByTitleId(String titleId);
 
     List<Rating> findByAvgRatingGreaterThan(double averageVote);
 

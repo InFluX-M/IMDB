@@ -22,13 +22,16 @@ public class SeriesEpisode {
 
     @ManyToOne
     private Movie parent;
-    private String titleId; // todo Movie
+
+    @OneToOne
+    private Movie episode;
+
     private Integer seasonNumber;
     private Integer episodeNumber;
 
     public SeriesEpisodeRequest request() {
         return SeriesEpisodeRequest.builder()
-                .titleId(titleId)
+                .titleId(episode.getTitleId())
                 .seasonNumber(seasonNumber)
                 .episodeNumber(episodeNumber)
                 .build();
@@ -36,16 +39,16 @@ public class SeriesEpisode {
 
     public SeriesEpisodeResponse response() {
         return SeriesEpisodeResponse.builder()
-                .titleId(titleId)
+                .episode(episode.response())
                 .seasonNumber(seasonNumber)
                 .episodeNumber(episodeNumber)
-                .parent(parent.response())
+                .parent(parent.commentResponse())
                 .build();
     }
 
     public EpisodeResponse episodeResponse() {
         return EpisodeResponse.builder()
-                .titleId(titleId)
+                .titleId(episode.getTitleId())
                 .seasonNumber(seasonNumber)
                 .episodeNumber(episodeNumber)
                 .build();

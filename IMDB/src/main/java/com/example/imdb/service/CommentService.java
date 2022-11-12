@@ -63,9 +63,8 @@ public class CommentService {
 
     public CommentResponse updateComment(Integer commentId, CommentRequest commentRequest) {
         Comment comment = commentRepository.findById(commentId).get();
-        if(commentRequest.getBody() != null) comment.setBody(commentRequest.getBody());
+        if (commentRequest.getBody() != null) comment.setBody(commentRequest.getBody());
         return commentRepository.save(comment).response();
     }
-
 
 }

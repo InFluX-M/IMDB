@@ -1,7 +1,6 @@
 package com.example.imdb.model;
 
 import com.example.imdb.model.requests.RatingRequest;
-import com.example.imdb.model.responses.RatingCommentResponse;
 import com.example.imdb.model.responses.RatingResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,13 +20,16 @@ public class Rating {
     @Id
     @GeneratedValue
     private Integer id;
-    private String titleId;
+
+    @OneToOne
+    private Movie movie;
+
     private Float avgRating;
     private Integer numVotes;
 
     public RatingRequest request() {
         return RatingRequest.builder()
-                .titleId(titleId)
+                .titleId(movie.getTitleId())
                 .avgRating(avgRating)
                 .numVotes(numVotes)
                 .build();
@@ -35,16 +37,9 @@ public class Rating {
 
     public RatingResponse response() {
         return RatingResponse.builder()
-                .titleId(titleId)
                 .avgRating(avgRating)
                 .numVotes(numVotes)
                 .build();
     }
 
-    public RatingCommentResponse commentResponse() {
-        return RatingCommentResponse.builder()
-                .avgRating(avgRating)
-                .numVotes(numVotes)
-                .build();
-    }
 }

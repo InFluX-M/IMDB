@@ -1,7 +1,6 @@
 package com.example.imdb.model;
 
 import com.example.imdb.model.requests.UserRequest;
-import com.example.imdb.model.responses.UserCommentResponse;
 import com.example.imdb.model.responses.UserResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,16 +22,11 @@ public class User {
     private String username;
     private String password;
 
-    @ManyToMany
-    @JoinTable(
-            name = "watch_list",
-            joinColumns = @JoinColumn(name = "username"),
-            inverseJoinColumns = @JoinColumn(name = "titleId")
-    )
-    private Set<Movie> watchList;
+    @OneToOne
+    private MovieList watchList;
 
     @OneToMany(mappedBy = "user")
-    private Set<FavoriteList> favoriteLists;
+    private Set<MovieList> movieLists;
 
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
@@ -47,14 +41,8 @@ public class User {
     public UserResponse response() {
         return UserResponse.builder()
                 .username(username)
-                .watchList(watchList)
+                .watchList(watchList.response())
                 .comments(comments)
-                .build();
-    }
-
-    public UserCommentResponse commentResponse() {
-        return UserCommentResponse.builder()
-                .username(username)
                 .build();
     }
 }

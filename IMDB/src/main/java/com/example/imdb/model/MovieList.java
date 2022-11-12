@@ -1,7 +1,7 @@
 package com.example.imdb.model;
 
 import com.example.imdb.model.requests.FavoriteListRequest;
-import com.example.imdb.model.responses.FavoriteListResponse;
+import com.example.imdb.model.responses.MovieListResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table
-public class FavoriteList {
+public class MovieList {
     @Id
     @GeneratedValue
     private Integer id;
@@ -25,7 +25,7 @@ public class FavoriteList {
 
     @ManyToMany
     @JoinTable(
-            name = "movie_list",
+            name = "movieList_movies",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "titleId")
     )
@@ -40,11 +40,11 @@ public class FavoriteList {
                 .build();
     }
 
-    public FavoriteListResponse response() {
-        return FavoriteListResponse.builder()
+    public MovieListResponse response() {
+        return MovieListResponse.builder()
                 .name(name)
                 .size(size)
-                .movies(movies)
+                .movies(movies.stream().map(Movie::response).toList())
                 .build();
     }
 }

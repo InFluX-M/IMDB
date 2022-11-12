@@ -3,17 +3,17 @@ package com.example.imdb.service;
 import com.example.imdb.exception.EntityNotFoundException;
 import com.example.imdb.exception.InvalidRatingException;
 import com.example.imdb.exception.InvalidUsernameException;
-import com.example.imdb.model.FavoriteList;
+import com.example.imdb.model.MovieList;
 import com.example.imdb.model.Movie;
 import com.example.imdb.model.Rating;
 import com.example.imdb.model.User;
 import com.example.imdb.model.requests.FavoriteListRequest;
 import com.example.imdb.model.requests.UserRequest;
-import com.example.imdb.model.responses.FavoriteListResponse;
+import com.example.imdb.model.responses.MovieListResponse;
 import com.example.imdb.model.responses.MovieResponse;
 import com.example.imdb.model.responses.RatingResponse;
 import com.example.imdb.model.responses.UserResponse;
-import com.example.imdb.repository.FavoriteListRepository;
+import com.example.imdb.repository.MovieListRepository;
 import com.example.imdb.repository.MovieRepository;
 import com.example.imdb.repository.RatingRepository;
 import com.example.imdb.repository.UserRepository;
@@ -31,7 +31,7 @@ public class UserService {
 
     private UserRepository userRepository;
     private RatingRepository ratingRepository;
-    private FavoriteListRepository favoriteListRepository;
+    private MovieListRepository movieListRepository;
     private MovieRepository movieRepository;
 
     public UserResponse addUser(UserRequest request) {
@@ -70,31 +70,31 @@ public class UserService {
         return checkUsername(username).response();
     }
 
-    public List<FavoriteListResponse> getFavLists(String username) {
-        return userRepository.findById(username).get().getFavoriteLists().stream().map(FavoriteList::response).toList();
+    public List<MovieListResponse> getFavLists(String username) {
+        return userRepository.findById(username).get().getMovieLists().stream().map(MovieList::response).toList();
     }
 
     public Set<MovieResponse> getWatchLists(String username) {
-        return userRepository.findById(username).get().getWatchList().stream().map(Movie::response).collect(Collectors.toSet());
+        return userRepository.findById(username).get().getWatchList().getMovies().stream().map(Movie::response).collect(Collectors.toSet());
     }
 
-    public FavoriteListResponse addFavList(FavoriteListRequest request) {
-        FavoriteList list = FavoriteList.builder()
+    public MovieListResponse addFavList(FavoriteListRequest request) {
+        MovieList list = MovieList.builder()
                 .size(0)
                 .name(request.getName())
                 .build();
 
-        return favoriteListRepository.save(list).response();
+        return movieListRepository.save(list).response();
     }
 
-    public FavoriteListResponse addToFavList(String listName, String titleId) {
+    public MovieListResponse addToFavList(String listName, String titleId) {
 
         Movie movie = checkMovieId(titleId);
-        FavoriteList list = favoriteListRepository.getByName(listName);
+        MovieList list = movieListRepository.getByName(listName);
 
         list.getMovies().add(movie);
 
-        return favoriteListRepository.save(list).response();
+        return movieListRepository.save(list).response();
     }
 
     public List<MovieResponse> addToWatchList(String username, String titleId) {
@@ -102,10 +102,10 @@ public class UserService {
         User user = checkUsername(username);
         Movie movie = checkMovieId(titleId);
 
-        user.getWatchList().add(movie);
+        user.getWatchList().getMovies().add(movie);
         userRepository.save(user);
 
-        return user.getWatchList().stream().map(Movie::response).toList();
+        return user.getWatchList().getMovies().stream().map(Movie::response).toList();
     }
 
     public RatingResponse rateMovie(String titleId, int rating) {
@@ -113,11 +113,13 @@ public class UserService {
         if (rating < 1 || rating > 10)
             throw new InvalidRatingException();
 
-        Rating ratingObj = ratingRepository.findByTitleId(titleId);
+        Movie movie = checkMovieId(titleId);
+        Rating ratingObj = movie.getRating();
 
         float newAvg = (rating + (ratingObj.getAvgRating() * ratingObj.getNumVotes())) / (ratingObj.getNumVotes() + 1);
         ratingObj.setAvgRating(newAvg);
         ratingObj.setNumVotes(ratingObj.getNumVotes() + 1);
+
         return ratingRepository.save(ratingObj).response();
     }
 

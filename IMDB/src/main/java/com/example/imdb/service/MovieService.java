@@ -169,7 +169,7 @@ public class MovieService {
 
     public RatingResponse getRating(String titleId) {
         Movie movie = checkMovieId(titleId);
-        return ratingRepository.findByTitleId(movie.getTitleId()).response();
+        return movie.getRating().response();
     }
 
     public Movie checkMovieId(String titleId) {

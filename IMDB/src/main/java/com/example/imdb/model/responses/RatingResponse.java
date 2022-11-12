@@ -7,7 +7,6 @@ import lombok.Value;
 @Value
 public class RatingResponse {
 
-    String titleId;
     Float avgRating;
     Integer numVotes;
 }

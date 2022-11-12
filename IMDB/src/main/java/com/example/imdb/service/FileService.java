@@ -12,13 +12,11 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.spec.ECPoint;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +26,7 @@ public class FileService {
     private PersonRepository personRepository;
     private RatingRepository ratingRepository;
     private SeriesEpisodeRepo seriesEpisodeRepo;
+
     public List<MovieResponse> readMovies() throws IOException {
 
         String fileName = "src/main/resources/Movie.tsv";
@@ -46,7 +45,7 @@ public class FileService {
             String[] parts = s.split("\t");
 
             for (int j = 0; j < parts.length; j++)
-                if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
+                if (Objects.equals(parts[j], "\\N")) parts[j] = null;
 
             allMovies.add(Movie.builder()
                     .titleId(parts[0])
@@ -82,7 +81,7 @@ public class FileService {
             String[] parts = s.split("\t");
 
             for (int j = 0; j < parts.length; j++)
-                if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
+                if (Objects.equals(parts[j], "\\N")) parts[j] = null;
 
             Random random = new Random();
             int birthDay = random.nextInt(28) + 1;
@@ -98,18 +97,22 @@ public class FileService {
                     .name(parts[1])
                     .birthDate(birthDate)
                     .deathDate(deathDate)
+                    .birthDateMonth(birthMonth)
+                    .birthDateDay(birthDay)
                     .professions(parts[4])
                     .knownForTitles(parts[5])
                     .build());
 
-            String[] titles = parts[5].split("\\,");
+            String[] titles = parts[5].split(",");
 
             for (String st : titles) {
-                people.get(i-1).getKnownForTitlesList().add(st);
+                people.get(i).getKnownForTitlesList().add(st);
                 Movie movie = movieRepository.findById(st).get();
-                movie.getActors().add(people.get(i-1));
+                movie.getActors().add(people.get(i));
                 movieRepository.save(movie);
             }
+
+            i++;
         }
 
         return personRepository.saveAll(people).stream().map(Person::response).toList();
@@ -122,7 +125,6 @@ public class FileService {
         ArrayList<Rating> ratings = new ArrayList<>();
 
         boolean firstLine = true;
-        int i = 0;
 
         for (String s : lines) {
 
@@ -134,10 +136,11 @@ public class FileService {
             String[] parts = s.split("\t");
 
             for (int j = 0; j < parts.length; j++)
-                if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
+                if (Objects.equals(parts[j], "\\N")) parts[j] = null;
 
+            Movie movie = movieRepository.findById(parts[0]).get();
             ratings.add(Rating.builder()
-                    .titleId(parts[0])
+                    .movie(movie)
                     .avgRating(Float.parseFloat(parts[1]))
                     .numVotes(Integer.parseInt(parts[2]))
                     .build());
@@ -154,7 +157,6 @@ public class FileService {
         ArrayList<SeriesEpisode> episodes = new ArrayList<>();
 
         boolean firstLine = true;
-        int i = 0;
 
         for (String s : lines) {
 
@@ -166,10 +168,11 @@ public class FileService {
             String[] parts = s.split("\t");
 
             for (int j = 0; j < parts.length; j++)
-                if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
+                if (Objects.equals(parts[j], "\\N")) parts[j] = null;
 
+            Movie episode = movieRepository.findById(parts[0]).get();
             episodes.add(SeriesEpisode.builder()
-                    .titleId(parts[0])
+                    .episode(episode)
                     .parent(Movie.builder().titleId(parts[1]).build())
                     .seasonNumber(Integer.parseInt(parts[2]))
                     .episodeNumber(Integer.parseInt(parts[3]))
@@ -197,13 +200,12 @@ public class FileService {
             String[] parts = s.split("\t");
 
             for (int j = 0; j < parts.length; j++)
-                if (Objects.equals(parts[j], "\\N")) parts[j] = "0";
+                if (Objects.equals(parts[j], "\\N")) parts[j] = null;
 
             String[] directors = parts[1].split(",");
 
             Movie movie = movieRepository.findById(parts[0]).get();
-            for(String d : directors)
-            {
+            for (String d : directors) {
                 movie.getDirectors().add(personRepository.findById(d).get());
             }
 

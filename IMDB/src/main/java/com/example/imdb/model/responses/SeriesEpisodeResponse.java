@@ -7,8 +7,8 @@ import lombok.Value;
 @Value
 public class SeriesEpisodeResponse {
 
-    MovieResponse parent;
-    String titleId;
+    MovieCommentResponse parent;
+    MovieResponse episode;
     Integer seasonNumber;
     Integer episodeNumber;
 }

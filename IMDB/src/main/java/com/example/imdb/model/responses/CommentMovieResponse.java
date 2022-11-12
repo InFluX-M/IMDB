@@ -7,5 +7,5 @@ import lombok.Value;
 @Value
 public class CommentMovieResponse {
     String body;
-    UserCommentResponse userCommentResponse;
+    String username;
 }

@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
@@ -18,7 +19,7 @@ import java.util.List;
 @Table
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+public class Comment implements Serializable {
 
     @Id
     @GeneratedValue
@@ -33,7 +34,10 @@ public class Comment {
     @JoinColumn(name = "titleId")
     private Movie movie;
 
-    @OneToMany(mappedBy = "comment")
+    @ManyToOne
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent")
     private List<Comment> replies;
 
     public CommentRequest request() {
@@ -52,7 +56,7 @@ public class Comment {
         return CommentResponse.builder()
                 .body(body)
                 .movieCommentResponse(movie.commentResponse())
-                .userCommentResponse(user.commentResponse())
+                .username(user.getUsername())
                 .replies(replies.stream().map(Comment::replyResponse).toList())
                 .build();
     }
@@ -60,9 +64,8 @@ public class Comment {
     public CommentMovieResponse movieResponse() {
         return CommentMovieResponse.builder()
                 .body(body)
-                .userCommentResponse(user.commentResponse())
+                .username(user.getUsername())
                 .build();
     }
-
 
 }

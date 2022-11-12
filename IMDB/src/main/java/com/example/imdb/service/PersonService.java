@@ -30,15 +30,14 @@ public class PersonService {
         return personRepository.save(person).response();
     }
 
-    public PersonResponse updatePerson(String personId, PersonRequest request)
-    {
+    public PersonResponse updatePerson(String personId, PersonRequest request) {
         Person person = checkPersonId(personId);
 
-        if(request.getDeathYear() != null) person.setDeathDate(request.getDeathYear());
-        if(request.getBirthYear() != null) person.setBirthDate(request.getBirthYear());
-        if(request.getKnownForTitles() != null) person.setKnownForTitles(request.getKnownForTitles());
-        if(request.getName() != null) person.setName(request.getName());
-        if(request.getProfessions() != null) person.setProfessions(request.getProfessions());
+        if (request.getDeathYear() != null) person.setDeathDate(request.getDeathYear());
+        if (request.getBirthYear() != null) person.setBirthDate(request.getBirthYear());
+        if (request.getKnownForTitles() != null) person.setKnownForTitles(request.getKnownForTitles());
+        if (request.getName() != null) person.setName(request.getName());
+        if (request.getProfessions() != null) person.setProfessions(request.getProfessions());
 
         return personRepository.save(person).response();
     }
@@ -58,6 +57,7 @@ public class PersonService {
     public List<PersonResponse> getPersonsByBirthDate(int year, int month) {
         return personRepository.findByBirthDateMonthAndBirthDateDay(year, month).stream().map(Person::response).toList();
     }
+
     public Person checkPersonId(String personId) {
         Optional<Person> loaded = personRepository.findById(personId);
         if (loaded.isEmpty())

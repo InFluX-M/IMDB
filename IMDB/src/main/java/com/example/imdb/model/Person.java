@@ -21,6 +21,7 @@ import java.util.List;
 @Entity
 @Table
 public class Person {
+
     @Id
     private String id;
     private String name;
@@ -30,7 +31,6 @@ public class Person {
     private String knownForTitles;
 
     private Integer birthDateMonth;
-
     private Integer birthDateDay;
 
     @Transient

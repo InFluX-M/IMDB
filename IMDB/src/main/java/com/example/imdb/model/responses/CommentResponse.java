@@ -10,7 +10,7 @@ import java.util.List;
 public class CommentResponse {
 
     String body;
-    UserCommentResponse userCommentResponse;
+    String username;
     MovieCommentResponse movieCommentResponse;
     List<ReplyResponse> replies;
 }

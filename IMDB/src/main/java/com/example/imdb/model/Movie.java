@@ -20,6 +20,8 @@ import java.util.Set;
 @Entity
 @Table
 public class Movie {
+    @OneToMany(mappedBy = "parent")
+    List<SeriesEpisode> episodes;
     @Id
     private String titleId;
     private TitleType type;
@@ -29,11 +31,9 @@ public class Movie {
     private Integer endYear;
     private Integer runtimeMinutes;
     private String genres;
+
     @Transient
     private List<String> genresList;
-
-    @OneToMany(mappedBy = "parent")
-    List<SeriesEpisode> episodes;
 
     @ManyToMany
     @JoinTable(
@@ -53,6 +53,9 @@ public class Movie {
 
     @OneToMany(mappedBy = "movie")
     private List<Comment> comments;
+
+    @OneToOne
+    private Rating rating;
 
     public MovieRequest request() {
         return MovieRequest.builder()
@@ -81,7 +84,8 @@ public class Movie {
                 .directors(directors)
                 .comments(comments)
                 .isAdult(isAdult)
-                .episodeResponses(episodes.stream().map(SeriesEpisode::episodeResponse).toList())
+                .episode(episodes.stream().map(SeriesEpisode::episodeResponse).toList())
+                .rating(rating.response())
                 .build();
     }
 

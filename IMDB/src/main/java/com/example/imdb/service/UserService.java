@@ -47,12 +47,13 @@ public class UserService {
         }
     }
 
-    public void updateUser(String username, UserRequest request) {
+    public UserResponse updateUser(String username, UserRequest request) {
         // todo valid pass?
         try {
             User user = checkUsername(username);
             if (request.getUsername() != null) user.setUsername(request.getUsername());
             if (request.getPassword() != null) user.setPassword(request.getPassword());
+            return userRepository.save(user).response();
         } catch (RuntimeException e) {
             throw new InvalidUsernameException(username);
         }

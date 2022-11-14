@@ -21,9 +21,9 @@ public class MovieResponse {
     Integer endYear;
     Integer runtimeMinutes;
     String genres;
-    Set<Person> directors;
-    Set<Person> actors;
-    List<Comment> comments;
+    Set<PersonResponse> directors;
+    Set<PersonResponse> actors;
+    List<CommentResponse> comments;
     List<EpisodeResponse> episode;
     RatingResponse rating;
 }

@@ -14,6 +14,7 @@ import java.util.Set;
 public class UserResponse {
 
     String username;
-    MovieListResponse watchList;
-    List<Comment> comments;
+    WatchListResponse watchList;
+    List<MovieListResponse> favoriteLists;
+
 }

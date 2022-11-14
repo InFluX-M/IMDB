@@ -7,9 +7,8 @@ import java.util.List;
 
 @Builder
 @Value
-public class MovieListResponse {
+public class WatchListResponse {
 
-    String username;
     String name;
     Integer size;
     List<MovieCommentResponse> movies;

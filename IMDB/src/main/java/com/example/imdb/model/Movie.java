@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -80,9 +81,9 @@ public class Movie {
                 .endYear(endYear)
                 .runtimeMinutes(runtimeMinutes)
                 .genres(genres)
-                .actors(actors)
-                .directors(directors)
-                .comments(comments)
+                .actors(actors.stream().map(Person::response).collect(Collectors.toSet()))
+                .directors(directors.stream().toList().stream().map(Person::response).collect(Collectors.toSet()))
+                .comments(comments.stream().map(Comment::response).toList())
                 .isAdult(isAdult)
                 .episode(episodes.stream().map(SeriesEpisode::episodeResponse).toList())
                 .rating(rating.response())
@@ -102,6 +103,7 @@ public class Movie {
                 .titleId(titleId)
                 .title(title)
                 .type(type)
+                .ratingResponse(rating.response())
                 .build();
     }
 }

@@ -2,20 +2,19 @@ package com.example.imdb.model;
 
 import com.example.imdb.model.requests.FavoriteListRequest;
 import com.example.imdb.model.responses.MovieListResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.imdb.model.responses.WatchListResponse;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table
+@Getter
+@Setter
 public class MovieList {
     @Id
     @GeneratedValue
@@ -44,7 +43,16 @@ public class MovieList {
         return MovieListResponse.builder()
                 .name(name)
                 .size(size)
-                .movies(movies.stream().map(Movie::response).toList())
+                .movies(movies.stream().map(Movie::commentResponse).toList())
+                .username(user.getUsername())
+                .build();
+    }
+
+    public WatchListResponse watchListResponse() {
+        return WatchListResponse.builder()
+                .name(name)
+                .size(size)
+                .movies(movies.stream().map(Movie::commentResponse).toList())
                 .build();
     }
 }

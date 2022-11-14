@@ -41,8 +41,8 @@ public class User {
     public UserResponse response() {
         return UserResponse.builder()
                 .username(username)
-                .watchList(watchList.response())
-                .comments(comments)
+                .watchList(watchList.watchListResponse())
+                .favoriteLists(movieLists.stream().map(MovieList::response).toList())
                 .build();
     }
 }

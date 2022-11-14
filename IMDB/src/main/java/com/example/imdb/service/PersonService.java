@@ -54,8 +54,8 @@ public class PersonService {
         return checkPersonId(personId).response();
     }
 
-    public List<PersonResponse> getPersonsByBirthDate(int year, int month) {
-        return personRepository.findByBirthDateMonthAndBirthDateDay(year, month).stream().map(Person::response).toList();
+    public List<PersonResponse> getPeopleByBirthDate(Integer month, Integer day) {
+        return personRepository.findByBirthDateMonthAndBirthDateDay(month, day).stream().map(Person::response).toList();
     }
 
     public Person checkPersonId(String personId) {

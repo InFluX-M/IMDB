@@ -9,7 +9,6 @@ import com.example.imdb.model.responses.MovieResponse;
 import com.example.imdb.model.responses.PersonResponse;
 import com.example.imdb.model.responses.RatingResponse;
 import com.example.imdb.repository.MovieRepository;
-import com.example.imdb.repository.RatingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,6 @@ import java.util.Optional;
 public class MovieService {
 
     private MovieRepository movieRepository;
-    private RatingRepository ratingRepository;
 
     public MovieResponse addMovie(MovieRequest request) {
 
@@ -64,14 +62,6 @@ public class MovieService {
         return movieRepository.findAll().stream().map(Movie::response).toList();
     }
 
-    public List<PersonResponse> getDirectorsMovieById(String titleId) {
-        return checkMovieId(titleId).getDirectors().stream().map(Person::response).toList();
-    }
-
-    public List<PersonResponse> getActorMovieById(String titleId) {
-        return checkMovieId(titleId).getActors().stream().map(Person::response).toList();
-    }
-
     public MovieResponse getMovieById(String titleId) {
         return checkMovieId(titleId).response();
     }
@@ -100,10 +90,6 @@ public class MovieService {
         return movieRepository.findByEndYear(year).stream().map(Movie::response).toList();
     }
 
-    public List<MovieResponse> findByRuntimeMinutes(int min) {
-        return movieRepository.findByRuntimeMinutes(min).stream().map(Movie::response).toList();
-    }
-
     public List<MovieResponse> findByStartYearBetween(int start, int end) {
         return movieRepository.findByStartYearBetween(start, end).stream().map(Movie::response).toList();
     }
@@ -126,6 +112,10 @@ public class MovieService {
 
     public List<MovieResponse> findByEndYearLessThan(int year) {
         return movieRepository.findByEndYearLessThan(year).stream().map(Movie::response).toList();
+    }
+
+    public List<MovieResponse> findByRuntimeMinutes(int min) {
+        return movieRepository.findByRuntimeMinutes(min).stream().map(Movie::response).toList();
     }
 
     public List<MovieResponse> findByActor(String id) {

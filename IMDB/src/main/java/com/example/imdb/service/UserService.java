@@ -75,7 +75,7 @@ public class UserService {
         return userRepository.findById(username).get().getMovieLists().stream().map(MovieList::response).toList();
     }
 
-    public Set<MovieResponse> getWatchLists(String username) {
+    public Set<MovieResponse> getWatchList(String username) {
         return userRepository.findById(username).get().getWatchList().getMovies().stream().map(Movie::response).collect(Collectors.toSet());
     }
 

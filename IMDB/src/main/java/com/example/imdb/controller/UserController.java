@@ -48,5 +48,10 @@ public class UserController {
     public ResponseEntity<List<MovieListResponse>> getDirectors(@PathVariable String username) {
         return new ResponseEntity<>(userService.getFavLists(username), HttpStatus.OK);
     }
+    
+    public ResponseEntity<List<UserResponse>> getUsers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
 
 }

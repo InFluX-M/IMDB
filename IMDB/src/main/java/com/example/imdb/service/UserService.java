@@ -55,9 +55,6 @@ public class UserService {
             if (request.getPassword() != null) user.setPassword(request.getPassword());
             return userRepository.save(user).response();
 
-        } catch (EntityNotFoundException e) {
-            throw e;
-
         } catch (RuntimeException e) {
             throw new InvalidUsernameException(username);
         }

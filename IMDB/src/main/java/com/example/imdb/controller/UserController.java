@@ -49,18 +49,14 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(username), HttpStatus.OK);
     }
 
-    @GetMapping("/users/{username}")
+    @GetMapping("/users/{username}/fav-list")
     public ResponseEntity<List<MovieListResponse>> getFavLists(@PathVariable String username) {
         return new ResponseEntity<>(userService.getFavLists(username), HttpStatus.OK);
     }
 
-    @GetMapping("/users/{username}")
+    @GetMapping("/users/{username}/watch-list")
     public ResponseEntity<Set<MovieResponse>> getWatchList(@PathVariable String username) {
         return new ResponseEntity<>(userService.getWatchList(username), HttpStatus.OK);
-        
-    @GetMapping("/users/{username}/favorites")
-    public ResponseEntity<List<MovieListResponse>> getDirectors(@PathVariable String username) {
-        return new ResponseEntity<>(userService.getFavLists(username), HttpStatus.OK);
     }
 
 }

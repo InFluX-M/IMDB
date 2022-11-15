@@ -33,17 +33,17 @@ public class PersonController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/movies")
+    @GetMapping("/people")
     public ResponseEntity<List<PersonResponse>> getPeople() {
         return new ResponseEntity<>(personService.getAllPersons(), HttpStatus.OK);
     }
 
-    @GetMapping("/movies/{personId}")
+    @GetMapping("/people/{personId}")
     public ResponseEntity<PersonResponse> getPerson(@PathVariable String personId) {
         return new ResponseEntity<>(personService.getPerson(personId), HttpStatus.OK);
     }
 
-    @GetMapping("/movies/{month}/{day}")
+    @GetMapping("/people/{month}/{day}")
     public ResponseEntity<List<PersonResponse>> getPerson(@PathVariable Integer month,
                                                     @PathVariable Integer day) {
         return new ResponseEntity<>(personService.getPeopleByBirthDate(month, day), HttpStatus.OK);

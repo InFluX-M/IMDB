@@ -20,13 +20,8 @@ public class FileController {
 
     private FileService fileService;
 
-    @PostMapping("/readMovies1")
-    public ResponseEntity<List<MovieResponse>> readMoviesPart1() throws IOException {
-        return new ResponseEntity<>(fileService.readMovies(), HttpStatus.CREATED);
-    }
-
-    @PostMapping("/readMovies2")
-    public ResponseEntity<List<MovieResponse>> readMoviesPart2() throws IOException {
+    @PostMapping("/readMovies")
+    public ResponseEntity<List<MovieResponse>> readMovies() throws IOException {
         return new ResponseEntity<>(fileService.readMovies(), HttpStatus.CREATED);
     }
 

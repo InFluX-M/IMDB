@@ -3,8 +3,8 @@ package com.example.imdb.service;
 import com.example.imdb.exception.EntityNotFoundException;
 import com.example.imdb.exception.InvalidRatingException;
 import com.example.imdb.exception.InvalidUsernameException;
-import com.example.imdb.model.MovieList;
 import com.example.imdb.model.Movie;
+import com.example.imdb.model.MovieList;
 import com.example.imdb.model.Rating;
 import com.example.imdb.model.User;
 import com.example.imdb.model.requests.FavoriteListRequest;
@@ -47,12 +47,17 @@ public class UserService {
         }
     }
 
-    public void updateUser(String username, UserRequest request) {
+    public UserResponse updateUser(String username, UserRequest request) {
         // todo valid pass?
         try {
             User user = checkUsername(username);
             if (request.getUsername() != null) user.setUsername(request.getUsername());
             if (request.getPassword() != null) user.setPassword(request.getPassword());
+            return userRepository.save(user).response();
+
+        } catch (EntityNotFoundException e) {
+            throw e;
+
         } catch (RuntimeException e) {
             throw new InvalidUsernameException(username);
         }

@@ -29,7 +29,7 @@ public class UserController {
 
     @PutMapping("/users/{username}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable String username,
-                                                     @RequestBody UserRequest request) {
+                                                   @RequestBody UserRequest request) {
         return new ResponseEntity<>(userService.updateUser(username, request), HttpStatus.OK);
     }
 
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserResponse>> getUsers() {
+    public ResponseEntity<List<UserResponse>> getUser() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
@@ -57,7 +57,10 @@ public class UserController {
     @GetMapping("/users/{username}")
     public ResponseEntity<Set<MovieResponse>> getWatchList(@PathVariable String username) {
         return new ResponseEntity<>(userService.getWatchList(username), HttpStatus.OK);
+        
+    @GetMapping("/users/{username}/favorites")
+    public ResponseEntity<List<MovieListResponse>> getDirectors(@PathVariable String username) {
+        return new ResponseEntity<>(userService.getFavLists(username), HttpStatus.OK);
     }
-
 
 }

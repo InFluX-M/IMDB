@@ -1,6 +1,7 @@
 package com.example.imdb.controller;
 
 import com.example.imdb.model.requests.UserRequest;
+import com.example.imdb.model.responses.MovieListResponse;
 import com.example.imdb.model.responses.UserResponse;
 import com.example.imdb.service.UserService;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class UserController {
 
     @PutMapping("/users/{username}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable String username,
-                                                     @RequestBody UserRequest request) {
+                                                   @RequestBody UserRequest request) {
         return new ResponseEntity<>(userService.updateUser(username, request), HttpStatus.OK);
     }
 
@@ -34,10 +35,23 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserResponse>> getUsers() {
+    public ResponseEntity<List<UserResponse>> getUser() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
+    @GetMapping("/users/{username}")
+    public ResponseEntity<UserResponse> getUser(@PathVariable String username) {
+        return new ResponseEntity<>(userService.getUserById(username), HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{username}/favorites")
+    public ResponseEntity<List<MovieListResponse>> getDirectors(@PathVariable String username) {
+        return new ResponseEntity<>(userService.getFavLists(username), HttpStatus.OK);
+    }
+    
+    public ResponseEntity<List<UserResponse>> getUsers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
 
 
 }

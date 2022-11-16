@@ -1,14 +1,14 @@
 package com.example.imdb.service;
 
 import com.example.imdb.exception.EntityNotFoundException;
-import com.example.imdb.model.Movie;
-import com.example.imdb.model.Person;
-import com.example.imdb.model.TitleType;
+import com.example.imdb.model.*;
 import com.example.imdb.model.requests.MovieRequest;
 import com.example.imdb.model.responses.MovieResponse;
 import com.example.imdb.model.responses.PersonResponse;
 import com.example.imdb.model.responses.RatingResponse;
+import com.example.imdb.repository.CommentRepository;
 import com.example.imdb.repository.MovieRepository;
+import com.example.imdb.repository.RatingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +22,8 @@ import java.util.Optional;
 public class MovieService {
 
     private MovieRepository movieRepository;
+    private RatingRepository ratingRepository;
+    private CommentRepository commentRepository;
 
     public MovieResponse addMovie(MovieRequest request) {
 
@@ -35,13 +37,25 @@ public class MovieService {
                 .genres(request.getGenres())
                 .isAdult(request.getIsAdult())
                 .build();
+
+        movieRepository.save(movie);
+
+        Rating rating = Rating.builder()
+                .movie(movie)
+                .avgRating(0f)
+                .numVotes(0)
+                .build();
+
+        movie.setRating(rating);
+        ratingRepository.save(rating);
+
         return movieRepository.save(movie).response();
     }
 
     public MovieResponse updateMovie(String titleId, MovieRequest request) {
         Movie movie = checkMovieId(titleId);
 
-        if (request.getIsAdult()) movie.setIsAdult(request.getIsAdult());
+        if (request.getIsAdult() != null) movie.setIsAdult(request.getIsAdult());
         if (request.getRuntimeMinutes() != null) movie.setRuntimeMinutes(request.getRuntimeMinutes());
         if (request.getGenres() != null) movie.setGenres(request.getGenres());
         if (request.getType() != null) movie.setType(request.getType());
@@ -55,6 +69,27 @@ public class MovieService {
     }
 
     public void deleteMovie(String titleId) {
+
+        // todo in mehod bug dare
+        Rating rating = ratingRepository.findByMovie(checkMovieId(titleId));
+        rating.setMovie(null);
+        checkMovieId(titleId).setRating(null);
+        ratingRepository.delete(rating);
+        // ----------------------------------------------------------------------------
+        checkMovieId(titleId).setActors(null);
+        checkMovieId(titleId).setDirectors(null);
+        // ----------------------------------------------------------------------------
+        List<Comment> comments = commentRepository.findByMovie(checkMovieId(titleId));
+        checkMovieId(titleId).setComments(null);
+        for (Comment c : comments) {
+            c.setMovie(null);
+            commentRepository.save(c);
+            commentRepository.delete(c);
+        }
+        // ----------------------------------------------------------------------------
+        checkMovieId(titleId).setEpisodes(null);
+        // todo delete from watch list / fav list
+
         movieRepository.deleteById(titleId);
     }
 

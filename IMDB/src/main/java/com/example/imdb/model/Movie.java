@@ -80,12 +80,12 @@ public class Movie {
                 .endYear(endYear)
                 .runtimeMinutes(runtimeMinutes)
                 .genres(genres)
-                //.actors(actors.stream().map(Person::response).collect(Collectors.toSet()))
+                //.actors(actors.stream().map(Person::response).collect(Collectors.toSet())) todo
                 //.directors(directors.stream().toList().stream().map(Person::response).collect(Collectors.toSet()))
                 //.comments(comments.stream().map(Comment::response).toList())
                 .isAdult(isAdult)
                 //.episode(episodes.stream().map(SeriesEpisode::episodeResponse).toList())
-                //.rating(rating.response())
+                .rating(rating.response())
                 .build();
     }
 

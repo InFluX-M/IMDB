@@ -23,7 +23,7 @@ public class PersonController {
 
     @PutMapping("/people/{personId}")
     public ResponseEntity<PersonResponse> updateMovie(@PathVariable String personId,
-                                                     @RequestBody PersonRequest request) {
+                                                      @RequestBody PersonRequest request) {
         return new ResponseEntity<>(personService.updatePerson(personId, request), HttpStatus.OK);
     }
 
@@ -45,7 +45,7 @@ public class PersonController {
 
     @GetMapping("/people/{month}/{day}")
     public ResponseEntity<List<PersonResponse>> getPerson(@PathVariable Integer month,
-                                                    @PathVariable Integer day) {
+                                                          @PathVariable Integer day) {
         return new ResponseEntity<>(personService.getPeopleByBirthDate(month, day), HttpStatus.OK);
     }
 

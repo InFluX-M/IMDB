@@ -22,11 +22,19 @@ public class User {
     private String username;
     private String password;
 
-    @OneToOne
-    private MovieList watchList;
+//    @OneToOne
+//    private WatchList watchList; todo
+
+    @ManyToMany
+    @JoinTable(
+            name = "watchList",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "titleId")
+    )
+    private Set<Movie> watchList;
 
     @OneToMany(mappedBy = "user")
-    private Set<MovieList> movieLists;
+    private Set<MovieList> favLists;
 
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
@@ -41,8 +49,8 @@ public class User {
     public UserResponse response() {
         return UserResponse.builder()
                 .username(username)
-                .watchList(watchList.watchListResponse())
-                .favoriteLists(movieLists.stream().map(MovieList::response).toList())
+//                .watchList(watchList.response()) todo
+                .favoriteLists(favLists.stream().map(MovieList::response).toList())
                 .build();
     }
 }

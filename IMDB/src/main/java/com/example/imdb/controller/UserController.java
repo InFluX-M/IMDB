@@ -1,12 +1,11 @@
 package com.example.imdb.controller;
 
-import com.example.imdb.model.User;
 import com.example.imdb.model.requests.FavoriteListRequest;
 import com.example.imdb.model.requests.UserRequest;
 import com.example.imdb.model.responses.MovieListResponse;
 import com.example.imdb.model.responses.MovieResponse;
-import com.example.imdb.model.responses.PersonResponse;
 import com.example.imdb.model.responses.UserResponse;
+import com.example.imdb.repository.MovieListRepository;
 import com.example.imdb.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +20,7 @@ import java.util.Set;
 public class UserController {
 
     private UserService userService;
+    private MovieListRepository movieListRepository;
 
     @PostMapping("/users")
     public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest request) {
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserResponse>> getUser() {
+    public ResponseEntity<List<UserResponse>> getUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
@@ -49,9 +49,30 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(username), HttpStatus.OK);
     }
 
-    @GetMapping("/users/{username}/fav-list")
+    @PostMapping("/users/{username}/fav-lists")
+    public ResponseEntity<MovieListResponse> addFavLists(@PathVariable String username,
+                                                         @RequestBody FavoriteListRequest request) {
+        // todo kodoom user?!
+        return new ResponseEntity<>(userService.addFavList(request), HttpStatus.OK);
+    }
+
+    @PostMapping("/users/{username}/fav-lists/{list}/{titleId}")
+    public ResponseEntity<MovieListResponse> addToFavList(@PathVariable String username,
+                                                          @PathVariable String list,
+                                                          @PathVariable String titleId) {
+        // todo kodoom user?!
+        return new ResponseEntity<>(userService.addToFavList(list, titleId), HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{username}/fav-lists")
     public ResponseEntity<List<MovieListResponse>> getFavLists(@PathVariable String username) {
         return new ResponseEntity<>(userService.getFavLists(username), HttpStatus.OK);
+    }
+
+    @PostMapping("/users/{username}/watch-list/{titleId}")
+    public ResponseEntity<List<MovieResponse>> addToWatchList(@PathVariable String username,
+                                                              @PathVariable String titleId) {
+        return new ResponseEntity<>(userService.addToWatchList(username, titleId), HttpStatus.OK);
     }
 
     @GetMapping("/users/{username}/watch-list")

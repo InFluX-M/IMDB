@@ -13,13 +13,11 @@ import com.example.imdb.model.responses.MovieListResponse;
 import com.example.imdb.model.responses.MovieResponse;
 import com.example.imdb.model.responses.RatingResponse;
 import com.example.imdb.model.responses.UserResponse;
-import com.example.imdb.repository.MovieListRepository;
-import com.example.imdb.repository.MovieRepository;
-import com.example.imdb.repository.RatingRepository;
-import com.example.imdb.repository.UserRepository;
+import com.example.imdb.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -36,31 +34,31 @@ public class UserService {
 
     public UserResponse addUser(UserRequest request) {
         // todo password validation?
-        try {
-            User user = User.builder()
-                    .username(request.getUsername())
-                    .password(request.getPassword())
-                    .build();
-            return userRepository.save(user).response();
-        } catch (RuntimeException e) {
+
+        if (userRepository.findById(request.getUsername()).isPresent())
             throw new InvalidUsernameException(request.getUsername());
-        }
+
+        User user = User.builder()
+                .username(request.getUsername())
+                .password(request.getPassword())
+//                    .watchList(new WatchList()) todo
+                .favLists(new HashSet<>())
+                .build();
+
+        return userRepository.save(user).response();
     }
 
     public UserResponse updateUser(String username, UserRequest request) {
         // todo valid pass?
-        try {
-            User user = checkUsername(username);
-            if (request.getUsername() != null) user.setUsername(request.getUsername());
-            if (request.getPassword() != null) user.setPassword(request.getPassword());
-            return userRepository.save(user).response();
+        User user = checkUsername(username);
 
-        } catch (RuntimeException e) {
-            throw new InvalidUsernameException(username);
-        }
+        if (request.getPassword() != null) user.setPassword(request.getPassword());
+
+        return userRepository.save(user).response();
     }
 
     public void deleteUser(String username) {
+        checkUsername(username);
         userRepository.deleteById(username);
     }
 
@@ -73,11 +71,13 @@ public class UserService {
     }
 
     public List<MovieListResponse> getFavLists(String username) {
-        return userRepository.findById(username).get().getMovieLists().stream().map(MovieList::response).toList();
+        return userRepository.findById(username).get().getFavLists().stream().map(MovieList::response).toList();
     }
 
     public Set<MovieResponse> getWatchList(String username) {
-        return userRepository.findById(username).get().getWatchList().getMovies().stream().map(Movie::response).collect(Collectors.toSet());
+//   todo     return userRepository.findById(username).get().getWatchList().getMovies().stream().map(Movie::response).collect(Collectors.toSet());
+        return userRepository.findById(username).get().getWatchList().stream().map(Movie::response).collect(Collectors.toSet());
+
     }
 
     public MovieListResponse addFavList(FavoriteListRequest request) {
@@ -104,10 +104,12 @@ public class UserService {
         User user = checkUsername(username);
         Movie movie = checkMovieId(titleId);
 
-        user.getWatchList().getMovies().add(movie);
+//        user.getWatchList().getMovies().add(movie); todo
+        user.getWatchList().add(movie);
         userRepository.save(user);
 
-        return user.getWatchList().getMovies().stream().map(Movie::response).toList();
+//        return user.getWatchList().getMovies().stream().map(Movie::response).toList(); todo
+        return user.getWatchList().stream().map(Movie::response).toList();
     }
 
     public RatingResponse rateMovie(String titleId, int rating) {

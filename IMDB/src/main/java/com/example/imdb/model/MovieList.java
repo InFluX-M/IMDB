@@ -2,7 +2,6 @@ package com.example.imdb.model;
 
 import com.example.imdb.model.requests.FavoriteListRequest;
 import com.example.imdb.model.responses.MovieListResponse;
-import com.example.imdb.model.responses.WatchListResponse;
 import lombok.*;
 
 import javax.persistence.*;
@@ -45,14 +44,6 @@ public class MovieList {
                 .size(size)
                 .movies(movies.stream().map(Movie::commentResponse).toList())
                 .username(user.getUsername())
-                .build();
-    }
-
-    public WatchListResponse watchListResponse() {
-        return WatchListResponse.builder()
-                .name(name)
-                .size(size)
-                .movies(movies.stream().map(Movie::commentResponse).toList())
                 .build();
     }
 }

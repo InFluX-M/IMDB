@@ -53,7 +53,7 @@ public class CommentController {
 
     @PutMapping("/comments/{commentId}")
     public ResponseEntity<CommentResponse> updateMovie(@PathVariable Integer commentId,
-                                                     @RequestBody CommentRequest request) {
+                                                       @RequestBody CommentRequest request) {
         return new ResponseEntity<>(commentService.updateComment(commentId, request), HttpStatus.OK);
     }
 

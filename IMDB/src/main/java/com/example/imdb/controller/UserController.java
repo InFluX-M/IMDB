@@ -4,7 +4,7 @@ import com.example.imdb.model.requests.FavoriteListRequest;
 import com.example.imdb.model.requests.UserRequest;
 import com.example.imdb.model.responses.MovieCommentResponse;
 import com.example.imdb.model.responses.MovieListResponse;
-import com.example.imdb.model.responses.MovieResponse;
+import com.example.imdb.model.responses.RatingResponse;
 import com.example.imdb.model.responses.UserResponse;
 import com.example.imdb.repository.MovieListRepository;
 import com.example.imdb.service.UserService;
@@ -50,11 +50,22 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(username), HttpStatus.OK);
     }
 
+    @PostMapping("/users/rate/{titleId}/{rating}")
+    public RatingResponse rateMovie(@PathVariable String titleId,
+                                    @PathVariable Integer rating) {
+        // todo user lazeme?
+        return userService.rateMovie(titleId, rating);
+    }
+
+    // fav list
+
     @PostMapping("/users/{username}/fav-lists")
     public ResponseEntity<MovieListResponse> addFavLists(@PathVariable String username,
                                                          @RequestBody FavoriteListRequest request) {
         // todo kodoom user?!
-        return new ResponseEntity<>(userService.addFavList(request), HttpStatus.OK);
+        // todo nemire to in
+        System.err.println("!::");
+        return new ResponseEntity<>(userService.addFavList(username, request), HttpStatus.OK);
     }
 
     @PostMapping("/users/{username}/fav-lists/{list}/{titleId}")
@@ -70,9 +81,11 @@ public class UserController {
         return new ResponseEntity<>(userService.getFavLists(username), HttpStatus.OK);
     }
 
+    // watch list
+
     @PostMapping("/users/{username}/watch-list/{titleId}")
-    public ResponseEntity<List<MovieResponse>> addToWatchList(@PathVariable String username,
-                                                              @PathVariable String titleId) {
+    public ResponseEntity<List<MovieCommentResponse>> addToWatchList(@PathVariable String username,
+                                                                     @PathVariable String titleId) {
         return new ResponseEntity<>(userService.addToWatchList(username, titleId), HttpStatus.OK);
     }
 

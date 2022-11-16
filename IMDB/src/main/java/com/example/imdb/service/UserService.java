@@ -38,7 +38,7 @@ public class UserService {
         User user = User.builder()
                 .username(request.getUsername())
                 .password(request.getPassword())
-//                    .watchList(new WatchList()) todo
+                .watchList(new HashSet<>())
                 .favLists(new HashSet<>())
                 .build();
 
@@ -77,10 +77,14 @@ public class UserService {
 
     }
 
-    public MovieListResponse addFavList(FavoriteListRequest request) {
+    public MovieListResponse addFavList(String username, FavoriteListRequest request) {
+
+        User user = checkUsername(username);
+
         MovieList list = MovieList.builder()
                 .size(0)
                 .name(request.getName())
+                .user(user)
                 .build();
 
         return movieListRepository.save(list).response();
@@ -96,7 +100,7 @@ public class UserService {
         return movieListRepository.save(list).response();
     }
 
-    public List<MovieResponse> addToWatchList(String username, String titleId) {
+    public List<MovieCommentResponse> addToWatchList(String username, String titleId) {
 
         User user = checkUsername(username);
         Movie movie = checkMovieId(titleId);
@@ -106,10 +110,10 @@ public class UserService {
         userRepository.save(user);
 
 //        return user.getWatchList().getMovies().stream().map(Movie::response).toList(); todo
-        return user.getWatchList().stream().map(Movie::response).toList();
+        return user.getWatchList().stream().map(Movie::commentResponse).toList();
     }
 
-    public RatingResponse rateMovie(String titleId, int rating) {
+    public RatingResponse rateMovie(String titleId, Integer rating) {
 
         if (rating < 1 || rating > 10)
             throw new InvalidRatingException();

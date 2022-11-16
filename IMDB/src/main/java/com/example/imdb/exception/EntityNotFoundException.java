@@ -2,7 +2,7 @@ package com.example.imdb.exception;
 
 public class EntityNotFoundException extends RuntimeException {
     public EntityNotFoundException(String entityName, String id) {
-        super(entityName + " with id " + id + " not found");
+        super(entityName + " with id '" + id + "' not found");
     }
 }
 

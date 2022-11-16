@@ -5,7 +5,7 @@ import com.example.imdb.model.responses.MovieListResponse;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -27,7 +27,7 @@ public class MovieList {
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "titleId")
     )
-    private List<Movie> movies;
+    private Set<Movie> movies;
 
     @ManyToOne
     private User user;

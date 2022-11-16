@@ -10,6 +10,7 @@ import com.example.imdb.repository.MovieRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,8 +24,11 @@ public class CommentService {
     public CommentResponse addComment(String titleId, CommentRequest commentRequest) {
         Movie movie = movieService.checkMovieId(titleId);
         Comment comment = Comment.builder()
-                .body(commentRequest.getBody())
+                .body(commentRequest.body())
+                .movie(movie)
+                .replies(new ArrayList<>())
                 .build();
+
         movie.getComments().add(comment);
         movieRepository.save(movie);
         return commentRepository.save(comment).response();
@@ -53,7 +57,7 @@ public class CommentService {
     public CommentResponse addReplyComment(Integer commentId, CommentRequest commentRequest) {
         Comment comment = commentRepository.findById(commentId).get();
         Comment reply = Comment.builder()
-                .body(commentRequest.getBody())
+                .body(commentRequest.body())
                 .build();
         comment.getReplies().add(reply);
         commentRepository.save(comment);
@@ -63,7 +67,7 @@ public class CommentService {
 
     public CommentResponse updateComment(Integer commentId, CommentRequest commentRequest) {
         Comment comment = commentRepository.findById(commentId).get();
-        if (commentRequest.getBody() != null) comment.setBody(commentRequest.getBody());
+        if (commentRequest.body() != null) comment.setBody(commentRequest.body());
         return commentRepository.save(comment).response();
     }
 

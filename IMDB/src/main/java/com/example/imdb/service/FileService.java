@@ -88,9 +88,18 @@ public class FileService {
             int birthMonth = random.nextInt(12) + 1;
             int deathDay = random.nextInt(28) + 1;
             int deathMonth = random.nextInt(12) + 1;
+            int birthYear;
+            int deathYear;
 
-            LocalDate birthDate = LocalDate.of(Integer.parseInt(parts[2]), birthMonth, birthDay);
-            LocalDate deathDate = LocalDate.of(Integer.parseInt(parts[3]), deathMonth, deathDay);
+            if(parts[2] == null) birthYear = random.nextInt(120) + 1900;
+            else birthYear = Integer.parseInt(parts[2]);
+
+
+            if(parts[3] == null) deathYear = random.nextInt(120) + 1900;
+            else deathYear = Integer.parseInt(parts[3]);
+
+            LocalDate birthDate = LocalDate.of(birthYear, birthMonth, birthDay);
+            LocalDate deathDate = LocalDate.of(deathYear, deathMonth, deathDay);
 
             people.add(Person.builder()
                     .id(parts[0])
@@ -105,6 +114,7 @@ public class FileService {
 
             String[] titles = parts[5].split(",");
 
+            people.get(i).setKnownForTitlesList(new ArrayList<>());
             for (String st : titles) {
                 people.get(i).getKnownForTitlesList().add(st);
                 Movie movie = movieRepository.findById(st).get();

@@ -57,7 +57,7 @@ public class Comment implements Serializable {
                 .body(body)
                 .movieCommentResponse(movie.commentResponse())
                 .username(user.getUsername())
-                .replies(replies.stream().map(Comment::replyResponse).toList())
+//                .replies(replies.stream().map(Comment::replyResponse).toList())
                 .build();
     }
 

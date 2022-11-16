@@ -13,46 +13,47 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/comment")
 public class CommentController {
 
     private CommentService commentService;
 
-    @PostMapping("/comments/{titleId}")
+    @PostMapping("/{titleId}")
     public ResponseEntity<CommentResponse> addComment(@PathVariable String titleId,
                                                       @RequestBody CommentRequest request) {
         return new ResponseEntity<>(commentService.addComment(titleId, request), HttpStatus.CREATED);
     }
 
-    @GetMapping("/comments/{titleId}")
+    @GetMapping("/movie/{titleId}")
     public ResponseEntity<List<CommentMovieResponse>> getComments(@PathVariable String titleId) {
         return new ResponseEntity<>(commentService.getAllComments(titleId), HttpStatus.OK);
     }
 
-    @GetMapping("/comments/{commentId}")
+    @GetMapping("/{commentId}")
     public ResponseEntity<List<CommentResponse>> getReplies(@PathVariable Integer commentId) {
         return new ResponseEntity<>(commentService.getAllReplyComments(commentId), HttpStatus.OK);
     }
 
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Integer commentId) {
         commentService.deleteComment(commentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/comments/{commentId}/{replyId}")
+    @DeleteMapping("/{commentId}/{replyId}")
     public ResponseEntity<Void> deleteReply(@PathVariable Integer commentId, @PathVariable Integer replyId) {
         commentService.deleteReplyComment(commentId, replyId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/comments/{commentId}")
+    @PostMapping("/reply/{commentId}")
     public ResponseEntity<CommentResponse> addReply(@PathVariable Integer commentId,
                                                     @RequestBody CommentRequest request) {
         return new ResponseEntity<>(commentService.addReplyComment(commentId, request), HttpStatus.CREATED);
     }
 
-    @PutMapping("/comments/{commentId}")
-    public ResponseEntity<CommentResponse> updateMovie(@PathVariable Integer commentId,
+    @PutMapping("/{commentId}")
+    public ResponseEntity<CommentResponse> updateComment(@PathVariable Integer commentId,
                                                      @RequestBody CommentRequest request) {
         return new ResponseEntity<>(commentService.updateComment(commentId, request), HttpStatus.OK);
     }

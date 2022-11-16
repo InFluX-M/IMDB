@@ -2,11 +2,10 @@ package com.example.imdb.model;
 
 import com.example.imdb.model.requests.FavoriteListRequest;
 import com.example.imdb.model.responses.MovieListResponse;
-import com.example.imdb.model.responses.WatchListResponse;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -28,7 +27,7 @@ public class MovieList {
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "titleId")
     )
-    private List<Movie> movies;
+    private Set<Movie> movies;
 
     @ManyToOne
     private User user;
@@ -45,14 +44,6 @@ public class MovieList {
                 .size(size)
                 .movies(movies.stream().map(Movie::commentResponse).toList())
                 .username(user.getUsername())
-                .build();
-    }
-
-    public WatchListResponse watchListResponse() {
-        return WatchListResponse.builder()
-                .name(name)
-                .size(size)
-                .movies(movies.stream().map(Movie::commentResponse).toList())
                 .build();
     }
 }

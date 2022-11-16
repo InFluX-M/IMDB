@@ -2,19 +2,17 @@ package com.example.imdb.model;
 
 import com.example.imdb.model.requests.RatingRequest;
 import com.example.imdb.model.responses.RatingResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table
 @Builder
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class Rating {
 
     @Id

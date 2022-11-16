@@ -1,6 +1,5 @@
 package com.example.imdb.controller;
 
-import com.example.imdb.model.Movie;
 import com.example.imdb.model.responses.*;
 import com.example.imdb.service.FileService;
 import lombok.AllArgsConstructor;
@@ -29,6 +28,7 @@ public class FileController {
     public ResponseEntity<List<PersonResponse>> readPersons() throws IOException {
         return new ResponseEntity<>(fileService.readPersons(), HttpStatus.CREATED);
     }
+
     @PostMapping("/readRatings")
     public ResponseEntity<List<RatingResponse>> readRatings() throws IOException {
         return new ResponseEntity<>(fileService.readRatings(), HttpStatus.CREATED);

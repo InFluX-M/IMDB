@@ -14,4 +14,16 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<String> entityNotFoundHandler(EntityNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InvalidUsernameException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<String> invalidUsernameException(InvalidUsernameException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidRatingException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> invalidRatingException(InvalidRatingException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

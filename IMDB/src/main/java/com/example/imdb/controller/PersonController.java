@@ -46,7 +46,7 @@ public class PersonController {
 
     @GetMapping("/{month}/{day}")
     public ResponseEntity<List<PersonResponse>> getPerson(@PathVariable Integer month,
-                                                    @PathVariable Integer day) {
+                                                          @PathVariable Integer day) {
         return new ResponseEntity<>(personService.getPeopleByBirthDate(month, day), HttpStatus.OK);
     }
 

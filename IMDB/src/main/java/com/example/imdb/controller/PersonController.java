@@ -12,38 +12,39 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/people")
 public class PersonController {
 
     private PersonService personService;
 
-    @PostMapping("/people")
+    @PostMapping("")
     public ResponseEntity<PersonResponse> addPerson(@RequestBody PersonRequest request) {
         return new ResponseEntity<>(personService.addPerson(request), HttpStatus.CREATED);
     }
 
-    @PutMapping("/people/{personId}")
-    public ResponseEntity<PersonResponse> updateMovie(@PathVariable String personId,
-                                                      @RequestBody PersonRequest request) {
+    @PutMapping("/{personId}")
+    public ResponseEntity<PersonResponse> updatePerson(@PathVariable String personId,
+                                                     @RequestBody PersonRequest request) {
         return new ResponseEntity<>(personService.updatePerson(personId, request), HttpStatus.OK);
     }
 
-    @DeleteMapping("/people/{personId}")
-    public ResponseEntity<Void> deleteMovie(@PathVariable String personId) {
+    @DeleteMapping("/{personId}")
+    public ResponseEntity<Void> deletePerson(@PathVariable String personId) {
         personService.deletePerson(personId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/people")
+    @GetMapping("")
     public ResponseEntity<List<PersonResponse>> getPeople() {
         return new ResponseEntity<>(personService.getAllPersons(), HttpStatus.OK);
     }
 
-    @GetMapping("/people/{personId}")
+    @GetMapping("/{personId}")
     public ResponseEntity<PersonResponse> getPerson(@PathVariable String personId) {
         return new ResponseEntity<>(personService.getPerson(personId), HttpStatus.OK);
     }
 
-    @GetMapping("/people/{month}/{day}")
+    @GetMapping("/{month}/{day}")
     public ResponseEntity<List<PersonResponse>> getPerson(@PathVariable Integer month,
                                                           @PathVariable Integer day) {
         return new ResponseEntity<>(personService.getPeopleByBirthDate(month, day), HttpStatus.OK);

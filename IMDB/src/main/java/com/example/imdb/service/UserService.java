@@ -9,10 +9,7 @@ import com.example.imdb.model.Rating;
 import com.example.imdb.model.User;
 import com.example.imdb.model.requests.FavoriteListRequest;
 import com.example.imdb.model.requests.UserRequest;
-import com.example.imdb.model.responses.MovieListResponse;
-import com.example.imdb.model.responses.MovieResponse;
-import com.example.imdb.model.responses.RatingResponse;
-import com.example.imdb.model.responses.UserResponse;
+import com.example.imdb.model.responses.*;
 import com.example.imdb.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -74,9 +71,9 @@ public class UserService {
         return userRepository.findById(username).get().getFavLists().stream().map(MovieList::response).toList();
     }
 
-    public Set<MovieResponse> getWatchList(String username) {
+    public Set<MovieCommentResponse> getWatchList(String username) {
 //   todo     return userRepository.findById(username).get().getWatchList().getMovies().stream().map(Movie::response).collect(Collectors.toSet());
-        return userRepository.findById(username).get().getWatchList().stream().map(Movie::response).collect(Collectors.toSet());
+        return checkUsername(username).getWatchList().stream().map(Movie::commentResponse).collect(Collectors.toSet());
 
     }
 

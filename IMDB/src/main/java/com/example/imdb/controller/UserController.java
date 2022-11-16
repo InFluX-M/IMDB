@@ -2,6 +2,7 @@ package com.example.imdb.controller;
 
 import com.example.imdb.model.requests.FavoriteListRequest;
 import com.example.imdb.model.requests.UserRequest;
+import com.example.imdb.model.responses.MovieCommentResponse;
 import com.example.imdb.model.responses.MovieListResponse;
 import com.example.imdb.model.responses.MovieResponse;
 import com.example.imdb.model.responses.UserResponse;
@@ -76,7 +77,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{username}/watch-list")
-    public ResponseEntity<Set<MovieResponse>> getWatchList(@PathVariable String username) {
+    public ResponseEntity<Set<MovieCommentResponse>> getWatchList(@PathVariable String username) {
         return new ResponseEntity<>(userService.getWatchList(username), HttpStatus.OK);
     }
 

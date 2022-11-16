@@ -50,6 +50,7 @@ public class User {
         return UserResponse.builder()
                 .username(username)
 //                .watchList(watchList.response()) todo
+                .watchList(watchList.stream().map(Movie::commentResponse).toList())
                 .favoriteLists(favLists.stream().map(MovieList::response).toList())
                 .build();
     }

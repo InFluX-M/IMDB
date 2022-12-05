@@ -16,6 +16,11 @@
         <action
             android:id="@+id/action_mainFragment_to_movieFragment"
             app:destination="@id/movieFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.imdbproj.classes.mainClasses.User"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -28,17 +33,34 @@
         <action
             android:id="@+id/action_loginFragment_to_userFragment"
             app:destination="@id/userFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.imdbproj.classes.mainClasses.User"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/movieFragment"
         android:name="com.example.imdbproj.movieFragment"
         android:label="fragment_movie"
-        tools:layout="@layout/fragment_movie" />
+        tools:layout="@layout/fragment_movie" >
+        <argument
+            android:name="user"
+            app:argType="com.example.imdbproj.classes.mainClasses.User"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/signupFragment"
         android:name="com.example.imdbproj.signupFragment"
         android:label="fragment_signup"
-        tools:layout="@layout/fragment_signup" />
+        tools:layout="@layout/fragment_signup" >
+        <argument
+            android:name="user"
+            app:argType="com.example.imdbproj.classes.mainClasses.User"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/userFragment"
         android:name="com.example.imdbproj.userFragment"
@@ -47,5 +69,10 @@
         <action
             android:id="@+id/action_userFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <argument
+            android:name="user"
+            app:argType="com.example.imdbproj.classes.mainClasses.User"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.imdbproj.fragments
+package com.example.imdbproj
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

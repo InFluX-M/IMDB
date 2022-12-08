@@ -1,6 +1,7 @@
 package com.example.imdbproj
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -27,8 +28,11 @@ class MainActivity : AppCompatActivity() {
                                            R.string.open,R.string.close)
         toggle.syncState()
 
-
-
     }
 
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.option_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 }

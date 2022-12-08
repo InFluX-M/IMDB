@@ -1,6 +1,18 @@
 package com.example.imdbproj.classes.mainClasses
 
-class User(private val username: String, private var password: String): java.io.Serializable {
+import com.google.gson.annotations.SerializedName
+
+class User(username: String, password: String) : java.io.Serializable {
+
+    @SerializedName("username")
+    private val username: String
+    @SerializedName("password")
+    private var password: String
+
+    init {
+        this.username = username
+        this.password = password
+    }
 
     fun getUserName() : String {
         return username

@@ -14,11 +14,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.example.imdbproj.classes.mainClasses.User
 import com.example.imdbproj.retrofit.ApiClient
 import com.example.imdbproj.retrofit.ApiService
-import com.example.imdbproj.retrofit.RetrofitClientInstance
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.jvm.javaClass
 
 
 class MainActivity : AppCompatActivity() {

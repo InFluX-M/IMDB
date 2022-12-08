@@ -74,14 +74,6 @@ class mainFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonLogin.setOnClickListener{
-
-            Navigation.findNavController(it)
-                .navigate(mainFragmentDirections.actionMainFragmentToLoginFragment()
-                    .setUser(binding.user))
-
-
-        }
 
     }
 }

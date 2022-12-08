@@ -1,17 +1,40 @@
 package com.example.imdbproj.classes.mainClasses
 
 import com.example.imdbproj_1.mainClasses.SeriesEpisode
+import com.google.gson.annotations.SerializedName
 
-class Movie(private val titleId: String, private var type: TitleType,
-            private var title: String, private var isAdult: Boolean,
-            private var startYear: Int, private var endYear: Int,
-            private var runtimeMinutes: Int, private var genresList: List<String>) {
+class Movie(titleId: String, type: TitleType, title: String, isAdult: Boolean,
+            startYear: Int, endYear: Int, runtimeMinutes: Int, genresList: List<String>) {
+
+    @SerializedName("titleId")
+    private val titleId: String
+    @SerializedName("type")
+    private var type: TitleType
+    @SerializedName("title")
+    private var title: String
+    @SerializedName("isAdult")
+    private var isAdult: Boolean
+    @SerializedName("startYear")
+    private var startYear: Int
+    @SerializedName("endYear")
+    private var endYear: Int
+    @SerializedName("runtimeMinutes")
+    private var runtimeMinutes: Int
+    @SerializedName("genresList")
+    private var genresList: List<String>
 
     private var episodes: List<SeriesEpisode>? = null
-        get() = field
-        set(value) {
-            field = value
-        }
+
+    init {
+        this.titleId = titleId
+        this.type = type
+        this.title = title
+        this.isAdult = isAdult
+        this.startYear = startYear
+        this.endYear = endYear
+        this.runtimeMinutes = runtimeMinutes
+        this.genresList = genresList
+    }
 
 
     fun getTitleId(): String {
@@ -73,5 +96,6 @@ class Movie(private val titleId: String, private var type: TitleType,
     fun getGenresList(): List<String> {
         return genresList
     }
+
 
 }

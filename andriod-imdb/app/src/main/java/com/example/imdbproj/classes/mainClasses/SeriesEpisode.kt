@@ -1,11 +1,29 @@
 package com.example.imdbproj_1.mainClasses
 
 import com.example.imdbproj.classes.mainClasses.Movie
+import com.google.gson.annotations.SerializedName
 
-class SeriesEpisode(private val id: Long,
-                    private val parent: Movie, private val episode: Movie,
-                    private var seasonNumber: Int, private var episodeNumber: Int) {
+class SeriesEpisode(id: Long, parent: Movie, episode: Movie, seasonNumber: Int, episodeNumber: Int) {
 
+
+    @SerializedName("id")
+    private val id: Long
+    @SerializedName("parent")
+    private val parent: Movie
+    @SerializedName("episode")
+    private val episode: Movie
+    @SerializedName("seasonNumber")
+    private var seasonNumber: Int
+    @SerializedName("episodeNumber")
+    private var episodeNumber: Int
+
+    init {
+        this.id = id
+        this.parent = parent
+        this.episode = episode
+        this.seasonNumber = seasonNumber
+        this.episodeNumber = episodeNumber
+    }
 
     fun getId(): Long {
         return id

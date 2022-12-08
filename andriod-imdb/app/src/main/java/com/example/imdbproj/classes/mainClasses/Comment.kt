@@ -1,16 +1,30 @@
 package com.example.imdbproj.classes.mainClasses
 
 import android.graphics.Movie
+import com.google.gson.annotations.SerializedName
 
-class Comment(private val id: Int, private var body: String,
-              private val user: User, private val movie: Movie,
-              private val parent: Comment?) {
+class Comment(id: Int, body: String, user: User, movie: Movie, parent: Comment?) {
+
+    @SerializedName("id")
+    private val id: Int
+    @SerializedName("body")
+    private var body: String
+    @SerializedName("user")
+    private val user: User
+    @SerializedName("movie")
+    private val movie: Movie
+    @SerializedName("parent")
+    private val parent: Comment?
+
+    init {
+        this.id = id
+        this.body = body
+        this.user = user
+        this.movie = movie
+        this.parent = parent
+    }
 
     private var replies: List<Comment>? = null
-        get() = field
-        set(value) {
-            field = value
-        }
 
     fun getId(): Int {
         return id
@@ -35,4 +49,13 @@ class Comment(private val id: Int, private var body: String,
     fun getParent(): Comment {
         return parent!!
     }
+
+    fun getReplies(): List<Comment> {
+        return replies!!
+    }
+
+    fun setReplies(replies: List<Comment>) {
+        this.replies = replies
+    }
+
 }

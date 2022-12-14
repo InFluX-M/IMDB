@@ -26,15 +26,16 @@ public class FileService {
     private PersonRepository personRepository;
     private RatingRepository ratingRepository;
     private SeriesEpisodeRepo seriesEpisodeRepo;
+    private MovieService movieService;
 
     public List<MovieResponse> readMovies() throws IOException {
 
-        String fileName = "src/main/resources/Movie.tsv";
+        String fileName = "C:\\Users\\feres\\Desktop\\git-pro1\\movie\\data.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         ArrayList<Movie> allMovies = new ArrayList<>();
 
         boolean firstLine = true;
-
+        int i = 0;
         for (String s : lines) {
 
             if (firstLine) {
@@ -47,16 +48,25 @@ public class FileService {
             for (int j = 0; j < parts.length; j++)
                 if (Objects.equals(parts[j], "\\N")) parts[j] = null;
 
-            allMovies.add(Movie.builder()
+            Movie movie = Movie.builder()
                     .titleId(parts[0])
                     .type(TitleType.valueOf(parts[1].toUpperCase()))
                     .title(parts[2])
                     .isAdult(Boolean.parseBoolean(parts[4]))
-                    .startYear(Integer.parseInt(parts[5]))
-                    .endYear(Integer.parseInt(parts[6]))
-                    .runtimeMinutes(Integer.parseInt(parts[7]))
+//                    .startYear(Integer.parseInt(parts[5]))
+//                    .endYear(Integer.parseInt(parts[6]))
+//                    .runtimeMinutes(Integer.parseInt(parts[7]))
                     .genres(parts[8])
-                    .build());
+                    .build();
+
+            if (parts[5] != null) movie.setStartYear(Integer.valueOf(parts[5]));
+            if (parts[6] != null) movie.setEndYear(Integer.valueOf(parts[6]));
+            if (parts[7] != null) movie.setRuntimeMinutes(Integer.valueOf(parts[7]));
+
+//            allMovies.add(movie);
+            movieService.addMovie(movie.request());
+
+            if (i++ == 1_000_000) break;
         }
 
         return movieRepository.saveAll(allMovies).stream().map(Movie::response).toList();

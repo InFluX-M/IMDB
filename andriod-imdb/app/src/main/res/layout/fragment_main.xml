@@ -5,7 +5,6 @@
     android:layout_width="match_parent">
 
     <data>
-
         <variable
             name="user"
             type="com.example.imdbproj.classes.mainClasses.User" />
@@ -18,7 +17,7 @@
         tools:context=".mainFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyleView"
+            android:id="@+id/recyleViewTopMovies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"

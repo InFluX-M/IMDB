@@ -1,5 +1,6 @@
 package com.example.imdbproj.classes.mainClasses
 
+import android.media.Image
 import com.example.imdbproj_1.mainClasses.SeriesEpisode
 import com.google.gson.annotations.SerializedName
 
@@ -22,6 +23,10 @@ class Movie(titleId: String, type: TitleType, title: String, isAdult: Boolean,
     private var runtimeMinutes: Int
     @SerializedName("genresList")
     private var genresList: List<String>
+
+    private var rank: Double = 0.0
+
+    private  var image: Image? = null
 
     private var episodes: List<SeriesEpisode>? = null
 
@@ -97,5 +102,16 @@ class Movie(titleId: String, type: TitleType, title: String, isAdult: Boolean,
         return genresList
     }
 
+    fun getImage() :Image{
+        return image!!
+    }
+
+    fun setRank(rank: Double) {
+        this.rank = rank
+    }
+
+    fun getRank(): Double {
+        return rank
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.example.imdbproj
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.AttributeSet
@@ -11,9 +12,15 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import com.example.imdbproj.classes.mainClasses.User
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.imdbproj.adaptor.ImdbMovieAdaptor
+import com.example.imdbproj.classes.mainClasses.Movie
+import com.example.imdbproj.classes.mainClasses.TitleType
 import com.example.imdbproj.retrofit.ApiClient
 import com.example.imdbproj.retrofit.ApiService
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,11 +31,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var drawerLayout : DrawerLayout
     lateinit var toolbar: Toolbar
 
-    lateinit var users: List<User>
+    lateinit var movies: ArrayList<Movie>
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
         drawerLayout = findViewById(R.id.drawerLayout)
@@ -39,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         val toggle = ActionBarDrawerToggle(this@MainActivity, drawerLayout,toolbar,
                                            R.string.open,R.string.close)
         toggle.syncState()
+
 
     }
 
@@ -79,15 +88,21 @@ class MainActivity : AppCompatActivity() {
 
         val service: ApiService = apiClient.getClient().create(ApiService::class.java)
 
-        val call: Call<List<User?>?>? = service.getAllUsers()
+        val call: Call<List<Movie?>?>? = service.getAllMovies()
 
+        call?.enqueue(object : Callback<List<Movie?>?> {
+            @SuppressLint("ResourceType")
+            override fun onResponse(call: Call<List<Movie?>?>, response: Response<List<Movie?>?>) {
+              //  movies = response.body() as List<Movie>
+                val movieAdaptor = ImdbMovieAdaptor(baseContext, movies)
+                val recyclerView: RecyclerView = recyleViewTopMovies.findViewById(R.id.recyleViewTopMovies)
+                recyclerView.adapter = movieAdaptor
 
-        call?.enqueue(object : Callback<List<User?>?> {
-            override fun onResponse(call: Call<List<User?>?>, response: Response<List<User?>?>) {
-                users = response.body() as List<User>
+                val linearLayout = LinearLayoutManager(baseContext, RecyclerView.VERTICAL, false)
+                recyclerView.layoutManager = linearLayout
             }
 
-            override fun onFailure(call: Call<List<User?>?>, t: Throwable) {
+            override fun onFailure(call: Call<List<Movie?>?>, t: Throwable) {
                 Toast.makeText(baseContext, "error getting info" , Toast.LENGTH_SHORT).show()
             }
         })

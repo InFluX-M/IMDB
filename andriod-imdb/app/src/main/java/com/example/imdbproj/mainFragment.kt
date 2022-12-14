@@ -28,7 +28,6 @@ class mainFragment : Fragment() {
 
     lateinit var movies: ArrayList<Movie>
 
-
     lateinit var binding: FragmentMainBinding
 
     private companion object {

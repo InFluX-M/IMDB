@@ -5,7 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.imdbproj.R
+import com.example.imdbproj.adaptor.MovieAdapter
+import com.example.imdbproj.adaptor.MovieDetailAdapter
+import com.example.imdbproj.classes.mainClasses.Movie
+import com.example.imdbproj.databinding.FragmentMainBinding
+import com.example.imdbproj.databinding.FragmentMovieBinding
+import kotlinx.android.synthetic.main.fragment_main.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +30,10 @@ class movieFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var movie: Movie
+
+    private lateinit var binding: FragmentMovieBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -30,10 +42,24 @@ class movieFragment : Fragment() {
         }
     }
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        // get movie
+
+        binding = FragmentMovieBinding.bind(view)
+        val recyclerView: RecyclerView = binding.recyclerViewDetalMovie
+
+        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView.adapter = MovieDetailAdapter(movie)
+
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?): View? {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_movie, container, false)
     }

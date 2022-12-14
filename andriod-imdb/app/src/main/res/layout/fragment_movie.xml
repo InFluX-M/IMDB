@@ -19,9 +19,9 @@
             android:id="@+id/imageView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="92dp"
+            android:layout_marginBottom="361dp"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerViewDetalMovie"
+            app:layout_constraintBottom_toTopOf="@+id/recycleViewActors"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +32,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="TextView"
+            android:text="@{movie.title}"
             android:textColor="@color/black"
             android:textSize="36sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,15 +41,45 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewDetalMovie"
+            android:layout_width="305dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.421"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewMovieName" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleViewActors"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginBottom="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="28dp"
+            app:layout_constraintBottom_toTopOf="@+id/recycleViewDirectors"
+            app:layout_constraintEnd_toEndOf="@+id/recycleViewComments"
+            app:layout_constraintStart_toStartOf="@+id/recyclerViewDetalMovie"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleViewDirectors"
+            android:layout_width="315dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="110dp"
+            app:layout_constraintBottom_toTopOf="@+id/recycleViewComments"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/recycleViewActors" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleViewComments"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/recycleViewDirectors"
+            app:layout_constraintStart_toStartOf="@+id/recycleViewDirectors"
+            app:layout_constraintTop_toBottomOf="@+id/recycleViewDirectors" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

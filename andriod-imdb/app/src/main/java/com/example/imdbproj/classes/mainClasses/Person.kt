@@ -1,5 +1,6 @@
 package com.example.imdbproj.classes.mainClasses
 
+import android.provider.ContactsContract.Contacts.Photo
 import com.google.gson.annotations.SerializedName
 import java.time.LocalDate
 
@@ -61,9 +62,18 @@ class Person(id: String) {
             field = value
         }
 
+    private lateinit var photo: Photo
+
     fun getId() : String {
         return id
     }
 
+    fun setPhoto(photo: Photo) {
+        this.photo = photo
+    }
+
+    fun getPhoto(): Photo {
+        return photo
+    }
 
 }

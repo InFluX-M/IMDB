@@ -1,6 +1,6 @@
 package com.example.imdb.dto;
 
-import com.example.imdb.model.AppUserRole;
+import com.example.imdb.model.UserRole;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -16,6 +16,6 @@ public class UserResponseDTO {
   @ApiModelProperty(position = 2)
   private String email;
   @ApiModelProperty(position = 3)
-  List<AppUserRole> appUserRoles;
+  List<UserRole> userRoles;
 
 }

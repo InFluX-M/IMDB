@@ -7,7 +7,7 @@
     android:layout_margin="10dp">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageMovie"
         android:layout_width="0dp"
         android:layout_height="84dp"
         android:layout_marginStart="48dp"
@@ -15,21 +15,21 @@
         android:layout_marginEnd="29dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textViewNameMovie"
+        app:layout_constraintEnd_toStartOf="@+id/nameMovie"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_movie_24" />
 
     <TextView
-        android:id="@+id/textViewNameMovie"
+        android:id="@+id/nameMovie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="96dp"
         android:text="TextView"
         app:layout_constraintEnd_toStartOf="@+id/imageView4"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintStart_toEndOf="@+id/imageMovie"
+        app:layout_constraintTop_toTopOf="@+id/imageMovie" />
 
     <TextView
         android:id="@+id/textViewRank"
@@ -37,10 +37,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="56dp"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewNameMovie"
+        app:layout_constraintBottom_toBottomOf="@+id/nameMovie"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/textViewNameMovie" />
+        app:layout_constraintTop_toTopOf="@+id/nameMovie" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -48,7 +48,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/textViewRank"
         app:layout_constraintEnd_toStartOf="@+id/textViewRank"
-        app:layout_constraintStart_toEndOf="@+id/textViewNameMovie"
+        app:layout_constraintStart_toEndOf="@+id/nameMovie"
         app:layout_constraintTop_toTopOf="@+id/textViewRank"
         app:srcCompat="@drawable/ic_baseline_star_rate_24" />
 

@@ -38,7 +38,7 @@ class ImdbMovieAdaptor(context: Context, movies: List<Movie>): RecyclerView.Adap
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImdbHolder {
-        val view: View = LayoutInflater.from(context).inflate(R.layout.top_movies,parent,false)
+        val view: View = LayoutInflater.from(context).inflate(R.layout.movies_layout,parent,false)
         return ImdbHolder(view)
     }
 

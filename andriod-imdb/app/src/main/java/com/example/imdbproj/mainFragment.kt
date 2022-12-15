@@ -58,6 +58,8 @@ class mainFragment : Fragment() {
 
        recycleView = binding.recyleViewTopMovies
 
+        movies = ArrayList()
+
         val list = ArrayList<String>()
         list.add("comedy")
         val movie1 = Movie("1", TitleType.MOVIE, "movie1", true, 2021, 2021, 120, list)

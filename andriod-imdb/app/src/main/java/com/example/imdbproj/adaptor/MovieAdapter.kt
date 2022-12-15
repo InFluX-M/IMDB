@@ -12,7 +12,7 @@ class MovieAdapter(var movies: ArrayList<Movie>): RecyclerView.Adapter<MovieAdap
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-        val textViewName = itemView.findViewById<TextView>(R.id.textViewNameMovie)
+        val textViewName = itemView.findViewById<TextView>(R.id.nameMovie)
         val textViewRank = itemView.findViewById<TextView>(R.id.textViewRank)
 
     }

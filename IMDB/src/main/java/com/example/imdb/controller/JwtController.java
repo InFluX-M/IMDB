@@ -2,8 +2,8 @@ package com.example.imdb.controller;
 
 import com.example.imdb.dto.UserDataDTO;
 import com.example.imdb.dto.UserResponseDTO;
-import com.example.imdb.model.AppUser;
-import com.example.imdb.service.UserService2;
+import com.example.imdb.model.User;
+import com.example.imdb.service.JwtService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -16,13 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/jwt")
 //@Api(tags = "users")
 @RequiredArgsConstructor
-public class jwtController {
+public class JwtController {
 
-    private final UserService2 userService;
+    private final JwtService userService;
     private final ModelMapper modelMapper;
 
     @PostMapping("/signin")
-    @ApiOperation(value = "${jwtController.signin}")
+    @ApiOperation(value = "${JwtController.signin}")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 422, message = "Invalid username/password supplied")})
@@ -33,19 +33,19 @@ public class jwtController {
     }
 
     @PostMapping("/signup")
-  @ApiOperation(value = "${jwtController.signup}")
-  @ApiResponses(value = {//
-      @ApiResponse(code = 400, message = "Something went wrong"), //
-      @ApiResponse(code = 403, message = "Access denied"), //
-      @ApiResponse(code = 422, message = "Username is already in use")})
+    @ApiOperation(value = "${JwtController.signup}")
+    @ApiResponses(value = {//
+            @ApiResponse(code = 400, message = "Something went wrong"), //
+            @ApiResponse(code = 403, message = "Access denied"), //
+            @ApiResponse(code = 422, message = "Username is already in use")})
     public String signup(@RequestBody UserDataDTO user) {
         System.err.println("signup");
-        return userService.signup(modelMapper.map(user, AppUser.class));
+        return userService.signup(modelMapper.map(user, User.class));
     }
 
-     @DeleteMapping(value = "/{username}")
+    @DeleteMapping(value = "/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @ApiOperation(value = "${jwtController.delete}", authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "${JwtController.delete}", authorizations = {@Authorization(value = "apiKey")})
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
@@ -58,7 +58,7 @@ public class jwtController {
 
     @GetMapping(value = "/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @ApiOperation(value = "${jwtController.search}", response = UserResponseDTO.class, authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "${JwtController.search}", response = UserResponseDTO.class, authorizations = {@Authorization(value = "apiKey")})
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
@@ -70,7 +70,7 @@ public class jwtController {
 
     @GetMapping(value = "/me")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
-    @ApiOperation(value = "${jwtController.me}", response = UserResponseDTO.class, authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "${JwtController.me}", response = UserResponseDTO.class, authorizations = {@Authorization(value = "apiKey")})
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //

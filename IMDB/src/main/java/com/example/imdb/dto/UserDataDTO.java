@@ -3,7 +3,7 @@ package com.example.imdb.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.example.imdb.model.AppUserRole;
+import com.example.imdb.model.UserRole;
 import java.util.List;
 
 @Data
@@ -17,6 +17,6 @@ public class UserDataDTO {
   @ApiModelProperty(position = 2)
   private String password;
   @ApiModelProperty(position = 3)
-  List<AppUserRole> appUserRoles;
+  List<UserRole> userRoles;
 
 }

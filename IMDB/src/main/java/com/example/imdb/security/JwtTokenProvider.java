@@ -1,7 +1,7 @@
 package com.example.imdb.security;
 
 import com.example.imdb.exception.CustomException;
-import com.example.imdb.model.AppUserRole;
+import com.example.imdb.model.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -44,10 +44,10 @@ public class JwtTokenProvider {
     secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
   }
 
-  public String createToken(String username, List<AppUserRole> appUserRoles) {
+  public String createToken(String username, List<UserRole> userRoles) {
 
     Claims claims = Jwts.claims().setSubject(username);
-    claims.put("auth", appUserRoles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority())).filter(Objects::nonNull).collect(Collectors.toList()));
+    claims.put("auth", userRoles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority())).filter(Objects::nonNull).collect(Collectors.toList()));
 
     Date now = new Date();
     Date validity = new Date(now.getTime() + validityInMilliseconds);

@@ -18,12 +18,25 @@ import java.util.Set;
 @Entity
 @Table
 public class User {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(unique = true, nullable = false)
     private String username;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
     private String password;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    List<UserRole> userRoles;
+
 //    @OneToOne
-//    private WatchList watchList; todo
+//    private WatchList watchList;
+//    todo
 
     @ManyToMany
     @JoinTable(

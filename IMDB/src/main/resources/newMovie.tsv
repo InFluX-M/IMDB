@@ -1,0 +1,77 @@
+tconst	titleType	primaryTitle	originalTitle	isAdult	startYear	endYear	runtimeMinutes	genres
+tt0243069	tvSeries	The Lone Gunmen	The Lone Gunmen	0	2001	2001	45	Comedy,Drama,Mystery
+tt0358323	tvSeries	Look Around You	Look Around You	0	2002	2005	30	Comedy
+tt0058823	tvSeries	The Long, Hot Summer	The Long, Hot Summer	0	1965	1966	48	Drama
+tt3632248	tvSeries	Blue Eyes	Blå ögon	0	2014	2015	60	Drama,Mystery,Thriller
+tt0635306	tvEpisode	All About Yves	All About Yves	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635307	tvEpisode	Bond, Jimmy Bond	Bond, Jimmy Bond	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635308	tvEpisode	The 'Cap'n Toby' Show	The 'Cap'n Toby' Show	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635309	tvEpisode	Diagnosis: Jimmy	Diagnosis: Jimmy	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635310	tvEpisode	Eine Kleine Frohike	Eine Kleine Frohike	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635311	tvEpisode	Like Water for Octane	Like Water for Octane	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635312	tvEpisode	Madam, I'm Adam	Madam, I'm Adam	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635313	tvEpisode	Maximum Byers	Maximum Byers	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635314	tvEpisode	Pilot	Pilot	0	2001	\N	43	Comedy,Drama,Mystery
+tt0635315	tvEpisode	Planet of the Frohikes	Planet of the Frohikes	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635316	tvEpisode	Tango de los Pistoleros	Tango de los Pistoleros	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635317	tvEpisode	The Lying Game	The Lying Game	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635318	tvEpisode	Three Men and a Smoking Diaper	Three Men and a Smoking Diaper	0	2001	\N	\N	Comedy,Drama,Mystery
+tt0635652	tvEpisode	A Stranger to the House	A Stranger to the House	0	1965	\N	60	Drama
+tt0635653	tvEpisode	A Time for Living	A Time for Living	0	1965	\N	60	Drama
+tt0635654	tvEpisode	A Time to Die	A Time to Die	0	1966	\N	60	Drama
+tt0635655	tvEpisode	Bitter Harvest	Bitter Harvest	0	1965	\N	60	Drama
+tt0635656	tvEpisode	Blaze of Glory	Blaze of Glory	0	1966	\N	60	Drama
+tt0635657	tvEpisode	Carlotta, Come Home	Carlotta, Come Home	0	1966	\N	60	Drama
+tt0635658	tvEpisode	Crisis	Crisis	0	1966	\N	60	Drama
+tt0635659	tvEpisode	Day of Thunder	Day of Thunder	0	1966	\N	60	Drama
+tt0635660	tvEpisode	Evil Angel	Evil Angel	0	1966	\N	60	Drama
+tt0635661	tvEpisode	Face of Fear	Face of Fear	0	1966	\N	60	Drama
+tt0635662	tvEpisode	From This Day Forward	From This Day Forward	0	1966	\N	60	Drama
+tt0635663	tvEpisode	Home Is a Nameless Place	Home Is a Nameless Place	0	1965	\N	60	Drama
+tt0635664	tvEpisode	Hunter to the Wind	Hunter to the Wind	0	1965	\N	60	Drama
+tt0635665	tvEpisode	Man with Two Faces	Man with Two Faces	0	1966	\N	60	Drama
+tt0635666	tvEpisode	No Hiding Place	No Hiding Place	0	1965	\N	60	Drama
+tt0635667	tvEpisode	Nor Hell a Fury	Nor Hell a Fury	0	1965	\N	60	Drama
+tt0635668	tvEpisode	Reunion - Italian Style	Reunion - Italian Style	0	1966	\N	60	Drama
+tt0635669	tvEpisode	Run, Hero, Run	Run, Hero, Run	0	1965	\N	60	Drama
+tt0635670	tvEpisode	The Desperate Innocent	The Desperate Innocent	0	1965	\N	60	Drama
+tt0635671	tvEpisode	The Homecoming	The Homecoming	0	1965	\N	60	Drama
+tt0635672	tvEpisode	The Intruders	The Intruders	0	1966	\N	60	Drama
+tt0635673	tvEpisode	The Return of the Quicks	The Return of the Quicks	0	1965	\N	60	Drama
+tt0635674	tvEpisode	The Twisted Image: Part 1	The Twisted Image: Part 1	0	1965	\N	60	Drama
+tt0635675	tvEpisode	The Twisted Image: Part 2	The Twisted Image: Part 2	0	1965	\N	60	Drama
+tt0635676	tvEpisode	The Warning	The Warning	0	1966	\N	60	Drama
+tt0635677	tvEpisode	Track the Man Down	Track the Man Down	0	1965	\N	60	Drama
+tt0635701	tvEpisode	Computers	Computers	0	2005	\N	\N	Comedy
+tt0635702	tvEpisode	Food	Food	0	2005	\N	\N	Comedy
+tt0635703	tvEpisode	Germs	Germs	0	2002	\N	\N	Comedy
+tt0635704	tvEpisode	Ghosts	Ghosts	0	2002	\N	\N	Comedy
+tt0635705	tvEpisode	Health	Health	0	2005	\N	\N	Comedy
+tt0635706	tvEpisode	Iron	Iron	0	2002	\N	\N	Comedy
+tt0635707	tvEpisode	Live Final	Live Final	0	2005	\N	\N	Comedy
+tt0635708	tvEpisode	Maths	Maths	0	2002	\N	\N	Comedy
+tt0635709	tvEpisode	Music	Music	0	2002	\N	\N	Comedy
+tt0635710	tvEpisode	Music	Music	0	2005	\N	\N	Comedy
+tt0635711	tvEpisode	Sport	Sport	0	2005	\N	\N	Comedy
+tt0635712	tvEpisode	Sulphur	Sulphur	0	2002	\N	\N	Comedy
+tt0635713	tvEpisode	The Brain	The Brain	0	2002	\N	\N	Comedy
+tt0635714	tvEpisode	Water	Water	0	2002	\N	\N	Comedy
+tt3651938	tvEpisode	Festen kan börja	Festen kan börja	0	2014	\N	57	Drama,Mystery,Thriller
+tt3651942	tvEpisode	Tusen nålstick	Tusen nålstick	0	2014	\N	58	Drama,Mystery,Thriller
+tt3651950	tvEpisode	Flyttfåglar	Flyttfåglar	0	2014	\N	57	Drama,Mystery,Thriller
+tt3651952	tvEpisode	...jord skall du åter varda	...jord skall du åter varda	0	2014	\N	58	Drama,Mystery,Thriller
+tt3651954	tvEpisode	Hälsa hem	Hälsa hem	0	2015	\N	58	Drama,Mystery,Thriller
+tt3651962	tvEpisode	Mina föräldrars lögner	Mina föräldrars lögner	0	2015	\N	59	Drama,Mystery,Thriller
+tt3651964	tvEpisode	Jordskalvet	Jordskalvet	0	2015	\N	58	Drama,Mystery,Thriller
+tt3651970	tvEpisode	Svallvågen	Svallvågen	0	2015	\N	58	Drama,Mystery,Thriller
+tt3651972	tvEpisode	Kölvattnet	Kölvattnet	0	2015	\N	59	Drama,Mystery,Thriller
+tt3651974	tvEpisode	En söndag i september	En söndag i september	0	2015	\N	59	Drama,Mystery,Thriller
+tt0111161	movie	The Shawshank Redemption	The Shawshank Redemption	0	1994	\N	142	Drama
+tt0068646	movie	The Godfather	The Godfather	0	1972	\N	175	Crime,Drama
+tt0468569	movie	The Dark Knight	The Dark Knight	0	2008	\N	152	Action,Crime,Drama
+tt0167260	movie	The Lord of the Rings: The Return of the King	The Lord of the Rings: The Return of the King	0	2003	\N	201	Action,Adventure,Drama
+tt0108052	movie	Schindler's List	Schindler's List	0	1993	\N	195	Biography,Drama,History
+tt0071562	movie	The Godfather Part II	The Godfather Part II	0	1974	\N	202	Crime,Drama
+tt0050083	movie	12 Angry Men	12 Angry Men	0	1957	\N	96	Crime,Drama
+tt0110912	movie	Pulp Fiction	Pulp Fiction	0	1994	\N	154	Crime,Drama
+tt1375666	movie	Inception	Inception	0	2010	\N	148	Action,Adventure,Sci-Fi

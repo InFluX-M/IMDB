@@ -20,9 +20,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final JwtTokenProvider jwtTokenProvider;
-
+  private static final String[] AUTH_WHITELIST = {
+          "/swagger-resources/**",
+          "/swagger-ui.html",
+          "/v3/api-docs",
+          "/webjars/**"
+  };
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+
+//    http.apply(new JwtTokenConfigurer(tokenProvider));
+
+
 
     // Disable CSRF (cross site request forgery)
     http.csrf().disable();
@@ -46,13 +55,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-    // Allow swagger to be accessed without authentication
-//    web.ignoring().antMatchers("/v2/api-docs")//
-//        .antMatchers("/swagger-resources/**")//
-//        .antMatchers("/swagger-ui.html")//
-//        .antMatchers("/configuration/**")//
-//        .antMatchers("/webjars/**")//
-//        .antMatchers("/public")
+    web.ignoring().antMatchers(AUTH_WHITELIST);
+//     Allow swagger to be accessed without authentication
 //
 //        // Un-secure H2 Database (for testing purposes, H2 console shouldn't be unprotected in production)
 //        .and()

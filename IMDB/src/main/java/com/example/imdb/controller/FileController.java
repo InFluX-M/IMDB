@@ -31,6 +31,7 @@ public class FileController {
 
     @PostMapping("/readRatings")
     public ResponseEntity<List<RatingResponse>> readRatings() throws IOException {
+
         return new ResponseEntity<>(fileService.readRatings(), HttpStatus.CREATED);
     }
 

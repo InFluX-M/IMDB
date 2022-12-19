@@ -85,7 +85,7 @@ public class Movie {
                 //.comments(comments.stream().map(Comment::response).toList())
                 .isAdult(isAdult)
                 //.episode(episodes.stream().map(SeriesEpisode::episodeResponse).toList())
-                .rating(rating.response())
+//                .rating(rating.response())
                 .build();
     }
 

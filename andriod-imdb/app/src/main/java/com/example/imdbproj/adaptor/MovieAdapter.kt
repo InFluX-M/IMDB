@@ -3,17 +3,26 @@ package com.example.imdbproj.adaptor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.app.ActivityCompat.finishAffinity
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.imdbproj.R
 import com.example.imdbproj.classes.mainClasses.Movie
+import com.example.imdbproj.mainFragment
 
-class MovieAdapter(var movies: ArrayList<Movie>): RecyclerView.Adapter<MovieAdapter.ViewHolder>()  {
+class MovieAdapter(var movies: ArrayList<Movie> ):
+    RecyclerView.Adapter<MovieAdapter.ViewHolder>()  {
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View):
+        RecyclerView.ViewHolder(itemView) {
 
         val textViewName = itemView.findViewById<TextView>(R.id.nameMovie)
         val textViewRank = itemView.findViewById<TextView>(R.id.textViewRank)
+        val relativeLayout = itemView.findViewById<RelativeLayout>(R.id.relative_main)
+
 
     }
 
@@ -31,6 +40,12 @@ class MovieAdapter(var movies: ArrayList<Movie>): RecyclerView.Adapter<MovieAdap
         val movie = movies[position]
         holder.textViewName.text = (movie.getTitle())
         holder.textViewRank.text = (movie.getRank().toString())
+
+        holder.relativeLayout.setOnClickListener { v ->
+            if (v != null) {
+                Toast.makeText(v.context, "movie show", Toast.LENGTH_LONG).show()
+            }
+        }
 
     }
 

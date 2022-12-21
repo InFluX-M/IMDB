@@ -6,50 +6,70 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp">
 
-    <ImageView
-        android:id="@+id/imageMovie"
-        android:layout_width="0dp"
-        android:layout_height="84dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="29dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/nameMovie"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_movie_24" />
-
-    <TextView
-        android:id="@+id/nameMovie"
+    <RelativeLayout
+        android:id="@+id/relative_main"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="96dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/imageView4"
-        app:layout_constraintStart_toEndOf="@+id/imageMovie"
-        app:layout_constraintTop_toTopOf="@+id/imageMovie" />
-
-    <TextView
-        android:id="@+id/textViewRank"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="56dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/nameMovie"
+        android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/nameMovie" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="0dp">
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textViewRank"
-        app:layout_constraintEnd_toStartOf="@+id/textViewRank"
-        app:layout_constraintStart_toEndOf="@+id/nameMovie"
-        app:layout_constraintTop_toTopOf="@+id/textViewRank"
-        app:srcCompat="@drawable/ic_baseline_star_rate_24" />
+        <ImageView
+            android:id="@+id/imageMovie"
+            android:layout_width="144dp"
+            android:layout_height="84dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="246dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/nameMovie"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_movie_24" />
+
+        <TextView
+            android:id="@+id/nameMovie"
+            android:layout_width="103dp"
+            android:layout_height="33dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="142dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toStartOf="@+id/imageView4"
+            app:layout_constraintStart_toEndOf="@+id/imageMovie"
+            app:layout_constraintTop_toTopOf="@+id/imageMovie" />
+
+        <TextView
+            android:id="@+id/textViewRank"
+            android:layout_width="74dp"
+            android:layout_height="76dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="11dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/nameMovie"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView4"
+            app:layout_constraintTop_toTopOf="@+id/nameMovie" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="47dp"
+            android:layout_height="71dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="260dp"
+            android:layout_marginEnd="84dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewRank"
+            app:layout_constraintEnd_toStartOf="@+id/textViewRank"
+            app:layout_constraintStart_toEndOf="@+id/nameMovie"
+            app:layout_constraintTop_toTopOf="@+id/textViewRank"
+            app:srcCompat="@drawable/ic_baseline_star_rate_24" />
+
+    </RelativeLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,19 +1,23 @@
 package com.example.imdbproj
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.Navigation
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.imdbproj.R
 import com.example.imdbproj.adaptor.MovieAdapter
 import com.example.imdbproj.classes.mainClasses.Movie
 import com.example.imdbproj.classes.mainClasses.TitleType
 import com.example.imdbproj.databinding.FragmentMainBinding
+import com.example.imdbproj.retrofit.ApiClient
+import com.example.imdbproj.retrofit.ApiService
 import kotlinx.android.synthetic.main.fragment_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,6 +33,8 @@ class mainFragment : Fragment() {
     lateinit var movies: ArrayList<Movie>
 
     lateinit var binding: FragmentMainBinding
+
+//    val movieService = ApiClient.createService(ApiService::class.java)
 
     private companion object {
         lateinit var recycleView: RecyclerView
@@ -60,6 +66,9 @@ class mainFragment : Fragment() {
 
         movies = ArrayList()
 
+
+        //findAll()
+
         val list = ArrayList<String>()
         list.add("comedy")
         val movie1 = Movie("1", TitleType.MOVIE, "movie1", true, 2021, 2021, 120, list)
@@ -80,5 +89,11 @@ class mainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
     }
+
+    private fun movieLayoutClicked(movie: Movie) {
+        Toast.makeText(this.context,"movie show",Toast.LENGTH_LONG).show()
+    }
+
+
 
 }

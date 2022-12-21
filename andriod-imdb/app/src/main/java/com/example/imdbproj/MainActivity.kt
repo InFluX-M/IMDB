@@ -14,9 +14,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.imdbproj.adaptor.ImdbMovieAdaptor
 import com.example.imdbproj.classes.mainClasses.Movie
-import com.example.imdbproj.classes.mainClasses.TitleType
 import com.example.imdbproj.retrofit.ApiClient
 import com.example.imdbproj.retrofit.ApiService
 import kotlinx.android.synthetic.main.activity_main.*
@@ -66,48 +64,17 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCreateView(
-        parent: View?,
-        name: String,
-        context: Context,
-        attrs: AttributeSet
-    ): View? {
+    override fun onCreateView(parent: View?, name: String, context: Context, attrs: AttributeSet): View? {
+
 
         val view = super.onCreateView(parent, name, context, attrs)
 
         // getData()
 
+
         return view
     }
 
-
-
-    fun getData() {
-
-        val apiClient = ApiClient()
-
-        val service: ApiService = apiClient.getClient().create(ApiService::class.java)
-
-        val call: Call<List<Movie?>?>? = service.getAllMovies()
-
-        call?.enqueue(object : Callback<List<Movie?>?> {
-            @SuppressLint("ResourceType")
-            override fun onResponse(call: Call<List<Movie?>?>, response: Response<List<Movie?>?>) {
-              //  movies = response.body() as List<Movie>
-                val movieAdaptor = ImdbMovieAdaptor(baseContext, movies)
-                val recyclerView: RecyclerView = recyleViewTopMovies.findViewById(R.id.recyleViewTopMovies)
-                recyclerView.adapter = movieAdaptor
-
-                val linearLayout = LinearLayoutManager(baseContext, RecyclerView.VERTICAL, false)
-                recyclerView.layoutManager = linearLayout
-            }
-
-            override fun onFailure(call: Call<List<Movie?>?>, t: Throwable) {
-                Toast.makeText(baseContext, "error getting info" , Toast.LENGTH_SHORT).show()
-            }
-        })
-
-    }
 
 
 }

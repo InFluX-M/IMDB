@@ -3,14 +3,22 @@ package com.example.imdbproj.retrofit
 import com.example.imdbproj.classes.mainClasses.Movie
 import com.example.imdbproj.classes.mainClasses.User
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 interface ApiService {
 
-    @GET("/user")
-    fun getAllUsers(): Call<List<User?>?>?
+    /*
+    @GET("movie/top-rated")
+    fun getAllTopRatedMovies(): Call<List<Movie?>?>?
+     */
 
-    @GET("/movie")
-    fun getAllMovies(): Call<List<Movie?>?>?
+    @GET("/movies")
+    fun getAllMovies(): Call<List<Movie>>
+
+    @POST("/movies")
+    fun addMovie(@Body movie: Movie): Call<Movie>
+
 
 }

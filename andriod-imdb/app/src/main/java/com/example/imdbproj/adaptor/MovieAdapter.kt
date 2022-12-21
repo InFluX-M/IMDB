@@ -13,7 +13,7 @@ import com.example.imdbproj.R
 import com.example.imdbproj.classes.mainClasses.Movie
 import com.example.imdbproj.mainFragment
 
-class MovieAdapter(var movies: ArrayList<Movie> ):
+class MovieAdapter(var movies: List<Movie> ):
     RecyclerView.Adapter<MovieAdapter.ViewHolder>()  {
 
     inner class ViewHolder(itemView: View):
@@ -22,7 +22,6 @@ class MovieAdapter(var movies: ArrayList<Movie> ):
         val textViewName = itemView.findViewById<TextView>(R.id.nameMovie)
         val textViewRank = itemView.findViewById<TextView>(R.id.textViewRank)
         val relativeLayout = itemView.findViewById<RelativeLayout>(R.id.relative_main)
-
 
     }
 

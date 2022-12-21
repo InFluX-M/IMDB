@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.imdbproj.adaptor.MovieAdapter
 import com.example.imdbproj.classes.mainClasses.Movie
-import com.example.imdbproj.classes.mainClasses.TitleType
 import com.example.imdbproj.databinding.FragmentMainBinding
 import com.example.imdbproj.retrofit.ApiClient
 import com.example.imdbproj.retrofit.ApiService
@@ -30,11 +29,9 @@ class mainFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    lateinit var movies: ArrayList<Movie>
+    private var movies: ArrayList<Movie> = ArrayList<Movie> ()
 
     lateinit var binding: FragmentMainBinding
-
-//    val movieService = ApiClient.createService(ApiService::class.java)
 
     private companion object {
         lateinit var recycleView: RecyclerView
@@ -64,11 +61,11 @@ class mainFragment : Fragment() {
 
        recycleView = binding.recyleViewTopMovies
 
-        movies = ArrayList()
+        getMovies()
 
 
-        //findAll()
 
+/*
         val list = ArrayList<String>()
         list.add("comedy")
         val movie1 = Movie("1", TitleType.MOVIE, "movie1", true, 2021, 2021, 120, list)
@@ -83,8 +80,11 @@ class mainFragment : Fragment() {
         movies.add(movie4)
         movies.add(movie5)
 
-        recyleViewTopMovies.layoutManager = LinearLayoutManager(this.context)
+ */
+
+        recyleViewTopMovies.layoutManager = LinearLayoutManager(context)
         recyleViewTopMovies.adapter = MovieAdapter(movies)
+
 
         super.onViewCreated(view, savedInstanceState)
 
@@ -95,5 +95,34 @@ class mainFragment : Fragment() {
     }
 
 
+    private fun getMovies() {
 
+        val apiClient = ApiClient()
+        val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
+
+        apiService.getAllMovies().enqueue(object : Callback<List<Movie>> {
+
+            override fun onResponse(call: Call<List<Movie>>, response: Response<List<Movie>>) {
+                if (response.isSuccessful) {
+                   movies = response.body() as ArrayList<Movie>
+                } else {
+                    println(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<List<Movie>>, t: Throwable) {
+                Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+
+        })
+
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        this.getMovies()
+    }
 }

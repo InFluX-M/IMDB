@@ -9,10 +9,6 @@ import retrofit2.http.POST
 
 interface ApiService {
 
-    /*
-    @GET("movie/top-rated")
-    fun getAllTopRatedMovies(): Call<List<Movie?>?>?
-     */
 
     @GET("/movies")
     fun getAllMovies(): Call<List<Movie>>

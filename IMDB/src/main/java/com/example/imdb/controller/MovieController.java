@@ -38,7 +38,6 @@ public class MovieController {
 
     @GetMapping
     public ResponseEntity<List<MovieResponse>> getMovies() {
-        System.err.println("type");
         return new ResponseEntity<>(movieService.getAllMovies(), HttpStatus.OK);
     }
 

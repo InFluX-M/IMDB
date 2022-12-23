@@ -64,7 +64,7 @@ public class FileService {
             i++;
         }
 
-        return movieRepository.saveAll(allMovies).stream().map(Movie::response).toList();
+        return movieRepository.saveAll(allMovies).stream().map(Movie::movieResponse).toList();
     }
 
     public List<PersonResponse> readPersons() throws IOException {
@@ -124,7 +124,6 @@ public class FileService {
 
                 for (String st : titles) {
 
-                    System.out.println(st);
                     if (movieRepository.findById(st).isPresent()) {
                         people.get(i).getKnownForTitlesList().add(st);
                         Movie movie = movieRepository.findById(st).get();
@@ -164,18 +163,23 @@ public class FileService {
 
             Movie movie = movieRepository.findById(parts[0]).get();
 
-            ratings.add(Rating.builder()
+            Rating rating = Rating.builder()
                     .movie(movie)
                     .avgRating(Float.parseFloat(parts[1]))
                     .numVotes(Integer.parseInt(parts[2]))
-                    .build());
+                    .build();
+
+            ratings.add(rating);
+
+            movie.setRating(rating);
+            ratingRepository.save(rating);
+            movieRepository.save(movie);
         }
 
-        return ratingRepository.saveAll(ratings).stream().map(Rating::response).toList();
-
+        return ratings.stream().map(Rating::response).toList();
     }
 
-    public List<SeriesEpisodeResponse> readEpisodes() throws IOException {
+    public List<EpisodeResponse> readEpisodes() throws IOException {
 
         String fileName = "C:\\Users\\feres\\Desktop\\git-pro1\\project-1-random\\IMDB\\src\\main\\resources\\newEpisode.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);

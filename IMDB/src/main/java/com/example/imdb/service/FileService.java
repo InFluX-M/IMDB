@@ -30,7 +30,7 @@ public class FileService {
 
     public List<MovieResponse> readMovies() throws IOException {
 
-        String fileName = "C:\\Users\\feres\\Desktop\\git-pro1\\project-1-random\\IMDB\\src\\main\\resources\\newMovie.tsv";
+        String fileName = "src/main/resources/newMovie.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         ArrayList<Movie> allMovies = new ArrayList<>();
 
@@ -69,7 +69,7 @@ public class FileService {
 
     public List<PersonResponse> readPersons() throws IOException {
 
-        String fileName = "C:\\Users\\feres\\Desktop\\git-pro1\\project-1-random\\IMDB\\src\\main\\resources\\newPerson.tsv";
+        String fileName = "src/main/resources/newPerson.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         ArrayList<Person> people = new ArrayList<>();
 
@@ -144,7 +144,7 @@ public class FileService {
 
     public List<RatingResponse> readRatings() throws IOException {
 
-        String fileName = "C:\\Users\\feres\\Desktop\\git-pro1\\project-1-random\\IMDB\\src\\main\\resources\\newRating.tsv";
+        String fileName = "src/main/resources/newRating.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         ArrayList<Rating> ratings = new ArrayList<>();
 
@@ -177,7 +177,7 @@ public class FileService {
 
     public List<SeriesEpisodeResponse> readEpisodes() throws IOException {
 
-        String fileName = "C:\\Users\\feres\\Desktop\\git-pro1\\project-1-random\\IMDB\\src\\main\\resources\\newEpisode.tsv";
+        String fileName = "src/main/resources/newEpisode.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         ArrayList<SeriesEpisode> episodes = new ArrayList<>();
 
@@ -209,7 +209,7 @@ public class FileService {
 
     public List<DirectorResponse> readCrews() throws IOException {
 
-        String fileName = "C:\\Users\\feres\\Desktop\\git-pro1\\project-1-random\\IMDB\\src\\main\\resources\\newCrew.tsv";
+        String fileName = "src/main/resources/newCrew.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         ArrayList<Movie> movies = new ArrayList<>();
 

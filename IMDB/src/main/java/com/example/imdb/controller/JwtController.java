@@ -39,7 +39,6 @@ public class JwtController {
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 422, message = "Username is already in use")})
     public String signup(@RequestBody UserDataDTO user) {
-        System.err.println("signup");
         return userService.signup(modelMapper.map(user, User.class));
     }
 
@@ -85,10 +84,4 @@ public class JwtController {
         return userService.refresh(req.getRemoteUser());
     }
 
-
-    @GetMapping("/test")
-    public String test() {
-        System.err.println("test");
-        return "test";
-    }
 }

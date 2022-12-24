@@ -1,5 +1,5 @@
 //package com.example.imdb.model;
-//
+
 //import com.example.imdb.model.responses.WatchListResponse;
 //import lombok.*;
 //

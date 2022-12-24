@@ -4,6 +4,7 @@ import com.example.imdb.model.requests.MovieRequest;
 import com.example.imdb.model.responses.DirectorResponse;
 import com.example.imdb.model.responses.MovieCommentResponse;
 import com.example.imdb.model.responses.MovieResponse;
+import com.example.imdb.model.responses.SeriesResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -71,7 +73,8 @@ public class Movie {
                 .build();
     }
 
-    public MovieResponse response() {
+    public MovieResponse movieResponse() {
+
         return MovieResponse.builder()
                 .titleId(titleId)
                 .type(type)
@@ -80,12 +83,31 @@ public class Movie {
                 .endYear(endYear)
                 .runtimeMinutes(runtimeMinutes)
                 .genres(genres)
-                //.actors(actors.stream().map(Person::response).collect(Collectors.toSet())) todo
-                //.directors(directors.stream().toList().stream().map(Person::response).collect(Collectors.toSet()))
-                //.comments(comments.stream().map(Comment::response).toList())
+                .actors(actors.stream().map(Person::response).collect(Collectors.toSet()))
+                .directors(directors.stream().toList().stream().map(Person::response).collect(Collectors.toSet()))
+                .comments(comments.stream().map(Comment::response).toList())
                 .isAdult(isAdult)
-                //.episode(episodes.stream().map(SeriesEpisode::episodeResponse).toList())
-//                .rating(rating.response())
+                .rating(rating.response())
+                .seriesEpisodes(episodes.stream().map(SeriesEpisode::response).collect(Collectors.toList()))
+                .build();
+    }
+
+    public SeriesResponse seriesResponse() {
+
+        return SeriesResponse.builder()
+                .titleId(titleId)
+                .type(type)
+                .title(title)
+                .startYear(startYear)
+                .endYear(endYear)
+                .runtimeMinutes(runtimeMinutes)
+                .genres(genres)
+                .actors(actors.stream().map(Person::response).collect(Collectors.toSet()))
+                .directors(directors.stream().toList().stream().map(Person::response).collect(Collectors.toSet()))
+                .comments(comments.stream().map(Comment::response).toList())
+                .isAdult(isAdult)
+                .rating(rating.response())
+                .episodes(episodes.stream().map(SeriesEpisode::episodeResponse).collect(Collectors.toList()))
                 .build();
     }
 

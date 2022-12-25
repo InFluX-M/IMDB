@@ -1,19 +1,24 @@
 package com.example.imdb.service;
 
+import com.example.imdb.exception.CustomException;
 import com.example.imdb.exception.EntityNotFoundException;
 import com.example.imdb.exception.InvalidRatingException;
 import com.example.imdb.exception.InvalidUsernameException;
-import com.example.imdb.model.Movie;
-import com.example.imdb.model.MovieList;
-import com.example.imdb.model.Rating;
-import com.example.imdb.model.User;
+import com.example.imdb.model.*;
 import com.example.imdb.model.requests.FavoriteListRequest;
 import com.example.imdb.model.requests.UserRequest;
 import com.example.imdb.model.responses.*;
 import com.example.imdb.repository.*;
+import com.example.imdb.security.JwtTokenProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +33,7 @@ public class UserService {
     private RatingRepository ratingRepository;
     private MovieListRepository movieListRepository;
     private MovieRepository movieRepository;
+    private UserRatingRepository userRatingRepository;
 
     public UserResponse addUser(UserRequest request) {
         // todo password validation?
@@ -125,6 +131,14 @@ public class UserService {
         ratingObj.setAvgRating(newAvg);
         ratingObj.setNumVotes(ratingObj.getNumVotes() + 1);
 
+        UserRating userRating = UserRating.builder()
+                .rating(rating)
+                .titleId(titleId)
+                .userId("InFluX")
+                .build();
+
+        userRatingRepository.save(userRating);
+
         return ratingRepository.save(ratingObj).response();
     }
 
@@ -141,5 +155,51 @@ public class UserService {
             throw new EntityNotFoundException(Movie.class.getName(), titleId);
         return loaded.get();
     }
+
+    //---------------------------------------------------------------
+    //JWT
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
+
+    public String signin(String username, String password) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getUserRoles());
+        } catch (AuthenticationException e) {
+            throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+    public String signup(User appUser) {
+        if (!userRepository.existsByUsername(appUser.getUsername())) {
+            appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+            userRepository.save(appUser);
+            return jwtTokenProvider.createToken(appUser.getUsername(), appUser.getUserRoles());
+        } else {
+            throw new CustomException("Username is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+    public void delete(String username) {
+        userRepository.deleteByUsername(username);
+    }
+
+    public User search(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new CustomException("The user doesn't exist", HttpStatus.NOT_FOUND);
+        }
+        return user;
+    }
+
+    public User whoami(HttpServletRequest req) {
+        return userRepository.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+    }
+
+    public String refresh(String username) {
+        return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getUserRoles());
+    }
+
 
 }

@@ -83,12 +83,12 @@ public class Movie {
                 .endYear(endYear)
                 .runtimeMinutes(runtimeMinutes)
                 .genres(genres)
-                .actors(actors.stream().map(Person::response).collect(Collectors.toSet()))
-                .directors(directors.stream().toList().stream().map(Person::response).collect(Collectors.toSet()))
-                .comments(comments.stream().map(Comment::response).toList())
+//                .actors(actors.stream().map(Person::response).collect(Collectors.toSet()))
+//                .directors(directors.stream().toList().stream().map(Person::response).collect(Collectors.toSet()))
+//                .comments(comments.stream().map(Comment::response).toList())
                 .isAdult(isAdult)
-                .rating(rating.response())
-                .seriesEpisodes(episodes.stream().map(SeriesEpisode::response).collect(Collectors.toList()))
+//                .rating(rating.response())
+//                .seriesEpisodes(episodes.stream().map(SeriesEpisode::response).collect(Collectors.toList()))
                 .build();
     }
 
@@ -115,7 +115,7 @@ public class Movie {
         return DirectorResponse.builder()
                 .titleId(titleId)
                 .title(title)
-                .directors(directors)
+//                .directors(directors)
                 .build();
     }
 
@@ -124,7 +124,7 @@ public class Movie {
                 .titleId(titleId)
                 .title(title)
                 .type(type)
-                .ratingResponse(rating.response())
+//                .ratingResponse(rating.response())
                 .build();
     }
 }

@@ -40,9 +40,9 @@ public class SeriesEpisode {
 
     public EpisodeResponse response() {
         return EpisodeResponse.builder()
-                .actors(episode.getActors().stream().map(Person::response).collect(Collectors.toSet()))
+//                .actors(episode.getActors().stream().map(Person::response).collect(Collectors.toSet()))
                 .isAdult(episode.getIsAdult())
-                .rating(episode.getRating().response())
+//                .rating(episode.getRating().response())
                 .runtimeMinutes(episode.getRuntimeMinutes())
                 .startYear(episode.getStartYear())
                 .genres(episode.getGenres())
@@ -51,7 +51,7 @@ public class SeriesEpisode {
                 .endYear(episode.getEndYear())
                 .seasonNumber(seasonNumber)
                 .episodeNumber(episodeNumber)
-                .parent(parent.commentResponse())
+//                .parent(parent.commentResponse())
                 .build();
     }
 

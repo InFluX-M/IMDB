@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MovieListRepository extends JpaRepository<MovieList, Integer> {
     MovieList getByName(String name);
+    MovieList getByNameAndUser_Username(String name, String username);
+
+
 }

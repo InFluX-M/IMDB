@@ -34,17 +34,8 @@ public class User {
     @ElementCollection(fetch = FetchType.EAGER)
     List<UserRole> userRoles;
 
-//    @OneToOne
-//    private WatchList watchList;
-//    todo
-
-    @ManyToMany
-    @JoinTable(
-            name = "watchList",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "titleId")
-    )
-    private Set<Movie> watchList;
+    @OneToOne
+    private WatchList watchList;
 
     @OneToMany(mappedBy = "user")
     private Set<MovieList> favLists;
@@ -63,7 +54,7 @@ public class User {
         return UserResponse.builder()
                 .username(username)
 //                .watchList(watchList.response()) todo
-                .watchList(watchList.stream().map(Movie::commentResponse).toList())
+//                .watchList(watchList.stream().map(Movie::commentResponse).toList())
                 .favoriteLists(favLists.stream().map(MovieList::response).toList())
                 .build();
     }

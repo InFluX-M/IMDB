@@ -2,6 +2,7 @@ package com.example.imdb.security;
 
 import com.example.imdb.model.User;
 import com.example.imdb.repository.UserRepository;
+import com.example.imdb.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

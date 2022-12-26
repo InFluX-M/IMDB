@@ -33,16 +33,14 @@ public class MovieList {
     private User user;
 
     public FavoriteListRequest request() {
-        return FavoriteListRequest.builder()
-                .name(name)
-                .build();
+        return new FavoriteListRequest(name);
     }
 
     public MovieListResponse response() {
         return MovieListResponse.builder()
                 .name(name)
                 .size(size)
-                .movies(movies.stream().map(Movie::commentResponse).toList())
+//                .movies(movies.stream().map(Movie::commentResponse).toList())
                 .username(user.getUsername())
                 .build();
     }

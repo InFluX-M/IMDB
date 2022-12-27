@@ -24,7 +24,7 @@ public class PersonController {
 
     @PutMapping("/{personId}")
     public ResponseEntity<PersonResponse> updatePerson(@PathVariable String personId,
-                                                     @RequestBody PersonRequest request) {
+                                                       @RequestBody PersonRequest request) {
         return new ResponseEntity<>(personService.updatePerson(personId, request), HttpStatus.OK);
     }
 
@@ -49,5 +49,4 @@ public class PersonController {
                                                           @PathVariable Integer day) {
         return new ResponseEntity<>(personService.getPeopleByBirthDate(month, day), HttpStatus.OK);
     }
-
 }

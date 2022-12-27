@@ -1,13 +1,15 @@
 package com.example.imdb.service;
 
+import com.example.imdb.exception.CustomException;
+import com.example.imdb.exception.EntityNotFoundException;
 import com.example.imdb.model.Comment;
 import com.example.imdb.model.Movie;
 import com.example.imdb.model.requests.CommentRequest;
-import com.example.imdb.model.responses.CommentMovieResponse;
 import com.example.imdb.model.responses.CommentResponse;
 import com.example.imdb.repository.CommentRepository;
 import com.example.imdb.repository.MovieRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,11 +24,15 @@ public class CommentService {
     private CommentRepository commentRepository;
 
     public CommentResponse addComment(String titleId, CommentRequest commentRequest) {
+        if (UserService.currentUser == null) {
+            throw new CustomException("You must be logged in to comment", HttpStatus.UNAUTHORIZED);
+        }
         Movie movie = movieService.checkMovieId(titleId);
         Comment comment = Comment.builder()
                 .body(commentRequest.body())
                 .movie(movie)
                 .replies(new ArrayList<>())
+                .user(UserService.currentUser)
                 .build();
 
         movie.getComments().add(comment);
@@ -34,8 +40,8 @@ public class CommentService {
         return commentRepository.save(comment).response();
     }
 
-    public List<CommentMovieResponse> getAllComments(String titleId) {
-        return movieService.checkMovieId(titleId).getComments().stream().map(Comment::movieResponse).toList();
+    public List<CommentResponse> getAllComments(String titleId) {
+        return movieService.checkMovieId(titleId).getComments().stream().filter(c -> c.getParent() == null).map(Comment::response).toList();
     }
 
     public List<CommentResponse> getAllReplyComments(Integer commentId) {
@@ -43,21 +49,28 @@ public class CommentService {
     }
 
     public void deleteComment(Integer commentId) {
-        commentRepository.deleteAll(commentRepository.findById(commentId).get().getReplies());
+        if (commentRepository.findById(commentId).isEmpty()) {
+            return;
+        }
+
+        for (Comment c : commentRepository.findById(commentId).get().getReplies()) {
+            deleteComment(c.getId());
+        }
+
         commentRepository.deleteById(commentId);
     }
 
-    public void deleteReplyComment(Integer commentId, Integer replyId) {
-        Comment comment = commentRepository.findById(commentId).get();
-        comment.getReplies().remove(commentRepository.findById(replyId).get());
-        commentRepository.deleteById(replyId);
-        commentRepository.save(comment);
-    }
-
     public CommentResponse addReplyComment(Integer commentId, CommentRequest commentRequest) {
-        Comment comment = commentRepository.findById(commentId).get();
+        if (UserService.currentUser == null) {
+            throw new CustomException("You must be logged in to comment", HttpStatus.UNAUTHORIZED);
+        }
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment", commentId.toString()));
         Comment reply = Comment.builder()
+                .parent(comment)
                 .body(commentRequest.body())
+                .user(UserService.currentUser)
+                .replies(new ArrayList<>())
+                .movie(comment.getMovie())
                 .build();
         comment.getReplies().add(reply);
         commentRepository.save(comment);

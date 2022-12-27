@@ -1,6 +1,5 @@
 package com.example.imdb.model.responses;
 
-import com.example.imdb.model.SeriesEpisode;
 import com.example.imdb.model.TitleType;
 import lombok.Builder;
 import lombok.Value;

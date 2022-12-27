@@ -49,8 +49,10 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(CustomException.class)
-    public void handleCustomException(HttpServletResponse res, CustomException ex) throws IOException {
-        res.sendError(ex.getHttpStatus().value(), ex.getMessage());
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<String> handleCustomException(HttpServletResponse res, CustomException ex) throws IOException {
+//        res.sendError(ex.getHttpStatus().value(), ex.getMessage()); // todo in chikar mikone?
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AccessDeniedException.class)

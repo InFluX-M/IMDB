@@ -2,13 +2,11 @@ package com.example.imdb.model;
 
 import com.example.imdb.model.requests.SeriesEpisodeRequest;
 import com.example.imdb.model.responses.EpisodeResponse;
-import com.example.imdb.model.responses.SeriesEpisodeResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.stream.Collectors;
 
 @Entity
 @Table

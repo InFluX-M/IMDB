@@ -23,10 +23,10 @@ import java.util.Optional;
 @AllArgsConstructor
 public class MovieService {
 
+    private final SeriesEpisodeRepo seriesEpisodeRepo;
     private MovieRepository movieRepository;
     private RatingRepository ratingRepository;
     private CommentRepository commentRepository;
-    private final SeriesEpisodeRepo seriesEpisodeRepo;
 
     public MovieResponse addMovie(MovieRequest request) {
 

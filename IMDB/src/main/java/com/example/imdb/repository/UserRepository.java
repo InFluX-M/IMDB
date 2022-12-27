@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findByUsernameContaining(String username);
 
 //    List<User> findByWatchlistContaining(String titleId);
@@ -19,6 +19,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     User findByUsername(String username);
 
+    //    Optional<User> findByUsernameOptional(String username);
     @Transactional
     void deleteByUsername(String username);
 }

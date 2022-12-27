@@ -33,6 +33,8 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret-key}")
     private String secretKey;
 
+    private String tok;
+
     @Value("${security.jwt.token.expire-length:3600000}")
     private long validityInMilliseconds = 3600000; // 1h
 
@@ -52,12 +54,14 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
-        return Jwts.builder()//
+        tok = Jwts.builder()//
                 .setClaims(claims)//
                 .setIssuedAt(now)//
                 .setExpiration(validity)//
                 .signWith(SignatureAlgorithm.HS256, secretKey)//
                 .compact();
+
+        return tok;
     }
 
     public Authentication getAuthentication(String token) {
@@ -70,7 +74,7 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
+        String bearerToken = tok;
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }

@@ -5,4 +5,3 @@ public class InvalidUsernameException extends RuntimeException {
         super("username '" + username + "' already exists");
     }
 }
-

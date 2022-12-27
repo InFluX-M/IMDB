@@ -1,4 +1,7 @@
 spring:
+#  main:
+#    web-application-type: none
+
   datasource:
     url: jdbc:mysql://localhost/imdb
     username: root
@@ -14,6 +17,8 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
+        .dialect:
+          MySQLMyISAMDialect: true
         format_sql: true
         id:
           new_generator_mappings: false
@@ -26,7 +31,7 @@ security:
     token:
       secret-key: secret-key
       expire-length: 300000 # 5 minutes duration by default: 5 minutes * 60 seconds * 1000 miliseconds
-      
+
 jwtController:
   signin: Authenticates user and returns its JWT token.
   signup: Creates user and returns its JWT token

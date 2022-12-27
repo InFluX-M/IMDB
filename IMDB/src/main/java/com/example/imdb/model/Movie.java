@@ -37,7 +37,7 @@ public class Movie {
     @Transient
     private List<String> genresList;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "movie_director",
             joinColumns = @JoinColumn(name = "titleId"),
@@ -45,7 +45,7 @@ public class Movie {
     )
     private Set<Person> directors;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "movie_actor",
             joinColumns = @JoinColumn(name = "titleId"),
@@ -124,7 +124,7 @@ public class Movie {
                 .titleId(titleId)
                 .title(title)
                 .type(type)
-//                .ratingResponse(rating.response())
+                .ratingResponse(rating.response())
                 .build();
     }
 }

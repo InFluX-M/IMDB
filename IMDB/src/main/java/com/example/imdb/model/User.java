@@ -19,32 +19,18 @@ import java.util.Set;
 @Table
 public class User {
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    List<UserRole> userRoles;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @Column(unique = true, nullable = false)
     private String username;
-
     @Column(unique = true, nullable = false)
     private String email;
-
     private String password;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    List<UserRole> userRoles;
-
-//    @OneToOne
-//    private WatchList watchList;
-//    todo
-
-    @ManyToMany
-    @JoinTable(
-            name = "watchList",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "titleId")
-    )
-    private Set<Movie> watchList;
+    @OneToOne
+    private WatchList watchList;
 
     @OneToMany(mappedBy = "user")
     private Set<MovieList> favLists;
@@ -62,8 +48,7 @@ public class User {
     public UserResponse response() {
         return UserResponse.builder()
                 .username(username)
-//                .watchList(watchList.response()) todo
-                .watchList(watchList.stream().map(Movie::commentResponse).toList())
+                .watchList(watchList.response())
                 .favoriteLists(favLists.stream().map(MovieList::response).toList())
                 .build();
     }

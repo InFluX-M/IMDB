@@ -1,7 +1,6 @@
 package com.example.imdb.controller;
 
 import com.example.imdb.model.responses.EpisodeResponse;
-import com.example.imdb.model.responses.SeriesResponse;
 import com.example.imdb.service.MovieService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

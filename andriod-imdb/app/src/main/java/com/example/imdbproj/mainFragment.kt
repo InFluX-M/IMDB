@@ -11,12 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.imdbproj.adaptor.MovieAdapter
 import com.example.imdbproj.classes.mainClasses.Movie
 import com.example.imdbproj.databinding.FragmentMainBinding
-import com.example.imdbproj.retrofit.ApiClient
-import com.example.imdbproj.retrofit.ApiService
+import com.example.imdbproj.repository.Repository
 import kotlinx.android.synthetic.main.fragment_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,9 +57,6 @@ class mainFragment : Fragment() {
 
        recycleView = binding.recyleViewTopMovies
 
-        getMovies()
-
-
 
 /*
         val list = ArrayList<String>()
@@ -82,9 +75,10 @@ class mainFragment : Fragment() {
 
  */
 
+        movies = Repository.getAllMovies()
+
         recyleViewTopMovies.layoutManager = LinearLayoutManager(context)
         recyleViewTopMovies.adapter = MovieAdapter(movies)
-
 
         super.onViewCreated(view, savedInstanceState)
 
@@ -94,28 +88,29 @@ class mainFragment : Fragment() {
         Toast.makeText(this.context,"movie show",Toast.LENGTH_LONG).show()
     }
 
-
+/*
     private fun getMovies() {
 
         val apiClient = ApiClient()
         val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
 
-        apiService.getAllMovies().enqueue(object : Callback<List<Movie>> {
+        apiService.getMovies().enqueue(object : Callback<List<Movie>> {
 
             override fun onResponse(call: Call<List<Movie>>, response: Response<List<Movie>>) {
                 if (response.isSuccessful) {
                    movies = response.body() as ArrayList<Movie>
+                    (recycleView.adapter as MovieAdapter).movies = movies
                 } else {
                     println(response.body())
                 }
+                Log.d("TAGGG", "gmvhmhgmm")
             }
 
             override fun onFailure(call: Call<List<Movie>>, t: Throwable) {
+                Log.d("TAGGG", t.message.toString())
                 Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT)
                     .show()
             }
-
-
         })
 
     }
@@ -125,4 +120,8 @@ class mainFragment : Fragment() {
         super.onResume()
         this.getMovies()
     }
+
+ */
+
+
 }

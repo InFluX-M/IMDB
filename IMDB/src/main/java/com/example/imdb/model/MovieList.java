@@ -1,6 +1,7 @@
 package com.example.imdb.model;
 
 import com.example.imdb.model.requests.FavoriteListRequest;
+import com.example.imdb.model.responses.AllMovieListResponse;
 import com.example.imdb.model.responses.MovieListResponse;
 import lombok.*;
 
@@ -21,9 +22,9 @@ public class MovieList {
     private String name;
     private int size;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "movieList_movies",
+            name = "movielist_movies",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "titleId")
     )
@@ -33,9 +34,7 @@ public class MovieList {
     private User user;
 
     public FavoriteListRequest request() {
-        return FavoriteListRequest.builder()
-                .name(name)
-                .build();
+        return new FavoriteListRequest(name);
     }
 
     public MovieListResponse response() {
@@ -44,6 +43,13 @@ public class MovieList {
                 .size(size)
                 .movies(movies.stream().map(Movie::commentResponse).toList())
                 .username(user.getUsername())
+                .build();
+    }
+
+    public AllMovieListResponse allMovieListResponse() {
+        return AllMovieListResponse.builder()
+                .name(name)
+                .size(size)
                 .build();
     }
 }

@@ -26,15 +26,16 @@ public class FileService {
     private PersonRepository personRepository;
     private RatingRepository ratingRepository;
     private SeriesEpisodeRepo seriesEpisodeRepo;
+    private MovieService movieService;
 
     public List<MovieResponse> readMovies() throws IOException {
 
-        String fileName = "src/main/resources/Movie.tsv";
+        String fileName = "src/main/resources/newMovie.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         ArrayList<Movie> allMovies = new ArrayList<>();
 
         boolean firstLine = true;
-
+        int i = 0;
         for (String s : lines) {
 
             if (firstLine) {
@@ -47,24 +48,28 @@ public class FileService {
             for (int j = 0; j < parts.length; j++)
                 if (Objects.equals(parts[j], "\\N")) parts[j] = null;
 
-            allMovies.add(Movie.builder()
+            Movie movie = Movie.builder()
                     .titleId(parts[0])
                     .type(TitleType.valueOf(parts[1].toUpperCase()))
                     .title(parts[2])
                     .isAdult(Boolean.parseBoolean(parts[4]))
-                    .startYear(Integer.parseInt(parts[5]))
-                    .endYear(Integer.parseInt(parts[6]))
-                    .runtimeMinutes(Integer.parseInt(parts[7]))
                     .genres(parts[8])
-                    .build());
+                    .build();
+
+            if (parts[5] != null) movie.setStartYear(Integer.valueOf(parts[5]));
+            if (parts[6] != null) movie.setEndYear(Integer.valueOf(parts[6]));
+            if (parts[7] != null) movie.setRuntimeMinutes(Integer.valueOf(parts[7]));
+
+            allMovies.add(movie);
+            i++;
         }
 
-        return movieRepository.saveAll(allMovies).stream().map(Movie::response).toList();
+        return movieRepository.saveAll(allMovies).stream().map(Movie::movieResponse).toList();
     }
 
     public List<PersonResponse> readPersons() throws IOException {
 
-        String fileName = "src/main/resources/Person.tsv";
+        String fileName = "src/main/resources/newPerson.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         ArrayList<Person> people = new ArrayList<>();
 
@@ -91,11 +96,11 @@ public class FileService {
             int birthYear;
             int deathYear;
 
-            if(parts[2] == null) birthYear = random.nextInt(120) + 1900;
+            if (parts[2] == null) birthYear = random.nextInt(120) + 1900;
             else birthYear = Integer.parseInt(parts[2]);
 
 
-            if(parts[3] == null) deathYear = random.nextInt(120) + 1900;
+            if (parts[3] == null) deathYear = random.nextInt(120) + 1900;
             else deathYear = Integer.parseInt(parts[3]);
 
             LocalDate birthDate = LocalDate.of(birthYear, birthMonth, birthDay);
@@ -115,11 +120,19 @@ public class FileService {
             String[] titles = parts[5].split(",");
 
             people.get(i).setKnownForTitlesList(new ArrayList<>());
-            for (String st : titles) {
-                people.get(i).getKnownForTitlesList().add(st);
-                Movie movie = movieRepository.findById(st).get();
-                movie.getActors().add(people.get(i));
-                movieRepository.save(movie);
+            try {
+
+                for (String st : titles) {
+
+                    if (movieRepository.findById(st).isPresent()) {
+                        people.get(i).getKnownForTitlesList().add(st);
+                        Movie movie = movieRepository.findById(st).get();
+                        movie.getActors().add(people.get(i));
+                        movieRepository.save(movie);
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
 
             i++;
@@ -130,7 +143,7 @@ public class FileService {
 
     public List<RatingResponse> readRatings() throws IOException {
 
-        String fileName = "src/main/resources/Rating.tsv";
+        String fileName = "src/main/resources/newRating.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         ArrayList<Rating> ratings = new ArrayList<>();
 
@@ -149,20 +162,26 @@ public class FileService {
                 if (Objects.equals(parts[j], "\\N")) parts[j] = null;
 
             Movie movie = movieRepository.findById(parts[0]).get();
-            ratings.add(Rating.builder()
+
+            Rating rating = Rating.builder()
                     .movie(movie)
                     .avgRating(Float.parseFloat(parts[1]))
                     .numVotes(Integer.parseInt(parts[2]))
-                    .build());
+                    .build();
+
+            ratings.add(rating);
+
+            movie.setRating(rating);
+            ratingRepository.save(rating);
+            movieRepository.save(movie);
         }
 
-        return ratingRepository.saveAll(ratings).stream().map(Rating::response).toList();
-
+        return ratings.stream().map(Rating::response).toList();
     }
 
-    public List<SeriesEpisodeResponse> readEpisodes() throws IOException {
+    public List<EpisodeResponse> readEpisodes() throws IOException {
 
-        String fileName = "src/main/resources/Episode.tsv";
+        String fileName = "src/main/resources/newEpisode.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         ArrayList<SeriesEpisode> episodes = new ArrayList<>();
 
@@ -194,7 +213,7 @@ public class FileService {
 
     public List<DirectorResponse> readCrews() throws IOException {
 
-        String fileName = "src/main/resources/Crew.tsv";
+        String fileName = "src/main/resources/newCrew.tsv";
         String[] lines = Files.readAllLines(Path.of(fileName)).toArray(new String[0]);
         ArrayList<Movie> movies = new ArrayList<>();
 

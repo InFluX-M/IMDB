@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Builder
 @Value
-public class MovieResponse {
+public class SeriesResponse {
 
     String titleId;
     TitleType type;
@@ -19,9 +19,9 @@ public class MovieResponse {
     Integer endYear;
     Integer runtimeMinutes;
     String genres;
+    List<EpisodeResponse> episodes;
     Set<PersonResponse> directors;
     Set<PersonResponse> actors;
     List<CommentResponse> comments;
     RatingResponse rating;
-    List<EpisodeResponse> seriesEpisodes;
 }

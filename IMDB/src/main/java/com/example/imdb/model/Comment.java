@@ -4,16 +4,17 @@ import com.example.imdb.model.requests.CommentRequest;
 import com.example.imdb.model.responses.CommentMovieResponse;
 import com.example.imdb.model.responses.CommentResponse;
 import com.example.imdb.model.responses.ReplyResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @Builder
 @Table
@@ -38,6 +39,7 @@ public class Comment implements Serializable {
     private Comment parent;
 
     @OneToMany(mappedBy = "parent")
+    @ToString.Exclude
     private List<Comment> replies;
 
     public CommentRequest request() {
@@ -48,7 +50,9 @@ public class Comment implements Serializable {
 
     public ReplyResponse replyResponse() {
         return ReplyResponse.builder()
+                .username(user.getUsername())
                 .body(body)
+                .replies(replies.stream().map(Comment::replyResponse).toList())
                 .build();
     }
 
@@ -57,7 +61,7 @@ public class Comment implements Serializable {
                 .body(body)
                 .movieCommentResponse(movie.commentResponse())
                 .username(user.getUsername())
-//                .replies(replies.stream().map(Comment::replyResponse).toList())
+                .replies(replies.stream().map(Comment::replyResponse).toList())
                 .build();
     }
 
@@ -68,4 +72,16 @@ public class Comment implements Serializable {
                 .build();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Comment comment = (Comment) o;
+        return id != null && Objects.equals(id, comment.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

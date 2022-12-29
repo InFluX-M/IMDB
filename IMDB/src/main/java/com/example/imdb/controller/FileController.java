@@ -31,11 +31,12 @@ public class FileController {
 
     @PostMapping("/readRatings")
     public ResponseEntity<List<RatingResponse>> readRatings() throws IOException {
+
         return new ResponseEntity<>(fileService.readRatings(), HttpStatus.CREATED);
     }
 
     @PostMapping("/readEpisodes")
-    public ResponseEntity<List<SeriesEpisodeResponse>> readEpisodes() throws IOException {
+    public ResponseEntity<List<EpisodeResponse>> readEpisodes() throws IOException {
         return new ResponseEntity<>(fileService.readEpisodes(), HttpStatus.CREATED);
     }
 

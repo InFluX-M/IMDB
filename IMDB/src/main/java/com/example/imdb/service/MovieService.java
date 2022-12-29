@@ -3,12 +3,14 @@ package com.example.imdb.service;
 import com.example.imdb.exception.EntityNotFoundException;
 import com.example.imdb.model.*;
 import com.example.imdb.model.requests.MovieRequest;
+import com.example.imdb.model.responses.EpisodeResponse;
 import com.example.imdb.model.responses.MovieResponse;
 import com.example.imdb.model.responses.PersonResponse;
 import com.example.imdb.model.responses.RatingResponse;
 import com.example.imdb.repository.CommentRepository;
 import com.example.imdb.repository.MovieRepository;
 import com.example.imdb.repository.RatingRepository;
+import com.example.imdb.repository.SeriesEpisodeRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class MovieService {
 
+    private final SeriesEpisodeRepo seriesEpisodeRepo;
     private MovieRepository movieRepository;
     private RatingRepository ratingRepository;
     private CommentRepository commentRepository;
@@ -49,7 +52,7 @@ public class MovieService {
         movie.setRating(rating);
         ratingRepository.save(rating);
 
-        return movieRepository.save(movie).response();
+        return movieRepository.save(movie).movieResponse();
     }
 
     public MovieResponse updateMovie(String titleId, MovieRequest request) {
@@ -65,7 +68,7 @@ public class MovieService {
         if (request.getTitle() != null) movie.setTitle(request.getTitle());
         if (request.getTitleId() != null) movie.setTitleId(request.getTitleId());
 
-        return movieRepository.save(movie).response();
+        return movieRepository.save(movie).movieResponse();
     }
 
     public void deleteMovie(String titleId) {
@@ -94,63 +97,63 @@ public class MovieService {
     }
 
     public List<MovieResponse> getAllMovies() {
-        return movieRepository.findAll().stream().map(Movie::response).toList();
+        return movieRepository.findAll().stream().map(Movie::movieResponse).toList();
     }
 
     public MovieResponse getMovieById(String titleId) {
-        return checkMovieId(titleId).response();
+        return checkMovieId(titleId).movieResponse();
     }
 
     public List<MovieResponse> findByTitleContaining(String title) {
-        return movieRepository.findByTitleContaining(title).stream().map(Movie::response).toList();
+        return movieRepository.findByTitleContaining(title).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByType(String type) {
-        return movieRepository.findByType(TitleType.valueOf(type.toUpperCase())).stream().map(Movie::response).toList();
+        return movieRepository.findByType(TitleType.valueOf(type.toUpperCase())).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByDirectors_Name(String name) {
-        return movieRepository.findByDirectors_Name(name).stream().map(Movie::response).toList();
+        return movieRepository.findByDirectors_Name(name).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByGenresContaining(String genre) {
-        return movieRepository.findByGenresContaining(genre).stream().map(Movie::response).toList();
+        return movieRepository.findByGenresContaining(genre).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByStartYear(int year) {
-        return movieRepository.findByStartYear(year).stream().map(Movie::response).toList();
+        return movieRepository.findByStartYear(year).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByEndYear(int year) {
-        return movieRepository.findByEndYear(year).stream().map(Movie::response).toList();
+        return movieRepository.findByEndYear(year).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByStartYearBetween(int start, int end) {
-        return movieRepository.findByStartYearBetween(start, end).stream().map(Movie::response).toList();
+        return movieRepository.findByStartYearBetween(start, end).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByStartYearGreaterThan(int year) {
-        return movieRepository.findByStartYearGreaterThan(year).stream().map(Movie::response).toList();
+        return movieRepository.findByStartYearGreaterThan(year).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByStartYearLessThan(int year) {
-        return movieRepository.findByStartYearLessThan(year).stream().map(Movie::response).toList();
+        return movieRepository.findByStartYearLessThan(year).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByEndYearBetween(int start, int end) {
-        return movieRepository.findByEndYearBetween(start, end).stream().map(Movie::response).toList();
+        return movieRepository.findByEndYearBetween(start, end).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByEndYearGreaterThan(int year) {
-        return movieRepository.findByEndYearGreaterThan(year).stream().map(Movie::response).toList();
+        return movieRepository.findByEndYearGreaterThan(year).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByEndYearLessThan(int year) {
-        return movieRepository.findByEndYearLessThan(year).stream().map(Movie::response).toList();
+        return movieRepository.findByEndYearLessThan(year).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByRuntimeMinutes(int min) {
-        return movieRepository.findByRuntimeMinutes(min).stream().map(Movie::response).toList();
+        return movieRepository.findByRuntimeMinutes(min).stream().map(Movie::movieResponse).toList();
     }
 
     public List<MovieResponse> findByActor(String id) {
@@ -173,7 +176,7 @@ public class MovieService {
                 titles.add(rs.getString("title_id"));
 
             for (String t : titles)
-                movies.add(checkMovieId(t).response());
+                movies.add(checkMovieId(t).movieResponse());
 
             return movies;
 
@@ -202,6 +205,11 @@ public class MovieService {
         if (loaded.isEmpty())
             throw new EntityNotFoundException(Movie.class.getName(), titleId);
         return loaded.get();
+    }
+
+    public EpisodeResponse getSeriesById(String titleId) {
+        Movie m = checkMovieId(titleId);
+        return seriesEpisodeRepo.findByEpisode(m).response();
     }
 
 }

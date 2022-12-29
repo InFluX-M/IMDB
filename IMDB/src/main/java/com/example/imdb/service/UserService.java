@@ -1,89 +1,66 @@
 package com.example.imdb.service;
 
+import com.example.imdb.exception.CustomException;
 import com.example.imdb.exception.EntityNotFoundException;
 import com.example.imdb.exception.InvalidRatingException;
-import com.example.imdb.exception.InvalidUsernameException;
-import com.example.imdb.model.Movie;
-import com.example.imdb.model.MovieList;
-import com.example.imdb.model.Rating;
-import com.example.imdb.model.User;
+import com.example.imdb.model.*;
 import com.example.imdb.model.requests.FavoriteListRequest;
-import com.example.imdb.model.requests.UserRequest;
 import com.example.imdb.model.responses.*;
 import com.example.imdb.repository.*;
+import com.example.imdb.security.JwtTokenProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class UserService {
 
+    public static User currentUser;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
     private UserRepository userRepository;
     private RatingRepository ratingRepository;
     private MovieListRepository movieListRepository;
     private MovieRepository movieRepository;
-
-    public UserResponse addUser(UserRequest request) {
-        // todo password validation?
-
-        if (userRepository.findById(request.getUsername()).isPresent())
-            throw new InvalidUsernameException(request.getUsername());
-
-        User user = User.builder()
-                .username(request.getUsername())
-                .password(request.getPassword())
-                .watchList(new HashSet<>())
-                .favLists(new HashSet<>())
-                .build();
-
-        return userRepository.save(user).response();
-    }
-
-    public UserResponse updateUser(String username, UserRequest request) {
-        // todo valid pass?
-        User user = checkUsername(username);
-
-        if (request.getPassword() != null) user.setPassword(request.getPassword());
-
-        return userRepository.save(user).response();
-    }
-
-    public void deleteUser(String username) {
-        checkUsername(username);
-        userRepository.deleteById(username);
-    }
+    private UserRatingRepository userRatingRepository;
+    private WatchListRepository watchListRepository;
 
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream().map(User::response).toList();
     }
 
-    public UserResponse getUserById(String username) {
-        return checkUsername(username).response();
+    public List<AllMovieListResponse> getFavLists() {
+        return checkUsername(currentUser.getUsername()).getFavLists().stream().map(MovieList::allMovieListResponse).toList();
     }
 
-    public List<MovieListResponse> getFavLists(String username) {
-        return userRepository.findById(username).get().getFavLists().stream().map(MovieList::response).toList();
+    public MovieListResponse getFavList(String list) {
+        return movieListRepository.getByNameAndUser_Username(list, currentUser.getUsername()).response();
     }
 
-    public Set<MovieCommentResponse> getWatchList(String username) {
-//   todo     return userRepository.findById(username).get().getWatchList().getMovies().stream().map(Movie::response).collect(Collectors.toSet());
-        return checkUsername(username).getWatchList().stream().map(Movie::commentResponse).collect(Collectors.toSet());
+    public WatchListResponse getWatchList() {
+        return checkUsername(currentUser.getUsername()).getWatchList().response();
 
     }
 
-    public MovieListResponse addFavList(String username, FavoriteListRequest request) {
+    public MovieListResponse addFavList(FavoriteListRequest request) {
 
-        User user = checkUsername(username);
+        User user = checkUsername(currentUser.getUsername());
 
         MovieList list = MovieList.builder()
                 .size(0)
-                .name(request.getName())
+                .name(request.name())
                 .user(user)
                 .build();
 
@@ -93,24 +70,23 @@ public class UserService {
     public MovieListResponse addToFavList(String listName, String titleId) {
 
         Movie movie = checkMovieId(titleId);
-        MovieList list = movieListRepository.getByName(listName);
-
+        MovieList list = movieListRepository.getByNameAndUser_Username(listName, currentUser.getUsername());
         list.getMovies().add(movie);
-
+        list.setSize(list.getSize() + 1);
         return movieListRepository.save(list).response();
     }
 
-    public List<MovieCommentResponse> addToWatchList(String username, String titleId) {
+    public WatchListResponse addToWatchList(String titleId) {
 
-        User user = checkUsername(username);
+        User user = checkUsername(currentUser.getUsername());
         Movie movie = checkMovieId(titleId);
 
-//        user.getWatchList().getMovies().add(movie); todo
-        user.getWatchList().add(movie);
+        user.getWatchList().getMovies().add(movie);
+        user.getWatchList().setSize(user.getWatchList().getSize() + 1);
         userRepository.save(user);
+        watchListRepository.save(user.getWatchList());
 
-//        return user.getWatchList().getMovies().stream().map(Movie::response).toList(); todo
-        return user.getWatchList().stream().map(Movie::commentResponse).toList();
+        return user.getWatchList().response();
     }
 
     public RatingResponse rateMovie(String titleId, Integer rating) {
@@ -125,14 +101,23 @@ public class UserService {
         ratingObj.setAvgRating(newAvg);
         ratingObj.setNumVotes(ratingObj.getNumVotes() + 1);
 
+        UserRating userRating = UserRating.builder()
+                .rating(rating)
+                .titleId(titleId)
+                .userId(currentUser.getUsername())
+                .build();
+
+        userRatingRepository.save(userRating);
+
         return ratingRepository.save(ratingObj).response();
     }
 
     public User checkUsername(String username) {
-        Optional<User> loaded = userRepository.findById(username);
-        if (loaded.isEmpty())
-            throw new EntityNotFoundException(User.class.getName(), username);
-        return loaded.get();
+        User loaded = userRepository.findByUsername(username);
+//        if (loaded.isEmpty())
+//            throw new EntityNotFoundException(User.class.getName(), username);
+//        return loaded.get();
+        return loaded;
     }
 
     public Movie checkMovieId(String titleId) {
@@ -140,6 +125,57 @@ public class UserService {
         if (loaded.isEmpty())
             throw new EntityNotFoundException(Movie.class.getName(), titleId);
         return loaded.get();
+    }
+
+    public String signin(String username, String password) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            currentUser = checkUsername(username);
+            return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getUserRoles());
+        } catch (AuthenticationException e) {
+            throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+    public String signup(User appUser) {
+        if (!userRepository.existsByUsername(appUser.getUsername())) {
+            appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+//            appUser.setFavLists(new HashSet<>());
+            WatchList watchList = WatchList.builder()
+                    .movies(List.of())
+                    .build();
+            watchListRepository.save(watchList);
+            appUser.setWatchList(watchList);
+            userRepository.save(appUser);
+            currentUser = checkUsername(appUser.getUsername());
+            return jwtTokenProvider.createToken(appUser.getUsername(), appUser.getUserRoles());
+        } else {
+            throw new CustomException("Username is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+    public void delete(String username) {
+        userRepository.deleteByUsername(username);
+    }
+
+    public User search(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new CustomException("The user doesn't exist", HttpStatus.NOT_FOUND);
+        }
+        return user;
+    }
+
+    public User whoami(HttpServletRequest req) {
+        return userRepository.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+    }
+
+    public String refresh(String username) {
+        return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getUserRoles());
+    }
+
+    public void logout() {
+        currentUser = null;
     }
 
 }

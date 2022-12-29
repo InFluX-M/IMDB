@@ -1,0 +1,40 @@
+spring:
+#  main:
+#    web-application-type: none
+
+  datasource:
+    url: jdbc:mysql://localhost/imdb
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  tomcat:
+    max-wait: 20000
+    max-active: 50
+    max-idle: 20
+    min-idle: 15
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        .dialect:
+          MySQLMyISAMDialect: true
+        format_sql: true
+        id:
+          new_generator_mappings: false
+
+server:
+   port: 8082 # This is the default port anyway, but you can change it here
+
+security:
+  jwt:
+    token:
+      secret-key: secret-key
+      expire-length: 300000 # 5 minutes duration by default: 5 minutes * 60 seconds * 1000 miliseconds
+
+jwtController:
+  signin: Authenticates user and returns its JWT token.
+  signup: Creates user and returns its JWT token
+  delete: Deletes specific user by username
+  search: Returns specific user by username
+  me: Returns current user's data

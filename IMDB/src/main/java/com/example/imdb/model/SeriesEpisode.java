@@ -2,7 +2,6 @@ package com.example.imdb.model;
 
 import com.example.imdb.model.requests.SeriesEpisodeRequest;
 import com.example.imdb.model.responses.EpisodeResponse;
-import com.example.imdb.model.responses.SeriesEpisodeResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -37,12 +36,20 @@ public class SeriesEpisode {
                 .build();
     }
 
-    public SeriesEpisodeResponse response() {
-        return SeriesEpisodeResponse.builder()
-                .episode(episode.response())
+    public EpisodeResponse response() {
+        return EpisodeResponse.builder()
+//                .actors(episode.getActors().stream().map(Person::response).collect(Collectors.toSet()))
+                .isAdult(episode.getIsAdult())
+//                .rating(episode.getRating().response())
+                .runtimeMinutes(episode.getRuntimeMinutes())
+                .startYear(episode.getStartYear())
+                .genres(episode.getGenres())
+                .type(episode.getType())
+                .title(episode.getTitle())
+                .endYear(episode.getEndYear())
                 .seasonNumber(seasonNumber)
                 .episodeNumber(episodeNumber)
-                .parent(parent.commentResponse())
+//                .parent(parent.commentResponse())
                 .build();
     }
 

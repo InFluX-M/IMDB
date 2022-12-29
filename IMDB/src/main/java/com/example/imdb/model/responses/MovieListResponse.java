@@ -12,5 +12,5 @@ public class MovieListResponse {
     String username;
     String name;
     Integer size;
-    List<MovieCommentResponse> movies;
+    List<MovieInformationResponse> movies;
 }

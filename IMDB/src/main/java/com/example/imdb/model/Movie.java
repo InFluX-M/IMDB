@@ -1,10 +1,8 @@
 package com.example.imdb.model;
 
-import com.example.imdb.model.requests.MovieRequest;
 import com.example.imdb.model.responses.DirectorResponse;
-import com.example.imdb.model.responses.MovieCommentResponse;
+import com.example.imdb.model.responses.MovieInformationResponse;
 import com.example.imdb.model.responses.MovieResponse;
-import com.example.imdb.model.responses.SeriesResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +20,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table
 public class Movie {
+
     @OneToMany(mappedBy = "parent")
     List<SeriesEpisode> episodes;
     @Id
@@ -33,10 +32,8 @@ public class Movie {
     private Integer endYear;
     private Integer runtimeMinutes;
     private String genres;
-
     @Transient
     private List<String> genresList;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "movie_director",
@@ -44,7 +41,6 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "id")
     )
     private Set<Person> directors;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "movie_actor",
@@ -52,26 +48,10 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "id")
     )
     private Set<Person> actors;
-
     @OneToMany(mappedBy = "movie")
     private List<Comment> comments;
-
     @OneToOne
     private Rating rating;
-
-    public MovieRequest request() {
-        return MovieRequest.builder()
-                .titleId(titleId)
-                .type(type)
-                .title(title)
-                .startYear(startYear)
-                .endYear(endYear)
-                .runtimeMinutes(runtimeMinutes)
-                .genres(genres)
-                .directors(directors)
-                .isAdult(isAdult)
-                .build();
-    }
 
     public MovieResponse movieResponse() {
 
@@ -88,26 +68,7 @@ public class Movie {
                 .comments(comments.stream().map(Comment::response).toList())
                 .isAdult(isAdult)
                 .rating(rating.response())
-                .seriesEpisodes(episodes.stream().map(SeriesEpisode::response).collect(Collectors.toList()))
-                .build();
-    }
-
-    public SeriesResponse seriesResponse() {
-
-        return SeriesResponse.builder()
-                .titleId(titleId)
-                .type(type)
-                .title(title)
-                .startYear(startYear)
-                .endYear(endYear)
-                .runtimeMinutes(runtimeMinutes)
-                .genres(genres)
-                .actors(actors.stream().map(Person::response).collect(Collectors.toSet()))
-                .directors(directors.stream().toList().stream().map(Person::response).collect(Collectors.toSet()))
-                .comments(comments.stream().map(Comment::response).toList())
-                .isAdult(isAdult)
-                .rating(rating.response())
-                .episodes(episodes.stream().map(SeriesEpisode::episodeResponse).collect(Collectors.toList()))
+                .episodes(episodes.stream().map(SeriesEpisode::response).collect(Collectors.toList())) // todo hazfe in?
                 .build();
     }
 
@@ -115,12 +76,12 @@ public class Movie {
         return DirectorResponse.builder()
                 .titleId(titleId)
                 .title(title)
-//                .directors(directors)
+                .directors(directors.stream().map(Person::response).collect(Collectors.toSet()))
                 .build();
     }
 
-    public MovieCommentResponse commentResponse() {
-        return MovieCommentResponse.builder()
+    public MovieInformationResponse informationResponse() {
+        return MovieInformationResponse.builder()
                 .titleId(titleId)
                 .title(title)
                 .type(type)

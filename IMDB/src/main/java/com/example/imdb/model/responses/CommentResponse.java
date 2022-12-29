@@ -11,6 +11,6 @@ public class CommentResponse {
 
     String body;
     String username;
-    MovieCommentResponse movieCommentResponse;
+    MovieInformationResponse movieInformationResponse;
     List<ReplyResponse> replies;
 }

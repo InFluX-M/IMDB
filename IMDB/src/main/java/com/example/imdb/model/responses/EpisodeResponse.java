@@ -1,6 +1,5 @@
 package com.example.imdb.model.responses;
 
-import com.example.imdb.model.TitleType;
 import lombok.Builder;
 import lombok.Value;
 
@@ -11,17 +10,11 @@ import java.util.Set;
 @Value
 public class EpisodeResponse {
 
-    MovieCommentResponse parent;
+    String parentId;
     Integer seasonNumber;
     Integer episodeNumber;
     String titleId;
-    TitleType type;
-    String title;
-    Boolean isAdult;
-    Integer startYear;
-    Integer endYear;
     Integer runtimeMinutes;
-    String genres;
     Set<PersonResponse> actors;
     List<CommentResponse> comments;
     RatingResponse rating;

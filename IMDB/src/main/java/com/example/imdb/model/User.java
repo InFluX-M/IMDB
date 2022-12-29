@@ -1,17 +1,15 @@
 package com.example.imdb.model;
 
-import com.example.imdb.model.requests.UserRequest;
 import com.example.imdb.model.responses.UserResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,26 +22,25 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(unique = true, nullable = false)
     private String username;
+
     @Column(unique = true, nullable = false)
     private String email;
+
     private String password;
+
     @OneToOne
     private WatchList watchList;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private Set<MovieList> favLists;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private List<Comment> comments;
-
-    public UserRequest request() {
-        return UserRequest.builder()
-                .username(username)
-                .password(password)
-                .build();
-    }
 
     public UserResponse response() {
         return UserResponse.builder()

@@ -1,9 +1,12 @@
 package com.example.imdb.controller;
 
+import com.example.imdb.model.Movie;
+import com.example.imdb.model.Rating;
 import com.example.imdb.model.requests.MovieRequest;
 import com.example.imdb.model.responses.MovieResponse;
 import com.example.imdb.model.responses.PersonResponse;
 import com.example.imdb.model.responses.RatingResponse;
+import com.example.imdb.repository.RatingRepository;
 import com.example.imdb.service.MovieService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,7 @@ import java.util.List;
 public class MovieController {
 
     private MovieService movieService;
+    private RatingRepository ratingRepository;
 
     @PostMapping
     public ResponseEntity<MovieResponse> addMovie(@RequestBody MovieRequest request) {
@@ -109,5 +113,31 @@ public class MovieController {
     public ResponseEntity<List<MovieResponse>> getMoviesByEndYear(@PathVariable Integer y1,
                                                                   @PathVariable Integer y2) {
         return new ResponseEntity<>(movieService.findByEndYearBetween(y1, y2), HttpStatus.OK);
+    }
+
+    @GetMapping("/rating-moreThan/{r}")
+    public ResponseEntity<List<MovieResponse>> getMoviesByRatingGreaterThan(@PathVariable Double r) {
+        List<MovieResponse> list = ratingRepository.findByAvgRatingBetween(r, 10).stream().map(Rating::getMovie).map(Movie::movieResponse).toList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/rating-lessThan/{r}")
+    public ResponseEntity<List<MovieResponse>> getMoviesByRatingLessThan(@PathVariable Double r) {
+        List<MovieResponse> list = ratingRepository.findByAvgRatingBetween(0, r).stream().map(Rating::getMovie).map(Movie::movieResponse).toList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/rating-between/{r1}/{r2}")
+    public ResponseEntity<List<MovieResponse>> getMoviesByRatingBetween(@PathVariable Double r1,
+                                                                        @PathVariable Double r2) {
+        List<MovieResponse> list = ratingRepository.findByAvgRatingBetween(r1, r2).stream().map(Rating::getMovie).map(Movie::movieResponse).toList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/votes/{v1}/{v2}")
+    public ResponseEntity<List<MovieResponse>> getMoviesByVotes(@PathVariable Integer v1,
+                                                                @PathVariable Integer v2) {
+        List<MovieResponse> list = ratingRepository.findByNumVotesBetween(v1, v2).stream().map(Rating::getMovie).map(Movie::movieResponse).toList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

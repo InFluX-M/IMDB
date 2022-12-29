@@ -10,5 +10,5 @@ import java.util.List;
 public class WatchListResponse {
 
     Integer size;
-    List<MovieCommentResponse> movies;
+    List<MovieInformationResponse> movies;
 }

@@ -23,5 +23,5 @@ public class MovieResponse {
     Set<PersonResponse> actors;
     List<CommentResponse> comments;
     RatingResponse rating;
-    List<EpisodeResponse> seriesEpisodes;
+    List<EpisodeResponse> episodes;
 }

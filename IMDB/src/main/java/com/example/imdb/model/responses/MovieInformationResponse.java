@@ -6,7 +6,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class MovieCommentResponse {
+public class MovieInformationResponse {
     String titleId;
     TitleType type;
     String title;

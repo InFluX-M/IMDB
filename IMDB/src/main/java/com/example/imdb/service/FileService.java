@@ -26,7 +26,6 @@ public class FileService {
     private PersonRepository personRepository;
     private RatingRepository ratingRepository;
     private SeriesEpisodeRepo seriesEpisodeRepo;
-    private MovieService movieService;
 
     public List<MovieResponse> readMovies() throws IOException {
 
@@ -35,7 +34,6 @@ public class FileService {
         ArrayList<Movie> allMovies = new ArrayList<>();
 
         boolean firstLine = true;
-        int i = 0;
         for (String s : lines) {
 
             if (firstLine) {
@@ -54,6 +52,7 @@ public class FileService {
                     .title(parts[2])
                     .isAdult(Boolean.parseBoolean(parts[4]))
                     .genres(parts[8])
+                    .genresList(List.of(parts[8].split(",")))
                     .build();
 
             if (parts[5] != null) movie.setStartYear(Integer.valueOf(parts[5]));
@@ -61,7 +60,6 @@ public class FileService {
             if (parts[7] != null) movie.setRuntimeMinutes(Integer.valueOf(parts[7]));
 
             allMovies.add(movie);
-            i++;
         }
 
         return movieRepository.saveAll(allMovies).stream().map(Movie::movieResponse).toList();

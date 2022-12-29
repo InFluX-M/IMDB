@@ -4,7 +4,7 @@ import com.example.imdb.model.responses.WatchListResponse;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -27,12 +27,12 @@ public class WatchList {
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "titleId")
     )
-    private List<Movie> movies;
+    private Set<Movie> movies;
 
     public WatchListResponse response() {
         return WatchListResponse.builder()
                 .size(size)
-                .movies(movies.stream().map(Movie::commentResponse).toList())
+                .movies(movies.stream().map(Movie::informationResponse).toList())
                 .build();
     }
 }

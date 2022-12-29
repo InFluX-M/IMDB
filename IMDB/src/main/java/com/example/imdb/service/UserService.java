@@ -9,7 +9,6 @@ import com.example.imdb.model.responses.*;
 import com.example.imdb.repository.*;
 import com.example.imdb.security.JwtTokenProvider;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +53,7 @@ public class UserService {
 
     }
 
-    public MovieListResponse addFavList(FavoriteListRequest request) {
+    public MovieListResponse createFavList(FavoriteListRequest request) {
 
         User user = checkUsername(currentUser.getUsername());
 
@@ -62,6 +61,7 @@ public class UserService {
                 .size(0)
                 .name(request.name())
                 .user(user)
+                .movies(new HashSet<>())
                 .build();
 
         return movieListRepository.save(list).response();
@@ -81,10 +81,12 @@ public class UserService {
         User user = checkUsername(currentUser.getUsername());
         Movie movie = checkMovieId(titleId);
 
-        user.getWatchList().getMovies().add(movie);
-        user.getWatchList().setSize(user.getWatchList().getSize() + 1);
-        userRepository.save(user);
-        watchListRepository.save(user.getWatchList());
+        if (!user.getWatchList().getMovies().contains(movie)) {
+            user.getWatchList().getMovies().add(movie);
+            user.getWatchList().setSize(user.getWatchList().getSize() + 1);
+            userRepository.save(user);
+            watchListRepository.save(user.getWatchList());
+        }
 
         return user.getWatchList().response();
     }
@@ -114,16 +116,15 @@ public class UserService {
 
     public User checkUsername(String username) {
         User loaded = userRepository.findByUsername(username);
-//        if (loaded.isEmpty())
-//            throw new EntityNotFoundException(User.class.getName(), username);
-//        return loaded.get();
+        if (loaded == null)
+            throw new EntityNotFoundException(User.class.getSimpleName(), username);
         return loaded;
     }
 
     public Movie checkMovieId(String titleId) {
         Optional<Movie> loaded = movieRepository.findById(titleId);
         if (loaded.isEmpty())
-            throw new EntityNotFoundException(Movie.class.getName(), titleId);
+            throw new EntityNotFoundException(Movie.class.getSimpleName(), titleId);
         return loaded.get();
     }
 
@@ -140,9 +141,9 @@ public class UserService {
     public String signup(User appUser) {
         if (!userRepository.existsByUsername(appUser.getUsername())) {
             appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-//            appUser.setFavLists(new HashSet<>());
             WatchList watchList = WatchList.builder()
-                    .movies(List.of())
+                    .size(0)
+                    .movies(new HashSet<>())
                     .build();
             watchListRepository.save(watchList);
             appUser.setWatchList(watchList);

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, String> {
+
     List<Movie> findByTitleContaining(String title);
 
     List<Movie> findByType(TitleType type);

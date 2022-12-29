@@ -16,6 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class MovieList {
+
     @Id
     @GeneratedValue
     private Integer id;
@@ -41,7 +42,7 @@ public class MovieList {
         return MovieListResponse.builder()
                 .name(name)
                 .size(size)
-                .movies(movies.stream().map(Movie::commentResponse).toList())
+                .movies(movies.stream().map(Movie::informationResponse).toList())
                 .username(user.getUsername())
                 .build();
     }

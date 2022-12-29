@@ -17,7 +17,7 @@ public class PersonController {
 
     private PersonService personService;
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<PersonResponse> addPerson(@RequestBody PersonRequest request) {
         return new ResponseEntity<>(personService.addPerson(request), HttpStatus.CREATED);
     }
@@ -34,7 +34,7 @@ public class PersonController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<PersonResponse>> getPeople() {
         return new ResponseEntity<>(personService.getAllPersons(), HttpStatus.OK);
     }

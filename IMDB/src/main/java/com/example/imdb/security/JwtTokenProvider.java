@@ -33,8 +33,6 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret-key}")
     private String secretKey;
 
-    private String tok;
-
     @Value("${security.jwt.token.expire-length:3600000}")
     private long validityInMilliseconds = 3600000; // 1h
 
@@ -54,14 +52,12 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
-        tok = Jwts.builder()//
+        return Jwts.builder()//
                 .setClaims(claims)//
                 .setIssuedAt(now)//
                 .setExpiration(validity)//
                 .signWith(SignatureAlgorithm.HS256, secretKey)//
                 .compact();
-
-        return tok;
     }
 
     public Authentication getAuthentication(String token) {
@@ -74,7 +70,7 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = tok;
+        String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
@@ -90,4 +86,7 @@ public class JwtTokenProvider {
         }
     }
 
+    public void deleteToken(String token) {
+        Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().setExpiration(new Date());
+    }
 }

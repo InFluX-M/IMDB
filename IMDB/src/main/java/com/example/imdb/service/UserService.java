@@ -9,6 +9,7 @@ import com.example.imdb.model.responses.*;
 import com.example.imdb.repository.*;
 import com.example.imdb.security.JwtTokenProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +27,6 @@ import java.util.Optional;
 public class UserService {
 
     public static User currentUser;
-    // JWT ---------------------------------------------------------------
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
@@ -41,7 +42,6 @@ public class UserService {
     }
 
     public List<AllMovieListResponse> getFavLists() {
-        System.err.println(currentUser);
         return checkUsername(currentUser.getUsername()).getFavLists().stream().map(MovieList::allMovieListResponse).toList();
     }
 
@@ -73,7 +73,6 @@ public class UserService {
         MovieList list = movieListRepository.getByNameAndUser_Username(listName, currentUser.getUsername());
         list.getMovies().add(movie);
         list.setSize(list.getSize() + 1);
-        System.err.println(list);
         return movieListRepository.save(list).response();
     }
 
@@ -174,4 +173,9 @@ public class UserService {
     public String refresh(String username) {
         return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getUserRoles());
     }
+
+    public void logout() {
+        currentUser = null;
+    }
+
 }

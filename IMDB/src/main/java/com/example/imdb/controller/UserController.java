@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -44,19 +45,16 @@ public class UserController {
     @PostMapping("/fav-lists/{list}/{titleId}")
     public ResponseEntity<MovieListResponse> addToFavList(@PathVariable String list,
                                                           @PathVariable String titleId) {
-        System.out.println("Hiiii");
         return new ResponseEntity<>(userService.addToFavList(list, titleId), HttpStatus.OK);
     }
 
     @GetMapping("/fav-lists")
     public ResponseEntity<List<AllMovieListResponse>> getFavLists() {
-        System.err.println("to");
         return new ResponseEntity<>(userService.getFavLists(), HttpStatus.OK);
     }
 
     @GetMapping("/fav-lists/{list}")
     public ResponseEntity<MovieListResponse> getFavLists(@PathVariable String list) {
-        System.err.println("to");
         return new ResponseEntity<>(userService.getFavList(list), HttpStatus.OK);
     }
 
@@ -78,7 +76,6 @@ public class UserController {
     public String login(//
                         @ApiParam("Username") @RequestParam(value = "username") String username, //
                         @ApiParam("Password") @RequestParam(value = "password") String password) {
-        System.err.println("login");
         return userService.signin(username, password);
     }
 
@@ -133,4 +130,10 @@ public class UserController {
     public String refresh(HttpServletRequest req) {
         return userService.refresh(req.getRemoteUser());
     }
+
+    @GetMapping("/logout")
+    public void logout() {
+        userService.logout();
+    }
+
 }

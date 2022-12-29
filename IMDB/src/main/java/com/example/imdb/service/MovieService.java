@@ -207,8 +207,6 @@ public class MovieService {
         return loaded.get();
     }
 
-    // -------------------------------------------------------------------
-
     public EpisodeResponse getSeriesById(String titleId) {
         Movie m = checkMovieId(titleId);
         return seriesEpisodeRepo.findByEpisode(m).response();

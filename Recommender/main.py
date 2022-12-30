@@ -19,6 +19,7 @@ df_ratings = pd.read_csv("rating.csv")
 
 user_ratings = mysql.user_ratings()
 users = mysql.load_users_db()
+num_users_db = len(users)
 
 
 def create_map_id_to_email(users_db):
@@ -28,7 +29,7 @@ def create_map_id_to_email(users_db):
     return map_id_to_email
 
 
-id_username = create_map_id_to_email(users)
+id_email = create_map_id_to_email(users)
 
 
 def create_random_user_based_on_average_rating_movies(Y_parameter, R_parameter):
@@ -58,14 +59,17 @@ def create_random_user_based_on_average_rating_movies(Y_parameter, R_parameter):
 
 def cost_func_v(X_parameter, W_parameter, b_parameter, Y_parameter, R_parameter, lambdaZ):
     j = (tf.linalg.matmul(X_parameter, tf.transpose(W_parameter)) + b_parameter - Y_parameter) * R_parameter
-    J = 0.5 * tf.reduce_sum(j ** 2) + (lambdaZ / 2) * (tf.reduce_sum(X_parameter ** 2) + tf.reduce_sum(W_parameter ** 2))
+    J = 0.5 * tf.reduce_sum(j ** 2) + (lambdaZ / 2) * (
+                tf.reduce_sum(X_parameter ** 2) + tf.reduce_sum(W_parameter ** 2))
     return J
 
 
 def define_model_and_parameters(num_movies_parameter, num_users_parameter, num_features_parameter):
     tf.random.set_seed(1234)  # for consistent results
-    W_parameter = tf.Variable(tf.random.normal((num_users_parameter, num_features_parameter), dtype=tf.float64), name='W')
-    X_parameter = tf.Variable(tf.random.normal((num_movies_parameter, num_features_parameter), dtype=tf.float64), name='X')
+    W_parameter = tf.Variable(tf.random.normal((num_users_parameter, num_features_parameter), dtype=tf.float64),
+                              name='W')
+    X_parameter = tf.Variable(tf.random.normal((num_movies_parameter, num_features_parameter), dtype=tf.float64),
+                              name='X')
     b_parameter = tf.Variable(tf.random.normal((1, num_users_parameter), dtype=tf.float64), name='b')
 
     keras_optimizer = keras.optimizers.Adam(learning_rate=1e-1)
@@ -76,6 +80,8 @@ def define_model_and_parameters(num_movies_parameter, num_users_parameter, num_f
 def add_user_ratings_to_matrix(Y_parameter, R_parameter, user_ratings_pd, title_id_to_id):
     for user in user_ratings_pd:
         for title_id in user_ratings_pd[user]:
+            title_id = title_id[:9]
+            iJ = title_id_to_id[title_id]
             Y_parameter.at[title_id_to_id[title_id], user] = user_ratings_pd[user][title_id]
             R_parameter.at[title_id_to_id[title_id], user] = int(1)
 
@@ -105,65 +111,35 @@ def predict_rating(X_parameter, W_parameter, b_parameter, Y_mean_parameter):
 Y = pd.DataFrame()
 R = pd.DataFrame()
 
+title_id_to_idx = create_map_title_id_to_id(df_movies)
+
 Y, R = create_random_user_based_on_average_rating_movies(Y, R)
-Y, R = add_user_ratings_to_matrix(Y, R, user_ratings, create_map_title_id_to_id(df_movies))
+Y, R = add_user_ratings_to_matrix(Y, R, user_ratings, title_id_to_idx)
 
 num_movies, num_users = Y.shape
-num_features = 100
+num_features = 200
 
 map_Y_columns_to_user_id = dict()
 for idx in range(num_users):
     map_Y_columns_to_user_id[Y.columns[idx]] = idx
 
-W, X, b, optimizer = define_model_and_parameters(num_movies, num_users+1, num_features)
+W, X, b, optimizer = define_model_and_parameters(num_movies, num_users, num_features)
 
-my_ratings = np.zeros(num_movies)
-my_rated = np.zeros(num_movies)
-my_ratings[150] = 5
-my_ratings[100] = 2
-my_ratings[160] = 5
-my_ratings[246] = 5
-my_ratings[16] = 3
-my_ratings[9] = 5
-my_ratings[102] = 2
-my_ratings[250] = 5
-my_ratings[180] = 5
-my_ratings[168] = 3
-my_ratings[190] = 1
-my_ratings[191] = 1
-my_ratings[135] = 5
-print('\nNew user ratings:\n')
-for i in range(len(my_ratings)):
-    if my_ratings[i] > 0:
-        print(f'Rated {my_ratings[i]} for  {df_movies.loc[i, "title"]}')
+Y = np.c_[Y]
+R = np.c_[R]
 
-#
-# Y["User1"] = my_ratings
-# R["User1"] = my_rated
-
-
-# Add new user ratings to Y
-Y = np.c_[my_ratings, Y]
-
-# Add new user indicator matrix to R
-R = np.c_[(my_ratings != 0).astype(int), R]
-
-#
-# Y = Y.values
-# R = R.values
 Y_norm, Y_mean = normalizeRatings(Y, R)
 
-X, W, b = train_model(X, W, b, Y_norm, R, 1, 250)
+X, W, b = train_model(X, W, b, Y_norm, R, 1, 300)
 
-pm = predict_rating(X, W, b, Y_mean)
+predictions = predict_rating(X, W, b, Y_mean)
 
-my_predictions = pm[:, 0]
+my_predictions = predictions[:, 120]
 
 # sort predictions
 ix = tf.argsort(my_predictions, direction='DESCENDING')
 
-
-print('\n\nOriginal vs Predicted ratings:\n')
-for i in range(len(my_ratings)):
-    if my_ratings[i] > 0:
-        print(f'Original {my_ratings[i]}, Predicted {my_predictions[i]:0.2f} for {df_movies.loc[i, "title"]}')
+print(id_email[0])
+print("Top recommendations for you:")
+for i in range(7):
+    print(f'Predicted {my_predictions[i]:0.2f} for {df_movies.loc[i, "title"]}')

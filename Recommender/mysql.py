@@ -17,7 +17,8 @@ def load_user_ratings_db():
             cursor.execute(sql)
             result = cursor.fetchall()
             result = list(result)
-            print(result)
+            for i in range(len(result)):
+                result[i]["title_id"] = result[i]["title_id"][:9]
 
     finally:
         connection.close()

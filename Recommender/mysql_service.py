@@ -36,12 +36,10 @@ def load_users_db():
     try:
 
         with connection.cursor() as cursor:
-            # Read a single record
             sql = "SELECT `id`, `email`, `username` FROM `user`"
             cursor.execute(sql)
             result = cursor.fetchall()
             result = list(result)
-            print(result)
 
     finally:
         connection.close()

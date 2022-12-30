@@ -1,6 +1,7 @@
 package com.example.imdbproj
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.imdbproj.adaptor.MovieAdapter
 import com.example.imdbproj.classes.mainClasses.Movie
+import com.example.imdbproj.classes.mainClasses.TitleType
 import com.example.imdbproj.databinding.FragmentMainBinding
 import com.example.imdbproj.repository.Repository
+import com.example.imdbproj.retrofit.ApiClient
+import com.example.imdbproj.retrofit.ApiServiceMovie
 import kotlinx.android.synthetic.main.fragment_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,28 +64,10 @@ class mainFragment : Fragment() {
 
        recycleView = binding.recyleViewTopMovies
 
+        getMovies()
 
-/*
-        val list = ArrayList<String>()
-        list.add("comedy")
-        val movie1 = Movie("1", TitleType.MOVIE, "movie1", true, 2021, 2021, 120, list)
-        val movie2 = Movie("2", TitleType.MOVIE, "movie2", true, 2021, 2021, 120, list)
-        val movie3 = Movie("3", TitleType.MOVIE, "movie3", true, 2021, 2021, 120, list)
-        val movie4 = Movie("4", TitleType.MOVIE, "movie4", true, 2021, 2021, 120, list)
-        val movie5 = Movie("5", TitleType.MOVIE, "movie5", true, 2021, 2021, 120, list)
-
-        movies.add(movie1)
-        movies.add(movie2)
-        movies.add(movie3)
-        movies.add(movie4)
-        movies.add(movie5)
-
- */
-
-        movies = Repository.getAllMovies()
-
-        recyleViewTopMovies.layoutManager = LinearLayoutManager(context)
-        recyleViewTopMovies.adapter = MovieAdapter(movies)
+        //recyleViewTopMovies.layoutManager = LinearLayoutManager(context)
+        //recyleViewTopMovies.adapter = MovieAdapter(movies)
 
         super.onViewCreated(view, savedInstanceState)
 
@@ -88,18 +77,20 @@ class mainFragment : Fragment() {
         Toast.makeText(this.context,"movie show",Toast.LENGTH_LONG).show()
     }
 
-/*
+
     private fun getMovies() {
 
         val apiClient = ApiClient()
-        val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
+        val apiService: ApiServiceMovie = apiClient.getRetrofit().create(ApiServiceMovie::class.java)
 
         apiService.getMovies().enqueue(object : Callback<List<Movie>> {
 
             override fun onResponse(call: Call<List<Movie>>, response: Response<List<Movie>>) {
                 if (response.isSuccessful) {
                    movies = response.body() as ArrayList<Movie>
-                    (recycleView.adapter as MovieAdapter).movies = movies
+                   // (recycleView.adapter as MovieAdapter).movies = movies
+                    recyleViewTopMovies.layoutManager = LinearLayoutManager(context)
+                    recyleViewTopMovies.adapter = MovieAdapter(movies)
                 } else {
                     println(response.body())
                 }
@@ -121,7 +112,7 @@ class mainFragment : Fragment() {
         this.getMovies()
     }
 
- */
+
 
 
 }

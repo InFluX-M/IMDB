@@ -24,7 +24,7 @@ class Movie(titleId: String, type: TitleType, title: String, isAdult: Boolean,
     @SerializedName("genresList")
     private var genresList: List<String>
 
-    private var rank: Double = 0.0
+    private var rank: Float = 0.0f
 
     private  var image: Image? = null
 
@@ -106,11 +106,11 @@ class Movie(titleId: String, type: TitleType, title: String, isAdult: Boolean,
         return image!!
     }
 
-    fun setRank(rank: Double) {
+    fun setRank(rank: Float) {
         this.rank = rank
     }
 
-    fun getRank(): Double {
+    fun getRank(): Float {
         return rank
     }
 

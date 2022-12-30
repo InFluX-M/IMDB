@@ -9,6 +9,8 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ApiServiceMovie {
 
@@ -21,11 +23,11 @@ interface ApiServiceMovie {
     @GET("/movies/{titleId}/directors")
     fun getDirectors(@Body titleId: String): Call<List<Person>>
 
-    @GET("/movies/{titleId/actors")
+    @GET("/movies/{titleId}/actors")
     fun getActors(@Body titleId: String): Call<List<Person>>
 
     @GET("/movies/{titleId}/ratings")
-    fun getRating(@Body titleId: String): Call<Rating>
+    fun getRating( @Path("titleId") titleId: String): Call<Rating>
 
 
     @POST("/movies")
@@ -36,6 +38,5 @@ interface ApiServiceMovie {
 
     @DELETE("/movies/{titleId}")
     fun deleteMovie(@Body titleId: String): Call<Movie>
-
 
 }

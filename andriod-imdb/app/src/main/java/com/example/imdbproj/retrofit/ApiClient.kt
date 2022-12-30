@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ApiClient {
 
     private var retrofit: Retrofit
-    private val BASE_URL = "http://192.168.10.108:8080"
+    private val BASE_URL = "http://192.168.10.108:8082"
 
     init {
         retrofit = getClient()

@@ -6,12 +6,15 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat.finishAffinity
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.imdbproj.R
 import com.example.imdbproj.classes.mainClasses.Movie
-import com.example.imdbproj.mainFragment
+import com.example.imdbproj.retrofit.ApiClient
+import com.example.imdbproj.retrofit.ApiServiceMovie
+import com.example.imdbproj_1.mainClasses.Rating
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MovieAdapter(var movies: List<Movie> ):
     RecyclerView.Adapter<MovieAdapter.ViewHolder>()  {
@@ -37,12 +40,14 @@ class MovieAdapter(var movies: List<Movie> ):
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val movie = movies[position]
-        holder.textViewName.text = (movie.getTitle())
-        holder.textViewRank.text = (movie.getRank().toString())
+        setRank(movie, holder)
+
+        //holder.textViewName.text = (movie.getTitle())
+        //holder.textViewRank.text = (movie.getRank().toString())
 
         holder.relativeLayout.setOnClickListener { v ->
             if (v != null) {
-                Toast.makeText(v.context, "movie show", Toast.LENGTH_LONG).show()
+                Toast.makeText(v.context, "movie show2", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -50,6 +55,28 @@ class MovieAdapter(var movies: List<Movie> ):
 
     override fun getItemCount(): Int {
         return movies.size
+    }
+
+    private fun setRank(movie: Movie, holder: ViewHolder) {
+
+        val apiClient = ApiClient()
+        val apiService: ApiServiceMovie = apiClient.getRetrofit().create(ApiServiceMovie::class.java)
+
+        apiService.getRating(movie.getTitleId()).enqueue(object : Callback<Rating> {
+            override fun onResponse(call: Call<Rating>, response: Response<Rating>) {
+                movie.setRank((response.body() as Rating).getAvqRating())
+                holder.textViewName.text = (movie.getTitle())
+                holder.textViewRank.text = (movie.getRank().toString())
+
+                TODO() // set photo of movie
+            }
+
+            override fun onFailure(call: Call<Rating>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
     }
 
 }

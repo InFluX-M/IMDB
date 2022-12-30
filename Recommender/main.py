@@ -1,6 +1,8 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+
+import email_service
 from recsys_utils import *
 import pandas as pd
 import random
@@ -134,14 +136,16 @@ X, W, b = train_model(X, W, b, Y_norm, R, 1, 300)
 
 predictions = predict_rating(X, W, b, Y_mean)
 
-user_predictions = predictions[:, 120 + 0]
-ix = tf.argsort(user_predictions, direction='DESCENDING')
-print(id_email[0])
-print("Top recommendations for you:")
-print(ix)
-for movie in ix:
-    print(f'Predicted {user_predictions[movie]:0.2f} for {df_movies.loc[movie, "title"]}')
+for i in range(num_users_db):
+    user_predictions = predictions[:, 120 + i]
+    ix = tf.argsort(user_predictions, direction='DESCENDING')
+    print(id_email[i])
+    print("Top recommendations for you:")
+    top_rated = ix.numpy()
+    top_rated = top_rated[:5]
 
+    recommended_movie = dict()
+    for movie in top_rated:
+        recommended_movie[df_movies.loc[movie, "title"]] = user_predictions[movie]
 
-for i in range(7):
-    print(f'Predicted {user_predictions[i]:0.2f} for {df_movies.loc[i, "title"]}')
+    email_service.send_recommend_movies_to_user_mail(id_email[i], recommended_movie)

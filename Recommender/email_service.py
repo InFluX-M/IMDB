@@ -7,47 +7,50 @@ smtp_server = "smtp.gmail.com"
 sender_email = "imdb.random@gmail.com"  # Enter your address
 password = "xnkdawrqxaghnxqv"
 
-def send_recommend_movies_to_user_mail():
 
-    for i in range(2):
-        message = MIMEMultipart("alternative")
-        message["Subject"] = "multipart test"
-        message["From"] = sender_email
-        message["To"] = "azami1382@gmail.com"
+def send_recommend_movies_to_user_mail(receiver_email, recommend_movies):
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Recommend Movies"
+    message["From"] = sender_email
+    message["To"] = "azami1382@gmail.com"
 
-        # Create the plain-text and HTML version of your message
-        text = """\
-        Hi,
-        How are you?
-        Real Python has many great tutorials:
-        www.realpython.com"""
-        html = """\
-        <html>
-          <body>
-            <p>Hi,<br>
-               How are you?<br>
-               <a href="http://www.realpython.com">Real Python</a> 
-               has many great tutorials.
-            </p>
-          </body>
-        </html>
-        """
+    body = ""
+    for movie in recommend_movies:
+        body += movie + "\t" + str(int(recommend_movies[movie])) + "\n"
 
-        # Turn these into plain/html MIMEText objects
-        part1 = MIMEText(text, "plain")
-        part2 = MIMEText(html, "html")
+    # Create the plain-text and HTML version of your message
+    text = f"Hi,\nHow are you?\n{body}"
 
-        # Add HTML/plain-text parts to MIMEMultipart message
-        # The email client will try to render the last part first
-        message.attach(part1)
-        message.attach(part2)
+    # html = f"\
+    # <html>\
+    #   <body>\
+    #     <p>\
+    #         Hi,<br>\
+    #         How are you?<br>\
+    #         {body}\
+    #         \
+    #     </p>\
+    #   </body>\
+    # </html>\
+    # "
 
-        # Create secure connection with server and send email
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-            server.login(sender_email, password)
-            server.sendmail(
-                sender_email, ls[i], message.as_string()
-            )
+    # Turn these into plain/html MIMEText objects
+    part1 = MIMEText(text, "plain")
+    # part2 = MIMEText(html, "html")
+
+    # Add HTML/plain-text parts to MIMEMultipart message
+    # The email client will try to render the last part first
+    message.attach(part1)
+    # message.attach(part2)
+
+    # Create secure connection with server and send email
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(
+            sender_email, receiver_email, message.as_string()
+        )
+
+
 
 

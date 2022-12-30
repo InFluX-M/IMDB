@@ -4,7 +4,7 @@ from tensorflow import keras
 from recsys_utils import *
 import pandas as pd
 import random
-import mysql
+import mysql_service
 
 
 def create_map_title_id_to_id(df_movies_db):
@@ -17,8 +17,8 @@ def create_map_title_id_to_id(df_movies_db):
 df_movies = pd.read_csv("movie.csv")
 df_ratings = pd.read_csv("rating.csv")
 
-user_ratings = mysql.user_ratings()
-users = mysql.load_users_db()
+user_ratings = mysql_service.user_ratings()
+users = mysql_service.load_users_db()
 num_users_db = len(users)
 
 
@@ -134,12 +134,14 @@ X, W, b = train_model(X, W, b, Y_norm, R, 1, 300)
 
 predictions = predict_rating(X, W, b, Y_mean)
 
-my_predictions = predictions[:, 120]
-
-# sort predictions
-ix = tf.argsort(my_predictions, direction='DESCENDING')
-
+user_predictions = predictions[:, 120 + 0]
+ix = tf.argsort(user_predictions, direction='DESCENDING')
 print(id_email[0])
 print("Top recommendations for you:")
+print(ix)
+for movie in ix:
+    print(f'Predicted {user_predictions[movie]:0.2f} for {df_movies.loc[movie, "title"]}')
+
+
 for i in range(7):
-    print(f'Predicted {my_predictions[i]:0.2f} for {df_movies.loc[i, "title"]}')
+    print(f'Predicted {user_predictions[i]:0.2f} for {df_movies.loc[i, "title"]}')

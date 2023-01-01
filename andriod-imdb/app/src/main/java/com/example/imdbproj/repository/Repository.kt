@@ -3,7 +3,7 @@ package com.example.imdbproj.repository
 import android.util.Log
 import com.example.imdbproj.classes.mainClasses.Movie
 import com.example.imdbproj.retrofit.ApiClient
-import com.example.imdbproj.retrofit.ApiServiceMovie
+import com.example.imdbproj.retrofit.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,7 +15,7 @@ class Repository {
         fun getAllMovies(): ArrayList<Movie> {
 
             val apiClient = ApiClient()
-            val apiService: ApiServiceMovie = apiClient.getRetrofit().create(ApiServiceMovie::class.java)
+            val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
 
             var movies: ArrayList<Movie> = ArrayList<Movie>()
 
@@ -42,7 +42,7 @@ class Repository {
         fun getMovieByTitleID(titleID: String): Movie? {
 
             val apiClient = ApiClient()
-            val apiService: ApiServiceMovie = apiClient.getRetrofit().create(ApiServiceMovie::class.java)
+            val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
 
             var movie: Movie? = null
 

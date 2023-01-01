@@ -11,11 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.imdbproj.adaptor.MovieAdapter
 import com.example.imdbproj.classes.mainClasses.Movie
-import com.example.imdbproj.classes.mainClasses.TitleType
 import com.example.imdbproj.databinding.FragmentMainBinding
-import com.example.imdbproj.repository.Repository
 import com.example.imdbproj.retrofit.ApiClient
-import com.example.imdbproj.retrofit.ApiServiceMovie
+import com.example.imdbproj.retrofit.ApiService
 import kotlinx.android.synthetic.main.fragment_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -66,9 +64,6 @@ class mainFragment : Fragment() {
 
         getMovies()
 
-        //recyleViewTopMovies.layoutManager = LinearLayoutManager(context)
-        //recyleViewTopMovies.adapter = MovieAdapter(movies)
-
         super.onViewCreated(view, savedInstanceState)
 
     }
@@ -81,7 +76,7 @@ class mainFragment : Fragment() {
     private fun getMovies() {
 
         val apiClient = ApiClient()
-        val apiService: ApiServiceMovie = apiClient.getRetrofit().create(ApiServiceMovie::class.java)
+        val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
 
         apiService.getMovies().enqueue(object : Callback<List<Movie>> {
 
@@ -111,8 +106,6 @@ class mainFragment : Fragment() {
         super.onResume()
         this.getMovies()
     }
-
-
 
 
 }

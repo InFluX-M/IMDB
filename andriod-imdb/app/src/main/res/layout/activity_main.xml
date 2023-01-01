@@ -41,13 +41,15 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="400dp"
-            android:layout_height="555dp"
+            android:layout_width="410dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottomNav"
             android:layout_below="@+id/toolbar"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="1dp"
-            android:layout_marginTop="37dp"
-            android:layout_marginEnd="9dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,12 +58,11 @@
             app:navGraph="@navigation/nav_graph" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/fragmentContainerView"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="26dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="1dp"
             app:menu="@menu/bottom_menue" />

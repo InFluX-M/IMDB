@@ -16,7 +16,7 @@ def send_recommend_movies_to_user_mail(receiver_email, recommend_movies):
 
     body = ""
     for movie in recommend_movies:
-        body += movie + "\t" + str(int(recommend_movies[movie])) + "\n"
+        body += movie + "\t" + str(recommend_movies[movie][1]) + "\t" + str(round(recommend_movies[movie][0], 1)) + "\n"
 
     # Create the plain-text and HTML version of your message
     text = f"Hi,\nHow are you?\n{body}"

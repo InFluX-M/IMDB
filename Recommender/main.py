@@ -1,8 +1,8 @@
-import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 
 import email_service
+import rec_mails
 from recsys_utils import *
 import pandas as pd
 import random
@@ -14,6 +14,7 @@ df_movies = pd.read_csv("movie.csv")
 df_ratings = pd.read_csv("rating.csv")
 
 user_ratings = mysql_service.user_ratings()
+
 users = mysql_service.load_users_db()
 num_users_db = len(users)
 
@@ -32,14 +33,23 @@ def create_map_id_to_email(users_db):
     return map_id_to_email
 
 
+def create_map_email_to_id(users_db):
+    map_email_to_id = dict()
+    for user in users_db:
+        map_email_to_id[user["email"]] = user["id"]
+    return map_email_to_id
+
+
 id_email = create_map_id_to_email(users)
+
+email_id = create_map_email_to_id(users)
 
 
 def create_random_user_based_on_average_rating_movies(Y_parameter, R_parameter):
     for idx_user in range(120):
         ls = [0 for _ in range(267)]
-        Y_parameter[idx_user] = ls
-        R_parameter[idx_user] = ls
+        Y_parameter["User" + str(idx_user)] = ls
+        R_parameter["User" + str(idx_user)] = ls
 
     for idx_movie in range(267):
         title_id_movie = df_movies.iloc[idx_movie]["title_id"]
@@ -48,18 +58,16 @@ def create_random_user_based_on_average_rating_movies(Y_parameter, R_parameter):
         j = random.randint(0, 5)
         while True:
             rate = random.randint(int(max(avg - random.randint(0, 3), 0)), int(min(avg + random.randint(0, 3), 10)))
-            # Y_parameter.insert(loc=idx_movie, column="User" + str(j), value=rate)
-            # R_parameter.insert(loc=idx_movie, column="User" + str(j), value=1)
 
             Y_parameter.at[idx_movie, "User" + str(j)] = rate
             R_parameter.at[idx_movie, "User" + str(j)] = 1
+
             if avg != 0 and j % (int(avg) * 3 + 10) == 0:
                 u = random.randint(0, 5)
-                # Y_parameter.insert(loc=idx_movie, column="User" + str(j + u), value=rate)
-                # R_parameter.insert(loc=idx_movie, column="User" + str(j + u), value=1)
                 Y_parameter.at[idx_movie, "User" + str(j + u)] = random.randint(1, 4)
                 R_parameter.at[idx_movie, "User" + str(j + u)] = 1
             j += random.randint(3, 7)
+
             if j > 119:
                 break
     return Y_parameter, R_parameter
@@ -104,13 +112,47 @@ def train_model(X_parameter, W_parameter, b_parameter, Y_norm_model, R_model, la
         grads = tape.gradient(cost_value, [X, W, b])
         optimizer.apply_gradients(zip(grads, [X, W, b]))
 
-        # if ITER % 20 == 0:
-        #     print(f"Training loss at iteration {ITER}: {cost_value:0.1f}")
+        if ITER % 20 == 0:
+            print(f"Training loss at iteration {ITER}: {cost_value:0.1f}")
     return X_parameter, W_parameter, b_parameter
 
 
 def predict_rating(X_parameter, W_parameter, b_parameter, Y_mean_parameter):
-    return np.matmul(X_parameter.numpy(), np.transpose(W_parameter.numpy())) + b_parameter.numpy() + Y_mean_parameter
+    return (np.matmul(X_parameter.numpy(), np.transpose(W_parameter.numpy())) + b_parameter.numpy()) + Y_mean_parameter
+
+
+def send_mail_top_rated_movies(num_users_model, predictions_model, id_email_model):
+    for idx_user_mail in range(num_users_model):
+        user_predictions = predictions_model[:, 120 + idx_user_mail]
+        ix = tf.argsort(user_predictions, direction='DESCENDING')
+
+        top_rated = list()
+        for rate_user in ix.numpy():
+            if R[rate_user][120 + idx_user_mail] == 0:
+                top_rated.append(rate_user)
+            if len(top_rated) == 5:
+                break
+
+        recommended_movie = dict()
+        for movie in top_rated:
+            recommended_movie[df_movies.loc[movie, "title_id"]] = [user_predictions[movie], df_movies.loc[movie, "title"]]
+
+        print(recommended_movie)
+        email_service.send_recommend_movies_to_user_mail(id_email_model[idx_user_mail], recommended_movie)
+
+
+def edit_Y_R_Values(title_id_to_id):
+    response_ratings = rec_mails.email_receiver()
+    mysql_service.insert_user_ratings(response_ratings, email_id)
+
+    for user in response_ratings:
+        id_user = email_id[user]
+        for title_id in response_ratings[user]:
+            id_movie = title_id_to_id[title_id]
+            Y[id_movie, id_user+120] = response_ratings[user][title_id]
+            R[id_movie, id_user+120] = 1
+
+    return Y, R
 
 
 Y = pd.DataFrame()
@@ -122,7 +164,7 @@ Y, R = create_random_user_based_on_average_rating_movies(Y, R)
 Y, R = add_user_ratings_to_matrix(Y, R, user_ratings, title_id_to_idx)
 
 num_movies, num_users = Y.shape
-num_features = 200
+num_features = 1500
 
 map_Y_columns_to_user_id = dict()
 for idx in range(num_users):
@@ -135,18 +177,44 @@ R = np.c_[R]
 
 Y_norm, Y_mean = normalizeRatings(Y, R)
 
-X, W, b = train_model(X, W, b, Y_norm, R, 1, 300)
+X, W, b = train_model(X, W, b, Y_norm, R, 1, 750)
 
 predictions = predict_rating(X, W, b, Y_mean)
 
-for i in range(num_users_db):
-    user_predictions = predictions[:, 120 + i]
-    ix = tf.argsort(user_predictions, direction='DESCENDING')
-    top_rated = ix.numpy()
-    top_rated = top_rated[:5]
 
-    recommended_movie = dict()
-    for movie in top_rated:
-        recommended_movie[df_movies.loc[movie, "title"]] = user_predictions[movie]
+# i = 0
+# for rate in predictions[:, 120]:
+#     print(rate, df_movies.iloc[i]["title_id"])
+#     i = i+1
 
-    email_service.send_recommend_movies_to_user_mail(id_email[i], recommended_movie)
+
+send_mail_top_rated_movies(num_users_db, predictions, id_email)
+
+Y, R = edit_Y_R_Values(title_id_to_idx)
+
+# not_zeroes = 0
+# for i in range(num_movies):
+#     if R[i, 120] != 0:
+#         not_zeroes = not_zeroes + 1
+# print(not_zeroes)
+
+W, X, b, optimizer = define_model_and_parameters(num_movies, num_users, num_features)
+
+Y = np.c_[Y]
+R = np.c_[R]
+
+Y_norm, Y_mean = normalizeRatings(Y, R)
+
+X, W, b = train_model(X, W, b, Y_norm, R, 1, 750)
+
+predictions = predict_rating(X, W, b, Y_mean)
+
+send_mail_top_rated_movies(num_users_db, predictions, id_email)
+
+# i = 0
+# for rate in predictions[:, 120]:
+#     if df_movies.iloc[i]["title_id"] == "tt0468569":
+#         print("-------------------------------")
+#         print(rate, df_movies.iloc[i]["title_id"])
+#     print(rate, df_movies.iloc[i]["title_id"], df_movies.iloc[i]["title"])
+#     i = i+1

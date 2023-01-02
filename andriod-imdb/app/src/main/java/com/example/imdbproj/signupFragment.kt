@@ -1,16 +1,15 @@
 package com.example.imdbproj
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.imdbproj.R
+import androidx.fragment.app.Fragment
 import com.example.imdbproj.classes.mainClasses.User
 import com.example.imdbproj.databinding.FragmentSignupBinding
-
+import java.util.regex.Pattern
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -51,16 +50,20 @@ class signupFragment() : Fragment() {
             val password = binding.editTextPassword.text.toString()
             val passwordRepeat = binding.editTextReEnterPassword.text.toString()
 
-            if (password == (passwordRepeat)) {
-                val userNew = User(username, password, email)
-                val mainFragment = mainFragment()
-                mainFragment.user = userNew
-                replaceFragment(mainFragment)
+            if (isValidPassword(password) && isValidEmailAddress(email)) {
+
+                if (password == (passwordRepeat)) {
+                    val userNew = User(username, password, email)
+                    val mainFragment = mainFragment()
+                    mainFragment.user = userNew
+                    replaceFragment(mainFragment)
+                } else {
+                    Toast.makeText(view.context, "passwords don't mach", Toast.LENGTH_LONG).show()
+                }
             }
 
-            else {
-                Toast.makeText(view.context, "passwords don't mach",Toast.LENGTH_LONG).show()
-            }
+            else
+                Toast.makeText(view.context,"invalid input",Toast.LENGTH_LONG).show()
 
         }
 
@@ -70,6 +73,21 @@ class signupFragment() : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
     }
+
+    private fun isValidEmailAddress(email: String?): Boolean {
+        val ePattern =
+            "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"
+        val p = Pattern.compile(ePattern)
+        val m = p.matcher(email.toString())
+        return m.matches()
+    }
+
+    private fun isValidPassword(password: String): Boolean {
+        if(password.length < 8)
+            return false
+        return true
+    }
+
 
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = (this.context as AppCompatActivity).supportFragmentManager

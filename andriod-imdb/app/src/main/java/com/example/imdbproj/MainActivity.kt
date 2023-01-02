@@ -53,7 +53,10 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationMenu.selectedItemId = R.id.itemHome
         bottomNavigationMenu.setOnItemSelectedListener {
             when(it.itemId) {
-                R.id.itemHome -> replaceFragment(mainFragment())
+                R.id.itemHome ->{
+                    val mainFragment = mainFragment()
+                    mainFragment.user = binding.user as User
+                    replaceFragment(mainFragment)}
                 R.id.itemAccount -> replaceFragment(loginFragment())
                 R.id.itemFavorite -> replaceFragment(favoriteListFragment(binding.user as User))
             }

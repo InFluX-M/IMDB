@@ -9,6 +9,8 @@ import retrofit2.http.*
 
 interface ApiService {
 
+    //  ------------movie----------------
+
     @GET("/movies")
     fun getMovies(): Call<List<Movie>>
 
@@ -35,9 +37,7 @@ interface ApiService {
     fun deleteMovie(@Path("titleId") titleId: String): Call<Movie>
 
 
-
-    @GET("/users/{username}")
-    fun getUser(@Path("username") username: String): Call<User>
+    // -----------user-----------------------
 
     @POST("/users/singin")
     @FormUrlEncoded

@@ -1,11 +1,13 @@
 package com.example.imdbproj
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.navigation.Navigation
 import com.example.imdbproj.R
 import com.example.imdbproj.classes.mainClasses.User
@@ -58,21 +60,23 @@ class loginFragment : Fragment() {
 
         binding.buttonLogin.setOnClickListener{
 
-            val username = binding.textInputUserName.username
-            val password = binding.textInputPassword.password
+            binding.buttonCreateAccount.setOnClickListener {
+                Log.i("why","base")
+                Toast.makeText(this.context,"create",Toast.LENGTH_LONG).show()
+            }
 
-            getUser(username.toString(), password.toString())
+            val username = binding.editTextUserName
+            val password = binding.editTextTextPassword
 
-            Navigation.findNavController(it)
-                .navigate(loginFragmentDirections.actionLoginFragmentToMainFragment()
-                    .setUser(binding.user))
+            //getUser(username.toString(), password.toString(), view)
+
         }
 
         super.onViewCreated(view, savedInstanceState)
     }
 
 
-    private fun getUser(username: String, password: String) {
+    private fun getUser(username: String, password: String, view: View) {
 
         val apiClient = ApiClient()
         val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
@@ -80,6 +84,10 @@ class loginFragment : Fragment() {
         apiService.getUser(username).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
 
+
+                Navigation.findNavController(view)
+                    .navigate(loginFragmentDirections.actionLoginFragmentToMainFragment()
+                        .setUser(binding.user))
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {

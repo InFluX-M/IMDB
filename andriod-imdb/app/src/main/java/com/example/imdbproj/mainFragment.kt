@@ -14,6 +14,7 @@ import com.example.imdbproj.classes.mainClasses.Movie
 import com.example.imdbproj.databinding.FragmentMainBinding
 import com.example.imdbproj.retrofit.ApiClient
 import com.example.imdbproj.retrofit.ApiService
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_main.*
 import retrofit2.Call
 import retrofit2.Callback

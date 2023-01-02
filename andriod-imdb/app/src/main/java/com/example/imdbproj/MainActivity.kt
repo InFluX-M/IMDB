@@ -6,14 +6,19 @@ import android.util.AttributeSet
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ButtonBarLayout
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.imdbproj.classes.mainClasses.Movie
 import com.example.imdbproj.databinding.FragmentMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 
 
@@ -29,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         binding = FragmentMainBinding.inflate(layoutInflater)
-        //binding.frameLayout.bottomNav.setSelectedItemId()
 
         drawerLayout = findViewById(R.id.drawerLayout)
         toolbar = findViewById(R.id.toolbar)
@@ -40,10 +44,24 @@ class MainActivity : AppCompatActivity() {
                                            R.string.open,R.string.close)
         toggle.syncState()
 
-        val nav = findViewById<ButtonBarLayout>(R.id.bottomNav)
+        val bottomNavigationMenu = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottomNavigationMenu.selectedItemId = R.id.itemHome
+        bottomNavigationMenu.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.itemHome -> replaceFragment(mainFragment())
+                R.id.itemAccount -> replaceFragment(loginFragment())
+                R.id.itemFavorite -> replaceFragment(favoriteListFragment())
+            }
+            true
+        }
 
-        //TODO("setNavigationSelectedItem")
+    }
 
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragmentContainerView,fragment)
+        fragmentTransaction.commit()
     }
 
 

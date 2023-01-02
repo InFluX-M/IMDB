@@ -14,7 +14,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import com.example.imdbproj.classes.mainClasses.Movie
+import com.example.imdbproj.classes.mainClasses.User
 import com.example.imdbproj.databinding.FragmentMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -44,13 +46,16 @@ class MainActivity : AppCompatActivity() {
                                            R.string.open,R.string.close)
         toggle.syncState()
 
+
+        binding.user = User("user1","password1","email1")
+
         val bottomNavigationMenu = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNavigationMenu.selectedItemId = R.id.itemHome
         bottomNavigationMenu.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.itemHome -> replaceFragment(mainFragment())
                 R.id.itemAccount -> replaceFragment(loginFragment())
-                R.id.itemFavorite -> replaceFragment(favoriteListFragment())
+                R.id.itemFavorite -> replaceFragment(favoriteListFragment(binding.user as User))
             }
             true
         }

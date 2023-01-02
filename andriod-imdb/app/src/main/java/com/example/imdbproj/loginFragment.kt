@@ -1,18 +1,14 @@
 package com.example.imdbproj
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
-import androidx.navigation.Navigation
-import com.example.imdbproj.R
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.imdbproj.classes.mainClasses.User
 import com.example.imdbproj.databinding.FragmentLoginBinding
-import com.example.imdbproj.databinding.FragmentMainBinding
 import com.example.imdbproj.retrofit.ApiClient
 import com.example.imdbproj.retrofit.ApiService
 import kotlinx.android.synthetic.main.fragment_login.view.*
@@ -20,16 +16,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [loginFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 @Suppress("UNREACHABLE_CODE")
 class loginFragment : Fragment() {
     // TODO: Rename and change types of parameters
@@ -59,20 +50,25 @@ class loginFragment : Fragment() {
         binding = FragmentLoginBinding.bind(view)
 
         binding.buttonLogin.setOnClickListener{
-
-            binding.buttonCreateAccount.setOnClickListener {
-                Log.i("why","base")
-                Toast.makeText(this.context,"create",Toast.LENGTH_LONG).show()
-            }
-
             val username = binding.editTextUserName
             val password = binding.editTextTextPassword
 
-            //getUser(username.toString(), password.toString(), view)
+            getUser(username.toString(), password.toString(), view)
 
         }
 
+        binding.buttonCreateAccount.setOnClickListener {
+            replaceFragment(signupFragment())
+        }
+
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = (this.context as AppCompatActivity).supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragmentContainerView,fragment)
+        fragmentTransaction.commit()
     }
 
 
@@ -81,13 +77,19 @@ class loginFragment : Fragment() {
         val apiClient = ApiClient()
         val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
 
-        apiService.getUser(username).enqueue(object : Callback<User> {
+        val params: MutableMap<String, String> = HashMap()
+        params["Username"] = username
+        params["Password"] = password
+
+
+        apiService.findUser(params).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
-
-
-                Navigation.findNavController(view)
-                    .navigate(loginFragmentDirections.actionLoginFragmentToMainFragment()
-                        .setUser(binding.user))
+                if (response.body() != null) {
+                    var mainFragment = mainFragment()
+                    mainFragment.user = response.body() as User
+                    replaceFragment(mainFragment)
+                }else
+                    Toast.makeText(view.context, "user: not found",Toast.LENGTH_LONG).show()
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {

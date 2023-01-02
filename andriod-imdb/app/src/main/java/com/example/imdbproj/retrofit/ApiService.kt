@@ -5,11 +5,7 @@ import com.example.imdbproj.classes.mainClasses.Person
 import com.example.imdbproj.classes.mainClasses.User
 import com.example.imdbproj_1.mainClasses.Rating
 import retrofit2.Call
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -42,6 +38,10 @@ interface ApiService {
 
     @GET("/users/{username}")
     fun getUser(@Path("username") username: String): Call<User>
+
+    @POST("/users/singin")
+    @FormUrlEncoded
+    fun findUser(@FieldMap map: Map<String,String>): Call<User>
 
 
 }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.imdbproj.adaptor.MovieAdapter
 import com.example.imdbproj.classes.mainClasses.Movie
+import com.example.imdbproj.classes.mainClasses.User
 import com.example.imdbproj.databinding.FragmentMainBinding
 import com.example.imdbproj.retrofit.ApiClient
 import com.example.imdbproj.retrofit.ApiService
@@ -26,14 +27,19 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-class mainFragment : Fragment() {
+class mainFragment() : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private var movies: ArrayList<Movie> = ArrayList<Movie> ()
 
-    lateinit var binding: FragmentMainBinding
+    private lateinit var binding: FragmentMainBinding
+    lateinit var user: User
+
+    init {
+
+    }
 
     private companion object {
         lateinit var recycleView: RecyclerView
@@ -82,15 +88,9 @@ class mainFragment : Fragment() {
         apiService.getMovies().enqueue(object : Callback<List<Movie>> {
 
             override fun onResponse(call: Call<List<Movie>>, response: Response<List<Movie>>) {
-                if (response.isSuccessful) {
-                   movies = response.body() as ArrayList<Movie>
-                   // (recycleView.adapter as MovieAdapter).movies = movies
-                    recyleViewTopMovies.layoutManager = LinearLayoutManager(context)
-                    recyleViewTopMovies.adapter = MovieAdapter(movies)
-                } else {
-                    println(response.body())
-                }
-                Log.d("TAGGG", "gmvhmhgmm")
+                movies = response.body() as ArrayList<Movie>
+                recyleViewTopMovies.layoutManager = LinearLayoutManager(context)
+                recyleViewTopMovies.adapter = MovieAdapter(movies)
             }
 
             override fun onFailure(call: Call<List<Movie>>, t: Throwable) {

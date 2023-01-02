@@ -163,6 +163,12 @@ title_id_to_idx = create_map_title_id_to_id(df_movies)
 Y, R = create_random_user_based_on_average_rating_movies(Y, R)
 Y, R = add_user_ratings_to_matrix(Y, R, user_ratings, title_id_to_idx)
 
+# j = 0
+# for i in Y.iloc[0:267, 120]:
+#     if i != 0:
+#         print(df_movies.iloc[j]["title_id"], i)
+#     j += 1
+
 num_movies, num_users = Y.shape
 num_features = 1500
 
@@ -177,7 +183,7 @@ R = np.c_[R]
 
 Y_norm, Y_mean = normalizeRatings(Y, R)
 
-X, W, b = train_model(X, W, b, Y_norm, R, 1, 750)
+X, W, b = train_model(X, W, b, Y_norm, R, 1, 760)
 
 predictions = predict_rating(X, W, b, Y_mean)
 
@@ -205,7 +211,7 @@ R = np.c_[R]
 
 Y_norm, Y_mean = normalizeRatings(Y, R)
 
-X, W, b = train_model(X, W, b, Y_norm, R, 1, 750)
+X, W, b = train_model(X, W, b, Y_norm, R, 1, 760)
 
 predictions = predict_rating(X, W, b, Y_mean)
 

@@ -53,7 +53,7 @@
             android:id="@+id/buttonLogin"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="228dp"
+            android:layout_marginBottom="164dp"
             android:background="@drawable/button_style"
             android:backgroundTint="#FFC107"
             android:text="sing in"

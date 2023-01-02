@@ -2,12 +2,17 @@ package com.example.imdbproj.adaptor
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.imdbproj.R
 import com.example.imdbproj.classes.mainClasses.Movie
+import com.example.imdbproj.mainFragment
 import com.example.imdbproj.retrofit.ApiClient
 import com.example.imdbproj.retrofit.ApiService
 import com.example.imdbproj_1.mainClasses.Rating
@@ -15,7 +20,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MovieAdapter(var movies: List<Movie> ):
+class MovieAdapter(var movies: List<Movie>, val clickListener: (Movie) -> Unit):
     RecyclerView.Adapter<MovieAdapter.ViewHolder>()  {
 
     inner class ViewHolder(itemView: View):
@@ -25,6 +30,7 @@ class MovieAdapter(var movies: List<Movie> ):
         val textViewRank = itemView.findViewById<TextView>(R.id.textViewRank)
         val relativeLayout = itemView.findViewById<RelativeLayout>(R.id.relative_main)
 
+        val containerView = itemView.findViewById<ConstraintLayout>(R.id.moviesLayout)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,23 +47,13 @@ class MovieAdapter(var movies: List<Movie> ):
         val movie = movies[position]
         setRank(movie, holder)
 
-        //holder.textViewName.text = (movie.getTitle())
-        //holder.textViewRank.text = (movie.getRank().toString())
-
-        holder.relativeLayout.setOnClickListener { v ->
-            if (v != null) {
-
-
-            }
-        }
-
     }
 
     override fun getItemCount(): Int {
         return movies.size
     }
 
-    private fun setRank(movie: Movie, holder: ViewHolder) {
+    private fun setRank(movie: Movie, holder: ViewHolder, ) {
 
         val apiClient = ApiClient()
         val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
@@ -69,6 +65,10 @@ class MovieAdapter(var movies: List<Movie> ):
                 holder.textViewRank.text = (movie.getRank().toString())
 
                  // set photo of movie
+
+                holder.containerView.setOnClickListener{
+                    clickListener(movie)
+                }
             }
 
             override fun onFailure(call: Call<Rating>, t: Throwable) {

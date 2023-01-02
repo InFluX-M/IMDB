@@ -32,7 +32,9 @@ class MovieDetailAdapter(var movie: Movie): RecyclerView.Adapter<MovieDetailAdap
         holder.textViewStartYear.text = movie.getStartYear().toString()
         holder.textViewEndYear.text = movie.getEndYear().toString()
         holder.textViewRuntimeMinutes.text = movie.getRuntimeMinutes().toString()
-        holder.textViewGeners.text = movie.getGenresList().toString()
+
+
+       // holder.textViewGeners.text = movie.getGenresList().toString()
     }
 
     override fun getItemCount(): Int {

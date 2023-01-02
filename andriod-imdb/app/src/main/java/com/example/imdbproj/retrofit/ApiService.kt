@@ -28,7 +28,7 @@ interface ApiService {
 
 
     @POST("/movies")
-    fun addMovie(movie: Movie): Call<Movie>
+    fun addMovie(@Body movie: Movie): Call<Movie>
 
     @PUT("/movies/{titleId}")
     fun updateMovie(@Path("titleId") titleId: String): Call<Movie>

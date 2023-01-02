@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,6 +68,11 @@ class mainFragment() : Fragment() {
 
         binding = FragmentMainBinding.bind(view)
 
+        binding.buttonPopUp.setOnClickListener {
+            var dialo = filterPopUpFragment()
+            dialo.show((this.context as AppCompatActivity).supportFragmentManager,"my pop up fragment")
+        }
+
        recycleView = binding.recyleViewTopMovies
 
         getMovies()
@@ -75,8 +81,8 @@ class mainFragment() : Fragment() {
 
     }
 
-    private fun movieLayoutClicked(movie: Movie) {
-        Toast.makeText(this.context,"movie show",Toast.LENGTH_LONG).show()
+    fun movieLayoutClicked(movie: Movie) {
+        replaceFragment(movieFragment(movie))
     }
 
 
@@ -90,7 +96,8 @@ class mainFragment() : Fragment() {
             override fun onResponse(call: Call<List<Movie>>, response: Response<List<Movie>>) {
                 movies = response.body() as ArrayList<Movie>
                 recyleViewTopMovies.layoutManager = LinearLayoutManager(context)
-                recyleViewTopMovies.adapter = MovieAdapter(movies)
+                recyleViewTopMovies.adapter = MovieAdapter(movies,
+                    {movieItem: Movie -> movieLayoutClicked(movieItem)})
             }
 
             override fun onFailure(call: Call<List<Movie>>, t: Throwable) {
@@ -108,5 +115,10 @@ class mainFragment() : Fragment() {
         this.getMovies()
     }
 
-
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = (this.context as AppCompatActivity).supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragmentContainerView,fragment)
+        fragmentTransaction.commit()
+    }
 }

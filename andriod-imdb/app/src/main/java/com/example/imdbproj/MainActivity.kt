@@ -30,6 +30,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var toolbar: Toolbar
     lateinit var binding: FragmentMainBinding
 
+
+    companion object {
+        var USER_GLOBAl: User? = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -47,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
 
-        binding.user = User("user1","password1","email1")
+        binding.user = USER_GLOBAl
 
         val bottomNavigationMenu = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNavigationMenu.selectedItemId = R.id.itemHome
@@ -55,10 +60,9 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId) {
                 R.id.itemHome ->{
                     val mainFragment = mainFragment()
-                    mainFragment.user = binding.user as User
                     replaceFragment(mainFragment)}
                 R.id.itemAccount -> replaceFragment(loginFragment())
-                R.id.itemFavorite -> replaceFragment(favoriteListFragment(binding.user as User))
+                R.id.itemFavorite -> replaceFragment(favoriteListFragment())
             }
             true
         }

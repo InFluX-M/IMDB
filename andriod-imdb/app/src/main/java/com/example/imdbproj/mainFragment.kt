@@ -28,7 +28,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-class mainFragment() : Fragment() {
+class mainFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -36,11 +36,8 @@ class mainFragment() : Fragment() {
     private var movies: ArrayList<Movie> = ArrayList<Movie> ()
 
     private lateinit var binding: FragmentMainBinding
-    lateinit var user: User
+    private var user = MainActivity.USER_GLOBAl
 
-    init {
-
-    }
 
     private companion object {
         lateinit var recycleView: RecyclerView

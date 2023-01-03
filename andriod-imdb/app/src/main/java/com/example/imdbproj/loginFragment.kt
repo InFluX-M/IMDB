@@ -86,7 +86,7 @@ class loginFragment : Fragment() {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.body() != null) {
                     var mainFragment = mainFragment()
-                    mainFragment.user = response.body() as User
+                    MainActivity.USER_GLOBAl = response.body() as User
                     replaceFragment(mainFragment)
                 }else
                     Toast.makeText(view.context, "user: not found",Toast.LENGTH_LONG).show()

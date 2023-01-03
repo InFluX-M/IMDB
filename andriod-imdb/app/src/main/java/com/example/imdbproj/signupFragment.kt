@@ -55,7 +55,7 @@ class signupFragment() : Fragment() {
                 if (password == (passwordRepeat)) {
                     val userNew = User(username, password, email)
                     val mainFragment = mainFragment()
-                    mainFragment.user = userNew
+                    MainActivity.USER_GLOBAl = userNew
                     replaceFragment(mainFragment)
                 } else {
                     Toast.makeText(view.context, "passwords don't mach", Toast.LENGTH_LONG).show()

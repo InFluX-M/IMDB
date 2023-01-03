@@ -13,18 +13,14 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-class favoriteListFragment(userPassed: User) : Fragment() {
+class favoriteListFragment() : Fragment() {
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private lateinit var binding: FragmentFavoriteListBinding
-    private lateinit var user:User
-
-    init {
-        user = userPassed
-    }
+    private var user = MainActivity.USER_GLOBAl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +42,8 @@ class favoriteListFragment(userPassed: User) : Fragment() {
 
         binding = FragmentFavoriteListBinding.bind(view)
         binding.user = user
+
+        binding.textTest.text = user?.getUserName().toString()
 
         super.onViewCreated(view, savedInstanceState)
     }

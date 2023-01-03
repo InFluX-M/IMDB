@@ -1,5 +1,6 @@
 package com.example.imdbproj.retrofit
 
+import com.example.imdbproj.classes.mainClasses.Comment
 import com.example.imdbproj.classes.mainClasses.Movie
 import com.example.imdbproj.classes.mainClasses.Person
 import com.example.imdbproj.classes.mainClasses.User
@@ -42,6 +43,16 @@ interface ApiService {
     @POST("/users/singin")
     @FormUrlEncoded
     fun findUser(@FieldMap map: Map<String,String>): Call<User>
+
+
+
+    //------------comment------------------------
+
+    @GET("/comment/{titleId}")
+    fun getComments(@Path("titleId") titleId: String): Call<List<Comment>>
+
+    @GET("/comment/replies/{commentId}")
+    fun getReplies(@Path("commentId") commentId: Int): Call<List<Comment>>
 
 
 }

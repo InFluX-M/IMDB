@@ -5,7 +5,7 @@ import com.example.imdbproj_1.mainClasses.SeriesEpisode
 import com.google.gson.annotations.SerializedName
 
 class Movie(titleId: String, type: TitleType, title: String, isAdult: Boolean,
-            startYear: Int, endYear: Int, runtimeMinutes: Int, genresList: List<String>) {
+            startYear: Int, endYear: Int, runtimeMinutes: Int, genresList: String) {
 
     @SerializedName("titleId")
     private val titleId: String
@@ -21,14 +21,16 @@ class Movie(titleId: String, type: TitleType, title: String, isAdult: Boolean,
     private var endYear: Int
     @SerializedName("runtimeMinutes")
     private var runtimeMinutes: Int
-    @SerializedName("genresList")
-    private var genresList: List<String>
+    @SerializedName("genres")
+    private var genresList: String
 
     private var rank: Float = 0.0f
 
     private  var image: Image? = null
 
     private var episodes: List<SeriesEpisode>? = null
+
+    private lateinit var time: String
 
     init {
         this.titleId = titleId
@@ -39,6 +41,8 @@ class Movie(titleId: String, type: TitleType, title: String, isAdult: Boolean,
         this.endYear = endYear
         this.runtimeMinutes = runtimeMinutes
         this.genresList = genresList
+
+        time  = getTime()
     }
 
 
@@ -94,11 +98,11 @@ class Movie(titleId: String, type: TitleType, title: String, isAdult: Boolean,
         return runtimeMinutes
     }
 
-    fun setGenresList(newGenresList: List<String>) {
+    fun setGenresList(newGenresList: String) {
         genresList = newGenresList
     }
 
-    fun getGenresList(): List<String> {
+    fun getGenresList(): String {
         return genresList
     }
 
@@ -110,8 +114,29 @@ class Movie(titleId: String, type: TitleType, title: String, isAdult: Boolean,
         this.rank = rank
     }
 
-    fun getRank(): Float {
-        return rank
+    fun getRank(): String {
+        return rank.toString()
     }
+
+    fun getAdult(): String {
+        if (isAdult) return "yes"
+        return "no"
+    }
+
+    fun getYear(): String {
+        return ("$startYear to $endYear")
+    }
+
+    fun getTime(): String {
+        return runtimeMinutes.toString()
+    }
+
+    fun getGenres(): String {
+        var genres = java.lang.StringBuilder()
+        for (g in genresList)
+            genres.append(g)
+        return genres.toString()
+    }
+
 
 }

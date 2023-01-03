@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.imdbproj.R
 
-class PersonAdapter(val persons: List<Person>): RecyclerView.Adapter<PersonAdapter.ViewHolder>() {
+class PersonAdapter(val persons: List<com.example.imdbproj.classes.mainClasses.Person>): RecyclerView.Adapter<PersonAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val textViewName = itemView.findViewById<TextView>(R.id.textViewPersonName)
@@ -25,7 +25,7 @@ class PersonAdapter(val persons: List<Person>): RecyclerView.Adapter<PersonAdapt
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textViewName.text = persons[position].name
+        holder.textViewName.text = persons[position].getName()
         // holder.imageView.imageAlpha = persons[position].getPhoto
     }
 

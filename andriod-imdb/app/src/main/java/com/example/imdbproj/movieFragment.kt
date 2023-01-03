@@ -11,15 +11,14 @@ import androidx.core.app.Person
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.imdbproj.R
-import com.example.imdbproj.adaptor.MovieAdapter
-import com.example.imdbproj.adaptor.MovieDetailAdapter
-import com.example.imdbproj.adaptor.PersonAdapter
+import com.example.imdbproj.adaptor.*
+import com.example.imdbproj.classes.mainClasses.Comment
 import com.example.imdbproj.classes.mainClasses.Movie
 import com.example.imdbproj.classes.mainClasses.User
-import com.example.imdbproj.databinding.FragmentMainBinding
 import com.example.imdbproj.databinding.FragmentMovieBinding
 import com.example.imdbproj.retrofit.ApiClient
 import com.example.imdbproj.retrofit.ApiService
+import com.example.imdbproj_1.mainClasses.Rating
 import kotlinx.android.synthetic.main.fragment_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,8 +37,8 @@ class movieFragment(movie: Movie) : Fragment() {
 
     private var movie: Movie
 
-    private lateinit var actors: List<Person>
-    private lateinit var directores: List<Person>
+    private var actors: ArrayList<com.example.imdbproj.classes.mainClasses.Person> = java.util.ArrayList()
+    private var directores: ArrayList<com.example.imdbproj.classes.mainClasses.Person> = ArrayList()
 
     private lateinit var binding: FragmentMovieBinding
 
@@ -59,25 +58,19 @@ class movieFragment(movie: Movie) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        // get movie
-
         binding = FragmentMovieBinding.bind(view)
-        val recyclerViewMovie: RecyclerView = binding.recyclerViewDetalMovie
 
-        recyclerViewMovie.layoutManager = LinearLayoutManager(this.context)
-        recyclerViewMovie.adapter = MovieDetailAdapter(movie)
-
-
-        val recyclerViewActors: RecyclerView = binding.recycleViewActors
-
-        recyclerViewActors.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-       // recyclerViewActors.adapter = PersonAdapter(actors)
+        binding.textViewTitle.text = movie.getTitle()
+        binding.textViewIsAdult.text = movie.getAdult()
+        binding.textViewYear.text = movie.getYear()
+        binding.textViewTime.text = movie.getTime()
+        binding.textViewGenres.text = movie.getGenresList()
+        binding.textViewAveRank.text = movie.getRank()
 
 
-        val recyclerViewDirectors: RecyclerView = binding.recycleViewDirectors
-
-        recyclerViewDirectors.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-       // recyclerViewDirectors.adapter = PersonAdapter(directores)
+        getComments()
+        getActors()
+        getDirectors()
 
         super.onViewCreated(view, savedInstanceState)
     }
@@ -96,22 +89,78 @@ class movieFragment(movie: Movie) : Fragment() {
         val apiClient = ApiClient()
         val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
 
-        /*
-        apiService.getActors(movie.getTitleId()).enqueue(object : Callback<List<Person>> {
 
-            override fun onResponse(call: Call<List<Person>>, response: Response<List<Person>>) {
+        apiService.getActors(movie.getTitleId()).enqueue(object : Callback<List<com.example.imdbproj.classes.mainClasses.Person>> {
+            override fun onResponse(
+                call: Call<List<com.example.imdbproj.classes.mainClasses.Person>>,
+                response: Response<List<com.example.imdbproj.classes.mainClasses.Person>>
+            ) {
+                actors = response.body() as ArrayList<com.example.imdbproj.classes.mainClasses.Person>
 
+                val recyclerViewActors: RecyclerView = binding.recyclrViewActors
+                recyclerViewActors.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                recyclerViewActors.adapter = PersonAdapter(actors)
             }
 
-            override fun onFailure(call: Call<List<Person>>, t: Throwable) {
-                Log.d("TAGGG", t.message.toString())
-                Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT)
-                    .show()
+            override fun onFailure(
+                call: Call<List<com.example.imdbproj.classes.mainClasses.Person>>,
+                t: Throwable
+            ) {
+                TODO("Not yet implemented")
             }
+
         })
 
-         */
+    }
 
+    private fun getDirectors() {
+
+        val apiClient = ApiClient()
+        val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
+
+        apiService.getDirectors(movie.getTitleId()).enqueue(object : Callback<List<com.example.imdbproj.classes.mainClasses.Person>> {
+            override fun onResponse(
+                call: Call<List<com.example.imdbproj.classes.mainClasses.Person>>,
+                response: Response<List<com.example.imdbproj.classes.mainClasses.Person>>
+            ) {
+                directores = response.body() as ArrayList<com.example.imdbproj.classes.mainClasses.Person>
+
+                val recyclerViewDirectors: RecyclerView = binding.recycleViewDirectors
+                recyclerViewDirectors.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                recyclerViewDirectors.adapter = PersonAdapter(directores)
+            }
+
+            override fun onFailure(
+                call: Call<List<com.example.imdbproj.classes.mainClasses.Person>>,
+                t: Throwable
+            ) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+    }
+
+    private fun getComments() {
+
+        val apiClient = ApiClient()
+        val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
+
+        apiService.getComments(movie.getTitleId()).enqueue(object : Callback<List<Comment>> {
+            override fun onResponse(call: Call<List<Comment>>, response: Response<List<Comment>>) {
+
+                val comments = response.body() as ArrayList<Comment>
+
+                val recyclerViewComment: RecyclerView = binding.recycleViewComment
+                recyclerViewComment.layoutManager = LinearLayoutManager(context)
+                recyclerViewComment.adapter = CommentAdapter(comments)
+            }
+
+            override fun onFailure(call: Call<List<Comment>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
 }

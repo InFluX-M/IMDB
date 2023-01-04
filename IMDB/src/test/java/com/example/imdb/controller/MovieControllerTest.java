@@ -1,5 +1,8 @@
 package com.example.imdb.controller;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.example.imdb.model.TitleType;
 import com.example.imdb.model.responses.MovieResponse;
 import com.example.imdb.service.MovieService;
@@ -22,6 +25,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.logging.Logger;
 
@@ -32,19 +37,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 
-//@ContextConfiguration("/applicationContext.xml")
 @ContextConfiguration(classes = {MovieController.class})
 @RunWith(SpringRunner.class)
 @WebMvcTest(MovieController.class)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class MovieControllerTest {
 
-    @Autowired private MockMvc mockMvc;
+    private MockMvc mockMvc;
+    @Autowired private WebApplicationContext context;
     @MockBean private MovieService service;
     private ObjectMapper mapper;
 
     @BeforeEach
     void setUp() {
         mapper = new ObjectMapper();
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
     }
 
     @Test

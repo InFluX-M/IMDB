@@ -21,6 +21,7 @@ def send_recommend_movies_to_user_mail(receiver_email, recommend_movies):
     for movie in recommend_movies:
         body[i] = [movie, str(round(recommend_movies[movie][0], 1)), recommend_movies[movie][1]]
         poster[i] = IMDBapi.get_movie_poster(movie)
+        print(poster[i])
         i = i + 1
 
 

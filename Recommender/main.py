@@ -183,7 +183,7 @@ R = np.c_[R]
 
 Y_norm, Y_mean = normalizeRatings(Y, R)
 
-X, W, b = train_model(X, W, b, Y_norm, R, 1, 760)
+X, W, b = train_model(X, W, b, Y_norm, R, 1, 300)
 
 predictions = predict_rating(X, W, b, Y_mean)
 
@@ -211,7 +211,7 @@ R = np.c_[R]
 
 Y_norm, Y_mean = normalizeRatings(Y, R)
 
-X, W, b = train_model(X, W, b, Y_norm, R, 1, 760)
+X, W, b = train_model(X, W, b, Y_norm, R, 1, 300)
 
 predictions = predict_rating(X, W, b, Y_mean)
 

@@ -12,7 +12,7 @@ public interface RatingRepository extends JpaRepository<Rating, Integer> {
 
     Rating findByMovie(Movie movie);
 
-    List<Rating> findByAvgRatingBetween(double min, double max);
+    List<Rating> findByAvgRatingBetween(Float min, Float max);
 
     List<Rating> findByNumVotesBetween(int min, int max);
 }

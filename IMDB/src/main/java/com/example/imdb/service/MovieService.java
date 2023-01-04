@@ -152,6 +152,22 @@ public class MovieService {
         return movieRepository.findByEndYearLessThan(year).stream().map(Movie::movieResponse).toList();
     }
 
+    public List<MovieResponse> orderByStartYear() {
+        return movieRepository.findAllByOrderByStartYearAsc().stream().map(Movie::movieResponse).toList();
+    }
+
+    public List<MovieResponse> orderByRating() {
+        return movieRepository.findAllByOrderByRatingDesc().stream().map(Movie::movieResponse).toList();
+    }
+
+    public List<MovieResponse> orderByTitle() {
+        return movieRepository.findAllByOrderByTitleDesc().stream().map(Movie::movieResponse).toList();
+    }
+
+    public List<MovieResponse> orderByTime() {
+        return movieRepository.findAllByOrderByRuntimeMinutesDesc().stream().map(Movie::movieResponse).toList();
+    }
+
     public List<MovieResponse> findByRuntimeMinutes(int min) {
         return movieRepository.findByRuntimeMinutes(min).stream().map(Movie::movieResponse).toList();
     }

@@ -35,4 +35,12 @@ public interface MovieRepository extends JpaRepository<Movie, String> {
     List<Movie> findByEndYearGreaterThan(int year);
 
     List<Movie> findByEndYearLessThan(int year);
+
+    List<Movie> findAllByOrderByStartYearAsc();
+
+    List<Movie> findAllByOrderByRatingDesc();
+
+    List<Movie> findAllByOrderByTitleDesc();
+
+    List<Movie> findAllByOrderByRuntimeMinutesDesc();
 }

@@ -116,20 +116,21 @@ public class MovieController {
     }
 
     @GetMapping("/rating-moreThan/{r}")
-    public ResponseEntity<List<MovieResponse>> getMoviesByRatingGreaterThan(@PathVariable Double r) {
-        List<MovieResponse> list = ratingRepository.findByAvgRatingBetween(r, 10).stream().map(Rating::getMovie).map(Movie::movieResponse).toList();
+    public ResponseEntity<List<MovieResponse>> getMoviesByRatingGreaterThan(@PathVariable Float r) {
+        System.out.println("rating more than " + r);
+        List<MovieResponse> list = ratingRepository.findByAvgRatingBetween(Float.valueOf(r), 10f).stream().map(Rating::getMovie).map(Movie::movieResponse).toList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/rating-lessThan/{r}")
-    public ResponseEntity<List<MovieResponse>> getMoviesByRatingLessThan(@PathVariable Double r) {
-        List<MovieResponse> list = ratingRepository.findByAvgRatingBetween(0, r).stream().map(Rating::getMovie).map(Movie::movieResponse).toList();
+    public ResponseEntity<List<MovieResponse>> getMoviesByRatingLessThan(@PathVariable Float r) {
+        List<MovieResponse> list = ratingRepository.findByAvgRatingBetween(0f, Float.valueOf(r)).stream().map(Rating::getMovie).map(Movie::movieResponse).toList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/rating-between/{r1}/{r2}")
-    public ResponseEntity<List<MovieResponse>> getMoviesByRatingBetween(@PathVariable Double r1,
-                                                                        @PathVariable Double r2) {
+    public ResponseEntity<List<MovieResponse>> getMoviesByRatingBetween(@PathVariable Float r1,
+                                                                        @PathVariable Float r2) {
         List<MovieResponse> list = ratingRepository.findByAvgRatingBetween(r1, r2).stream().map(Rating::getMovie).map(Movie::movieResponse).toList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -139,5 +140,27 @@ public class MovieController {
                                                                 @PathVariable Integer v2) {
         List<MovieResponse> list = ratingRepository.findByNumVotesBetween(v1, v2).stream().map(Rating::getMovie).map(Movie::movieResponse).toList();
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    // sort
+
+    @GetMapping("/sort/title")
+    public ResponseEntity<List<MovieResponse>> getMoviesSortedByTitle() {
+        return new ResponseEntity<>(movieService.orderByTitle(), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/year")
+    public ResponseEntity<List<MovieResponse>> getMoviesSortedByYear() {
+        return new ResponseEntity<>(movieService.orderByStartYear(), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/rating")
+    public ResponseEntity<List<MovieResponse>> getMoviesSortedByRating() {
+        return new ResponseEntity<>(movieService.orderByRating(), HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/time")
+    public ResponseEntity<List<MovieResponse>> getMoviesSortedByTime() {
+        return new ResponseEntity<>(movieService.orderByTime(), HttpStatus.OK);
     }
 }

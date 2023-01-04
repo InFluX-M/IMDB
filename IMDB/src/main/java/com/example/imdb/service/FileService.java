@@ -55,9 +55,13 @@ public class FileService {
                     .genresList(List.of(parts[8].split(",")))
                     .build();
 
+            Random random = new Random();
             if (parts[5] != null) movie.setStartYear(Integer.valueOf(parts[5]));
+            else movie.setStartYear(random.nextInt(2021 - 1900) + 1900);
             if (parts[6] != null) movie.setEndYear(Integer.valueOf(parts[6]));
+            else movie.setEndYear(random.nextInt(2021 - 1900) + 1900);
             if (parts[7] != null) movie.setRuntimeMinutes(Integer.valueOf(parts[7]));
+            else movie.setRuntimeMinutes(random.nextInt(300 - 60) + 60);
 
             allMovies.add(movie);
         }

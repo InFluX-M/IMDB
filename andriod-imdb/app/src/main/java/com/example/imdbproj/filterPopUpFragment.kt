@@ -17,6 +17,7 @@ import com.example.imdbproj.adaptor.PersonAdapter
 import com.example.imdbproj.classes.mainClasses.Movie
 import com.example.imdbproj.retrofit.ApiClient
 import com.example.imdbproj.retrofit.ApiService
+import com.google.android.material.slider.RangeSlider
 import kotlinx.android.synthetic.main.fragment_filter_pop_up.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -52,19 +53,33 @@ class filterPopUpFragment(val updateMovies: (ArrayList<Movie>) -> Unit) : Dialog
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        val slider = view.findViewById<RangeSlider>(R.id.rangeSlider)
+        slider.stepSize = 1F
+
         spinnerGenre(view)
 
-
-        view.findViewById<Button>(R.id.buttonFilterMovies).setOnClickListener {
-
+        view.findViewById<Button>(R.id.buttonOKActor).setOnClickListener {
             val actorName = view.findViewById<EditText>(R.id.editTextActor).text.toString()
             if (actorName.isNotEmpty()) {
                 filterByActor(actorName)
-                Log.i("afAAA" , moviesFilters.size.toString())
-
             }
+        }
 
-            Log.i("af" , moviesFilters.size.toString())
+        view.findViewById<Button>(R.id.buttonOKDirector).setOnClickListener {
+            val directorName = view.findViewById<EditText>(R.id.editTextTextDirectore).text.toString()
+            if (directorName.isNotEmpty())
+                filterByDirector(directorName)
+        }
+
+        view.findViewById<Button>(R.id.buttonOKYear).setOnClickListener {
+            val y1 = slider.values.get(0)
+            val y2 = slider.values.get(1)
+
+            filterYear(y1.toInt(), y2.toInt())
+        }
+
+
+        view.findViewById<Button>(R.id.buttonFilterMovies).setOnClickListener {
 
             updateMovies(filterAll())
             dismiss()
@@ -77,6 +92,8 @@ class filterPopUpFragment(val updateMovies: (ArrayList<Movie>) -> Unit) : Dialog
 
         super.onViewCreated(view, savedInstanceState)
     }
+
+
 
     private fun spinnerGenre(view: View) {
 
@@ -228,14 +245,94 @@ class filterPopUpFragment(val updateMovies: (ArrayList<Movie>) -> Unit) : Dialog
                 val actors = response.body() as ArrayList<com.example.imdbproj.classes.mainClasses.Person>
 
                 for (person in actors)
-                    if (person.getName().equals(name))
+                    if (person.getName().equals(name)) {
                         array.add(movie)
+                    }
+
             }
 
             override fun onFailure(
                 call: Call<List<com.example.imdbproj.classes.mainClasses.Person>>,
                 t: Throwable
             ) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+    }
+
+    private fun filterByDirector(name: String) {
+
+        val apiClient = ApiClient()
+        val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
+
+        apiService.getMovies().enqueue(object : Callback<List<Movie>> {
+
+            override fun onResponse(call: Call<List<Movie>>, response: Response<List<Movie>>) {
+                val list = response.body() as ArrayList<Movie>
+                moviesFilters.add(ArrayList())
+                val array = moviesFilters.get(moviesFilters.size - 1)
+
+                for (movie in list)
+                    getDirectors(movie, name, array)
+            }
+
+            override fun onFailure(call: Call<List<Movie>>, t: Throwable) {
+                Log.d("TAGGG", t.message.toString())
+                Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+
+    }
+
+    private fun getDirectors(movie: Movie, name: String, array: ArrayList<Movie>) {
+
+        val apiClient = ApiClient()
+        val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
+
+        apiService.getDirectors(movie.getTitleId()).enqueue(object : Callback<List<com.example.imdbproj.classes.mainClasses.Person>> {
+            override fun onResponse(
+                call: Call<List<com.example.imdbproj.classes.mainClasses.Person>>,
+                response: Response<List<com.example.imdbproj.classes.mainClasses.Person>>
+            ) {
+                val directors = response.body() as ArrayList<com.example.imdbproj.classes.mainClasses.Person>
+
+                for (person in directors)
+                    if (person.getName().equals(name)) {
+                        array.add(movie)
+                    }
+
+            }
+
+            override fun onFailure(
+                call: Call<List<com.example.imdbproj.classes.mainClasses.Person>>,
+                t: Throwable
+            ) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+    }
+
+    private fun filterYear(y1: Int, y2: Int) {
+
+        val apiClient = ApiClient()
+        val apiService: ApiService = apiClient.getRetrofit().create(ApiService::class.java)
+
+        apiService.filterYear(y1,y2).enqueue(object : Callback<List<Movie>> {
+
+            override fun onResponse(call: Call<List<Movie>>, response: Response<List<Movie>>) {
+                val list = response.body() as ArrayList<Movie>
+                moviesFilters.add(ArrayList())
+                val array = moviesFilters.get(moviesFilters.size - 1)
+                for (movie in list)
+                    array.add(movie)
+            }
+
+            override fun onFailure(call: Call<List<Movie>>, t: Throwable) {
                 TODO("Not yet implemented")
             }
 

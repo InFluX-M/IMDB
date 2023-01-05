@@ -22,10 +22,11 @@
         android:layout_height="1dp"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="58dp"
+        android:layout_marginBottom="44dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="@+id/textView20"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -147,19 +148,52 @@
         app:layout_constraintStart_toEndOf="@+id/buttonFilterMovies"
         app:layout_constraintTop_toBottomOf="@+id/divider5" />
 
-    <SeekBar
-        android:id="@+id/seekBarYear"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="296dp"
-        android:layout_height="29dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
+    <Button
+        android:id="@+id/buttonOKActor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
-        android:max="10"
-        android:progress="3"
-        app:layout_constraintBottom_toTopOf="@+id/divider3"
+        android:text="ok"
+        app:layout_constraintBaseline_toBaselineOf="@+id/editTextActor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView19"
+        app:layout_constraintStart_toEndOf="@+id/editTextActor" />
+
+    <Button
+        android:id="@+id/buttonOKDirector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="32dp"
+        android:text="ok"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextTextDirectore" />
+
+    <Button
+        android:id="@+id/buttonOKYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="32dp"
+        android:text="ok"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/rangeSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView19"
+        android:valueFrom="1990"
+        android:valueTo="2023"
+        app:values="@array/rangeSlider">
+
+    </com.google.android.material.slider.RangeSlider>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

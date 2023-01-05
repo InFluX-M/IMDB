@@ -61,4 +61,7 @@ interface ApiService {
     @GET("/movies/genre/{genre}")
     fun filterGenre(@Path("genre") genre: String): Call<List<Movie>>
 
+    @GET("/movies/start-year/{y1}/{y2}")
+    fun filterYear(@Path("y1") year1: Int, @Path("y2") year2: Int): Call<List<Movie>>
+
 }

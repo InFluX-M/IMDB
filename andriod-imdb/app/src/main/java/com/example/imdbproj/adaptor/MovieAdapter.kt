@@ -23,6 +23,10 @@ import retrofit2.Response
 class MovieAdapter(var movies: List<Movie>, val clickListener: (Movie) -> Unit):
     RecyclerView.Adapter<MovieAdapter.ViewHolder>()  {
 
+    fun getMovies(): ArrayList<Movie> {
+        return movies as ArrayList
+    }
+
     inner class ViewHolder(itemView: View):
         RecyclerView.ViewHolder(itemView) {
 

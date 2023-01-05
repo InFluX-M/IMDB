@@ -19,7 +19,7 @@ class ApiClient {
             .baseUrl(BASE_URL)
             .client(
                 OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                    //.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                     .build()
             )
             .addConverterFactory(GsonConverterFactory.create())

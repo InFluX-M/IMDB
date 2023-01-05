@@ -55,4 +55,10 @@ interface ApiService {
     fun getReplies(@Path("commentId") commentId: Int): Call<List<Comment>>
 
 
+
+    //-----------filter-------------------------
+
+    @GET("/movies/genre/{genre}")
+    fun filterGenre(@Path("genre") genre: String): Call<List<Movie>>
+
 }

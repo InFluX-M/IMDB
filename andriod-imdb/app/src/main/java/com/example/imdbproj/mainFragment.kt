@@ -66,7 +66,7 @@ class mainFragment : Fragment() {
         binding = FragmentMainBinding.bind(view)
 
         binding.buttonPopUp.setOnClickListener {
-            var dialo = filterPopUpFragment()
+            var dialo = filterPopUpFragment({moviesList: ArrayList<Movie> -> updateList(moviesList)})
             dialo.show((this.context as AppCompatActivity).supportFragmentManager,"my pop up fragment")
         }
 
@@ -104,6 +104,13 @@ class mainFragment : Fragment() {
             }
         })
 
+    }
+
+
+    fun updateList(movieList: ArrayList<Movie>) {
+        recyleViewTopMovies.layoutManager = LinearLayoutManager(context)
+        recyleViewTopMovies.adapter = MovieAdapter(movieList,
+            {movieItem: Movie -> movieLayoutClicked(movieItem)})
     }
 
 
